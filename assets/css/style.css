@@ -1,0 +1,567 @@
+/* =========================================
+   1. RESET & DASAR GLOBAL
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Agar padding tidak menambah lebar elemen */
+}
+
+body {
+    /* Menggunakan Font Poppins dari Google Font */
+    font-family: 'Poppins', sans-serif;
+    color: #334155; /* Warna teks abu gelap (Slate-700) */
+    overflow-x: hidden; /* Mencegah scroll horizontal */
+    background-color: #f8fafc; /* Warna latar putih keabuan (Slate-50) */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   2. BACKGROUND CANVAS (ANIMASI)
+   ========================================= */
+#particles-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Taruh di paling belakang */
+    
+    /* PENTING: Agar background tidak menghalangi klik mouse & tidak bisa di-save image */
+    pointer-events: none; 
+}
+
+/* =========================================
+   3. NAVBAR (NAVIGASI ATAS)
+   ========================================= */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Logo di kiri, Tombol di kanan */
+    align-items: center;
+    padding: 1.5rem 3rem; /* Spasi atas-bawah & kiri-kanan */
+    z-index: 100; /* Agar navbar selalu di atas elemen lain */
+}
+
+/* Logo Area */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: 800; /* Bold tebal */
+    color: #1e293b;
+    letter-spacing: -0.5px;
+}
+
+.logo-icon {
+    background-color: #2563eb; /* Biru utama */
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Tombol Navigasi */
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* =========================================
+   4. COMPONENT TOMBOL (CUSTOM BUTTONS)
+   ========================================= */
+button {
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease; /* Animasi halus saat hover */
+}
+
+/* Tombol Teks Biasa (Login) */
+.btn-text {
+    background: none;
+    border: none;
+    font-weight: 600;
+    color: #64748b;
+}
+.btn-text:hover { 
+    color: #2563eb; 
+}
+
+/* Tombol Outline (Sign Up) */
+.btn-outline {
+    background: transparent;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    padding: 8px 24px;
+    border-radius: 50px; /* Membuat tombol lonjong */
+    font-weight: 600;
+}
+.btn-outline:hover {
+    background-color: #2563eb;
+    color: white;
+}
+
+/* Tombol Utama (Mulai Sekarang - Gradient) */
+.btn-primary {
+    background: linear-gradient(to right, #2563eb, #7c3aed); /* Gradasi Biru ke Ungu */
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); /* Bayangan biru */
+}
+.btn-primary:hover {
+    transform: translateY(-3px); /* Naik sedikit saat hover */
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+    opacity: 0.95;
+}
+
+/* =========================================
+   5. HERO SECTION (LAYOUT UTAMA)
+   ========================================= */
+.hero-container {
+    flex-grow: 1; /* Mengisi sisa ruang layar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3rem;
+    max-width: 1200px; /* Batas lebar maksimal konten */
+    margin: 0 auto; /* Tengah secara horizontal */
+    width: 100%;
+    gap: 4rem; /* Jarak antara teks dan gambar */
+    z-index: 1;
+}
+
+/* BAGIAN KIRI: TEKS */
+.hero-text {
+    flex: 1; /* Mengambil 50% lebar */
+}
+
+h1 {
+    font-size: 3.5rem; /* Ukuran font judul besar */
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+/* Teks Gradasi (HydraFit) */
+.text-gradient {
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* Teks jadi transparan agar background muncul */
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: #334155;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.text-red { color: #ef4444; }
+.text-green { color: #22c55e; }
+
+.description {
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 450px;
+    font-weight: 300; /* Font tipis (Light) */
+}
+
+/* Grup Tombol CTA & Sosmed */
+.cta-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.socials {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    background-color: #e2e8f0;
+    border-radius: 50%; /* Bulat */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #334155;
+    transition: 0.3s;
+}
+.icon-box:hover {
+    background-color: #cbd5e1;
+    color: #2563eb;
+    transform: translateY(-3px);
+}
+
+/* BAGIAN KANAN: GAMBAR */
+.hero-image {
+    flex: 1; /* Mengambil 50% lebar */
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+}
+
+/* Lingkaran Pembungkus Gambar */
+.circle-container {
+    width: 450px;
+    height: 450px;
+    border-radius: 50%; /* Bulat sempurna */
+    overflow: hidden; /* Memotong gambar yg keluar dari lingkaran */
+    border: 6px solid white;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15); /* Bayangan lembut */
+    background-color: #f1f5f9;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.5s;
+}
+.circle-container:hover {
+    transform: scale(1.02); /* Zoom sedikit saat hover */
+}
+
+.circle-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Agar gambar tidak gepeng */
+}
+
+/* Badge Target -5kg */
+.badge {
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px); /* Efek kaca buram */
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 0.9rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Hiasan Blur (Glow di belakang gambar) */
+.blur-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px); /* Efek blur kuat */
+    opacity: 0.6;
+    z-index: 1;
+}
+.blue { width: 150px; height: 150px; background: #bfdbfe; top: -20px; right: -20px; }
+.purple { width: 200px; height: 200px; background: #e9d5ff; bottom: -20px; left: -20px; }
+
+/* =========================================
+   6. RESPONSIVE (LAYOUT HP/TABLET)
+   ========================================= */
+@media (max-width: 900px) {
+    .navbar { 
+        padding: 1.5rem; 
+    }
+    
+    .hero-container {
+        flex-direction: column-reverse; /* Gambar pindah ke atas di layar kecil */
+        text-align: center;
+        gap: 2rem;
+        padding: 2rem 1.5rem;
+    }
+
+    h1 { font-size: 2.5rem; }
+    
+    .description { 
+        margin: 0 auto 2rem auto; 
+    }
+    
+    .cta-group { 
+        justify-content: center; 
+    }
+    
+    .hero-image { 
+        justify-content: center; 
+    }
+    
+    .circle-container {
+        width: 300px;
+        height: 300px; /* Mengecilkan gambar di HP */
+    }
+}
+
+/* =========================================
+   7. ANIMASI MASUK (FADE IN)
+   ========================================= */
+.fade-in {
+    opacity: 0;
+    animation: fadeInUp 1s ease forwards;
+}
+.delay { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* =========================================
+   8. HALAMAN AUTH (LOGIN & REGISTER)
+   ========================================= */
+
+/* Background Abu-abu (Sesuai desain Figma) */
+.auth-body {
+    background-color: #e5e5e5; /* Warna abu terang */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Kartu Putih di Tengah */
+.auth-card {
+    background-color: white;
+    width: 100%;
+    max-width: 750px; /* Lebar maksimal kartu */
+    padding: 3rem 4rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    text-align: center;
+    margin: 20px;
+}
+
+.auth-form, .btn-google, .auth-toggle, .divider {
+    max-width: 450px; /* Konten tetap ramping di tengah */
+    margin-left: auto; /* Teknik centering */
+    margin-right: auto;
+}
+
+/* Toggle (Tombol Pilihan Sign up / Login) */
+.auth-toggle {
+    display: flex;
+    background-color: #1e293b; /* Warna hitam slate */
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    flex: 1; /* Bagi dua sama rata */
+    padding: 12px;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    border-radius: 8px;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+/* Warna tombol aktif (Sign Up) */
+.toggle-btn.active {
+    background-color: #14b8a6; /* Warna Cyan/Teal (Mirip gambar) */
+    /* Atau kalau mau biru tema kita: #2563eb */
+    color: white;
+}
+
+/* Warna tombol pasif (Log In) */
+.toggle-btn.inactive {
+    background-color: transparent;
+    color: #94a3b8; /* Abu-abu teks */
+}
+.toggle-btn.inactive:hover {
+    color: white;
+}
+
+/* Judul Halaman */
+.auth-title {
+    font-size: 1.5rem;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Tombol Google */
+.btn-google {
+    width: 100%;
+    background-color: white;
+    border: 1px solid #cbd5e1;
+    padding: 12px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-google:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+}
+
+/* Garis Pembatas (OR) */
+.divider {
+    display: flex;
+    align-items: center;
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+.divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #e2e8f0;
+}
+.divider span {
+    padding: 0 10px;
+}
+
+/* Form Input */
+.auth-form {
+    text-align: left;
+}
+
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Tombol Submit Bawah */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background-color: #b0b0b0; /* Abu-abu (Disabled look) */
+    /* Ganti jadi #2563eb kalau mau langsung biru */
+    color: white;
+    font-weight: 600;
+    border-radius: 50px;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #2563eb; /* Berubah biru saat hover */
+}
+
+/* ... (Kode CSS sebelumnya) ... */
+
+/* --- STYLE UNTUK PASSWORD TOGGLE --- */
+
+.password-wrapper {
+    position: relative; /* Penting! Biar ikon mata ngikutin input ini */
+    width: 100%;
+}
+
+.password-wrapper input {
+    padding-right: 45px; /* Kasih ruang di kanan biar teks gak nabrak ikon mata */
+}
+
+.eye-icon {
+    position: absolute;
+    right: 15px; /* Jarak dari kanan */
+    top: 50%;
+    transform: translateY(-50%); /* Biar pas di tengah vertikal */
+    cursor: pointer;
+    color: #94a3b8; /* Warna abu-abu */
+    display: flex;
+    align-items: center;
+}
+
+.eye-icon:hover {
+    color: #2563eb; /* Warna biru pas di-hover */
+}
+
+/* --- NAVBAR KHUSUS HALAMAN AUTH --- */
+
+.auth-navbar {
+    position: absolute; /* Melayang di atas elemen lain */
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 3rem; /* Samakan padding dengan Landing Page biar konsisten */
+    z-index: 10; /* Pastikan dia di atas background abu-abu */
+}
+
+/* Memastikan link logo tidak ada garis bawah (underline) */
+.auth-navbar .logo {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Responsif untuk HP: Padding dikecilkan dikit */
+@media (max-width: 900px) {
+    .auth-navbar {
+        padding: 1.5rem;
+        justify-content: center; /* Di HP mungkin logo bagusnya di tengah? Atau tetap kiri */
+    }
+}
+
+/* --- STYLE TAMBAHAN LOGIN --- */
+.forgot-password {
+    text-align: right;
+    margin-top: 8px;
+    margin-bottom: 15px;
+}
+
+.forgot-password a {
+    color: #64748b;
+    font-size: 0.85rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.forgot-password a:hover {
+    color: #2563eb;
+    text-decoration: underline;
+}
