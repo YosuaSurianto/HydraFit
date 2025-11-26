@@ -3,7 +3,6 @@
    ========================================= */
 const canvas = document.getElementById('particles-canvas');
 
-// Pengecekan: Hanya jalankan animasi jika elemen canvas ada di halaman tersebut
 if (canvas) {
     const ctx = canvas.getContext('2d');
     let particlesArray;
@@ -26,7 +25,7 @@ if (canvas) {
         draw() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-            ctx.fillStyle = '#94a3b8'; // Warna abu-abu (Slate-400)
+            ctx.fillStyle = '#94a3b8';
             ctx.fill();
         }
         update() {
@@ -40,7 +39,6 @@ if (canvas) {
 
     function init() {
         particlesArray = [];
-        // Rumus kepadatan: Semakin besar pembagi (9000), semakin sedikit titiknya
         let numberOfParticles = (canvas.width * canvas.height) / 9000;
         for (let i = 0; i < numberOfParticles; i++) {
             let size = (Math.random() * 2) + 1;
@@ -57,8 +55,6 @@ if (canvas) {
             for (let b = a; b < particlesArray.length; b++) {
                 let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
                     + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-                
-                // Jika jarak dekat, gambar garis
                 if (distance < (canvas.width/7) * (canvas.height/7)) {
                     let opacityValue = 1 - (distance/20000);
                     ctx.strokeStyle = 'rgba(148, 163, 184,' + opacityValue + ')';
@@ -98,7 +94,6 @@ const btnLogin = document.getElementById('btnLogin');
 const btnSignup = document.getElementById('btnSignup');
 const btnStart = document.getElementById('btnStart');
 
-// 1. PINDAH HALAMAN
 if(btnLogin) {
     btnLogin.addEventListener('click', () => { window.location.href = 'login.html'; });
 }
@@ -109,29 +104,20 @@ if(btnStart) {
     btnStart.addEventListener('click', () => { window.location.href = 'register.html'; });
 }
 
-// 2. FITUR SHOW/HIDE PASSWORD
-// Kita cari icon mata berdasarkan class atau ID
+// TOGGLE PASSWORD
 const togglePassword = document.getElementById('togglePassword');
-
-// Kita cari input password. Karena ID-nya beda di Login vs Register, kita cari salah satu.
-const passwordInputReg = document.getElementById('passwordInput'); // ID di Register
-const passwordInputLog = document.getElementById('loginPassword'); // ID di Login
-
-// Tentukan mana yang aktif saat ini (Register atau Login)
+const passwordInputReg = document.getElementById('passwordInput');
+const passwordInputLog = document.getElementById('loginPassword');
 const activePasswordInput = passwordInputReg || passwordInputLog;
 
 if (togglePassword && activePasswordInput) {
     togglePassword.addEventListener('click', function () {
-        // Cek tipe: password atau text?
         const type = activePasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         activePasswordInput.setAttribute('type', type);
         
-        // Ganti Icon SVG
         if (type === 'text') {
-            // Icon Mata Terbuka (Show)
             this.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
         } else {
-            // Icon Mata Dicoret (Hide) - Default
             this.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
         }
     });
@@ -146,37 +132,43 @@ const registerForm = document.getElementById('registerForm');
 
 if (registerForm) {
     registerForm.addEventListener('submit', (e) => {
-        e.preventDefault(); // Stop reload halaman
+        e.preventDefault(); 
 
-        // 1. Ambil nilai dari input
-        const name = document.getElementById('regName').value;
         const email = document.getElementById('regEmail').value;
-        // Ambil password dari ID register
         const password = document.getElementById('passwordInput').value;
 
-        // 2. Ambil data user lama dari LocalStorage (kalau ada)
         let users = JSON.parse(localStorage.getItem('users')) || [];
 
-        // 3. Cek apakah email sudah terdaftar?
+        // Cek duplikat
         const isEmailExist = users.find(user => user.email === email);
         if (isEmailExist) {
             alert("Email ini sudah terdaftar! Silakan login.");
             return;
         }
 
-        // 4. Masukkan user baru ke Array
+        // Masukkan user baru dengan STATUS: BELUM SELESAI
         users.push({
-            name: name,
             email: email,
-            password: password
+            password: password,
+            isSetupDone: false, // <--- INI KUNCINYA
+            
+            // Data lain masih kosong
+            name: "", 
+            username: "",
+            birthdate: "",
+            gender: "",
+            blood: "",
+            weight: "",
+            height: ""
         });
 
-        // 5. Simpan balik ke LocalStorage
         localStorage.setItem('users', JSON.stringify(users));
+        
+        // Simpan email sementara
+        localStorage.setItem('registeringEmail', email);
 
-        // 6. Sukses
-        alert("Registrasi Berhasil! Silakan Login.");
-        window.location.href = 'login.html';
+        // Redirect ke STEP 2
+        window.location.href = 'create-profile.html';
     });
 }
 
@@ -187,26 +179,34 @@ if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // 1. Ambil input
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
 
-        // 2. Ambil database user dari LocalStorage
         let users = JSON.parse(localStorage.getItem('users')) || [];
-
-        // 3. Cari user yang email DAN passwordnya cocok
         const validUser = users.find(user => user.email === email && user.password === password);
 
         if (validUser) {
-            // 4. Jika ketemu, simpan sesi login
-            localStorage.setItem('currentUser', JSON.stringify(validUser));
+            // --- LOGIKA SATPAM (DIPERKETAT) ---
+            // Jika isSetupDone TIDAK true (berarti bisa false, atau tidak ada/undefined), maka TOLAK.
+            if (validUser.isSetupDone !== true) {
+                alert("Pendaftaran Anda belum selesai! Harap lengkapi profil Anda.");
+                
+                // Simpan emailnya biar sistem tau siapa yg mau dilanjutin
+                localStorage.setItem('registeringEmail', validUser.email);
+                
+                // Paksa pindah ke Step 2
+                window.location.href = 'create-profile.html';
+                return; // Stop di sini, jangan lanjut login
+            }
 
-            alert("Login Berhasil! Selamat datang, " + validUser.name);
+            // Kalau sudah lulus, baru boleh masuk
+            localStorage.setItem('currentUser', JSON.stringify(validUser));
             
-            // Redirect ke Dashboard (Pastikan nanti file dashboard.html dibuat)
+            const displayName = validUser.name ? validUser.name : "User";
+            alert("Login Berhasil! Selamat datang, " + displayName);
+            
             window.location.href = 'dashboard.html'; 
         } else {
-            // 5. Jika tidak ketemu
             alert("Email atau Password salah!");
         }
     });
