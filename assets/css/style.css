@@ -34,7 +34,7 @@ body {
 }
 
 /* =========================================
-   3. NAVBAR (NAVIGASI ATAS)
+   3. NAVBAR UTAMA (LANDING PAGE)
    ========================================= */
 .navbar {
     display: flex;
@@ -54,6 +54,7 @@ body {
     font-weight: 800; /* Bold tebal */
     color: #1e293b;
     letter-spacing: -0.5px;
+    text-decoration: none; /* Hilangkan garis bawah link */
 }
 
 .logo-icon {
@@ -322,7 +323,7 @@ h1 {
 }
 
 /* =========================================
-   8. HALAMAN AUTH (LOGIN & REGISTER)
+   8. HALAMAN AUTH (LOGIN & REGISTER & WELCOME)
    ========================================= */
 
 /* Background Abu-abu (Sesuai desain Figma) */
@@ -332,13 +333,43 @@ h1 {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding-top: 80px; /* Kasih jarak atas biar navbar gak nutupin */
+}
+
+/* NAVBAR KHUSUS HALAMAN AUTH */
+.auth-navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 3rem;
+    z-index: 10;
+    
+    /* --- PENTING: Layout Kiri-Kanan (Flexbox) --- */
+    display: flex !important; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex-direction: row;
+}
+
+/* Pastikan logo dan user-display tidak mengambil lebar 100% */
+.auth-navbar .logo, 
+.auth-navbar .user-display {
+    flex-shrink: 0;
+}
+
+/* Memastikan link logo tidak ada garis bawah (underline) */
+.auth-navbar .logo {
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Kartu Putih di Tengah */
 .auth-card {
     background-color: white;
     width: 100%;
-    max-width: 750px; /* Lebar maksimal kartu */
+    /* Lebar Maksimal Kartu (Login/Regis) */
+    max-width: 750px; 
     padding: 3rem 4rem;
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
@@ -346,8 +377,9 @@ h1 {
     margin: 20px;
 }
 
+/* Membatasi lebar konten dalam kartu agar tidak terlalu panjang */
 .auth-form, .btn-google, .auth-toggle, .divider {
-    max-width: 450px; /* Konten tetap ramping di tengah */
+    max-width: 450px; 
     margin-left: auto; /* Teknik centering */
     margin-right: auto;
 }
@@ -379,8 +411,7 @@ h1 {
 
 /* Warna tombol aktif (Sign Up) */
 .toggle-btn.active {
-    background-color: #14b8a6; /* Warna Cyan/Teal (Mirip gambar) */
-    /* Atau kalau mau biru tema kita: #2563eb */
+    background-color: #14b8a6; /* Warna Cyan/Teal */
     color: white;
 }
 
@@ -397,7 +428,6 @@ h1 {
 .auth-title {
     font-size: 1.5rem;
     color: #1e293b;
-    margin-bottom: 1.5rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
 }
@@ -479,8 +509,7 @@ h1 {
     width: 100%;
     padding: 14px;
     border: none;
-    background-color: #b0b0b0; /* Abu-abu (Disabled look) */
-    /* Ganti jadi #2563eb kalau mau langsung biru */
+    background-color: #b0b0b0; /* Abu-abu default */
     color: white;
     font-weight: 600;
     border-radius: 50px;
@@ -493,60 +522,32 @@ h1 {
     background-color: #2563eb; /* Berubah biru saat hover */
 }
 
-/* ... (Kode CSS sebelumnya) ... */
-
-/* --- STYLE UNTUK PASSWORD TOGGLE --- */
-
+/* Style Password Toggle */
 .password-wrapper {
-    position: relative; /* Penting! Biar ikon mata ngikutin input ini */
+    position: relative;
     width: 100%;
 }
 
 .password-wrapper input {
-    padding-right: 45px; /* Kasih ruang di kanan biar teks gak nabrak ikon mata */
+    padding-right: 45px;
 }
 
 .eye-icon {
     position: absolute;
-    right: 15px; /* Jarak dari kanan */
+    right: 15px;
     top: 50%;
-    transform: translateY(-50%); /* Biar pas di tengah vertikal */
+    transform: translateY(-50%);
     cursor: pointer;
-    color: #94a3b8; /* Warna abu-abu */
+    color: #94a3b8;
     display: flex;
     align-items: center;
 }
 
 .eye-icon:hover {
-    color: #2563eb; /* Warna biru pas di-hover */
+    color: #2563eb;
 }
 
-/* --- NAVBAR KHUSUS HALAMAN AUTH --- */
-
-.auth-navbar {
-    position: absolute; /* Melayang di atas elemen lain */
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 1.5rem 3rem; /* Samakan padding dengan Landing Page biar konsisten */
-    z-index: 10; /* Pastikan dia di atas background abu-abu */
-}
-
-/* Memastikan link logo tidak ada garis bawah (underline) */
-.auth-navbar .logo {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* Responsif untuk HP: Padding dikecilkan dikit */
-@media (max-width: 900px) {
-    .auth-navbar {
-        padding: 1.5rem;
-        justify-content: center; /* Di HP mungkin logo bagusnya di tengah? Atau tetap kiri */
-    }
-}
-
-/* --- STYLE TAMBAHAN LOGIN --- */
+/* Style Forgot Password */
 .forgot-password {
     text-align: right;
     margin-top: 8px;
@@ -564,4 +565,17 @@ h1 {
 .forgot-password a:hover {
     color: #2563eb;
     text-decoration: underline;
+}
+
+/* Responsif untuk HP: Navbar Auth */
+@media (max-width: 900px) {
+    .auth-navbar {
+        padding: 1.5rem;
+        /* Di HP, kita biarkan logo di kiri dan user di kanan */
+    }
+    
+    .auth-card {
+        padding: 2rem; /* Kecilin padding biar muat di layar HP */
+        width: 90%;
+    }
 }

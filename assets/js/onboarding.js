@@ -103,11 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Hapus sesi register sementara (bersih-bersih) karena sudah selesai
                 localStorage.removeItem('registeringEmail');
 
-                // 4. Redirect ke Dashboard (AKHIRNYA!)
-                alert("Profil Sukses Dibuat! Selamat Datang di HydraFit.");
-                
-                // Pastikan file dashboard.html nanti ada ya
-                window.location.href = 'dashboard.html'; 
+               // 4. Redirect ke WELCOME PAGE (Sesuai request)
+               // // alert dihapus biar smooth
+               window.location.href = 'welcome.html';
             } else {
                 alert("Error: User data corrupt. Silakan ulang.");
                 window.location.href = 'register.html';
