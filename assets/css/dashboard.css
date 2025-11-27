@@ -1,0 +1,441 @@
+/* =========================================
+   DASHBOARD STYLES
+   ========================================= */
+
+/* Reset Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f1f5f9; /* Abu muda */
+    color: #334155;
+    overflow-x: hidden;
+}
+
+/* --- 1. SIDEBAR (Collapsible) --- */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: white;
+    border-right: 1px solid #e2e8f0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease; /* Animasi transisi lebar */
+    z-index: 100;
+}
+
+/* Mode Ciut (Collapsed) */
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar-header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #1e293b;
+    font-weight: 800;
+    font-size: 1.2rem;
+    overflow: hidden; 
+    white-space: nowrap;
+}
+
+.logo-icon {
+    background-color: #2563eb;
+    color: white;
+    padding: 5px;
+    border-radius: 6px;
+    display: flex;
+    min-width: 32px; 
+    justify-content: center;
+}
+
+/* Tombol Toggle Sidebar */
+.btn-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    padding: 5px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+.btn-toggle:hover {
+    background-color: #f1f5f9;
+    color: #2563eb;
+}
+
+/* --- LOGIKA COLLAPSED BARU (FIX TOMBOL HILANG) --- */
+
+/* 1. HANYA Sembunyikan Logo Text saat Collapsed */
+.sidebar.collapsed .logo-text {
+    display: none;
+}
+
+/* 2. Atur Header saat Collapsed */
+.sidebar.collapsed .sidebar-header {
+    justify-content: center; /* Tengahkan isi */
+    padding: 0;
+    flex-direction: column; /* Susun ke bawah (Logo atas, Tombol bawah) */
+    height: auto; 
+    padding-top: 1rem;
+    gap: 1rem; 
+}
+
+/* 3. Style Tombol Toggle saat Collapsed */
+.sidebar.collapsed .btn-toggle {
+    display: block; /* PASTIKAN MUNCUL */
+    margin: 0 auto; 
+    transform: rotate(180deg); /* Opsional: Putar panah */
+}
+
+/* 4. Sembunyikan Teks Menu */
+.sidebar.collapsed .link-text {
+    display: none;
+}
+
+/* 5. Menu Link saat Collapsed */
+.sidebar.collapsed .menu-list a, 
+.sidebar.collapsed .logout-link {
+    justify-content: center; 
+    padding: 12px 0; 
+}
+
+
+/* Menu List */
+.menu-list {
+    list-style: none;
+    padding: 1rem;
+    flex-grow: 1; /* Dorong logout ke bawah */
+    overflow-y: auto;
+}
+
+.menu-list li {
+    margin-bottom: 0.5rem;
+}
+
+.menu-list a, .logout-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    color: #64748b;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: 0.3s;
+    white-space: nowrap; 
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.menu-list a:hover, .logout-link:hover {
+    background-color: #f1f5f9;
+    color: #2563eb;
+}
+
+.menu-list li.active a {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+/* Spacer */
+.menu-spacer {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 1rem 0;
+}
+
+/* Logout Merah */
+.logout-link {
+    color: #ef4444;
+}
+.logout-link:hover {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+
+
+/* --- 2. MAIN CONTENT --- */
+.main-content {
+    margin-left: 250px; 
+    width: calc(100% - 250px);
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+/* Jika Sidebar Collapsed, Margin Content Mengecil */
+.sidebar.collapsed ~ .main-content {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+}
+
+/* Header Atas */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.user-welcome h1 {
+    font-size: 1.8rem;
+    color: #0f172a;
+}
+.user-welcome p {
+    color: #64748b;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* --- DASHBOARD GRID SYSTEM --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 1.5rem;
+}
+
+/* Cards */
+.card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+    font-size: 1.1rem;
+    color: #1e293b;
+}
+
+.badge-soft {
+    background-color: #f1f5f9;
+    color: #64748b;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Chart Area */
+.chart-container {
+    height: 300px;
+    width: 100%;
+}
+
+/* Input Berat Baru */
+.weight-input-area {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.weight-input-area input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+}
+
+.btn-update {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Stat Cards */
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.icon-box.blue { background-color: #3b82f6; }
+.icon-box.orange { background-color: #f97316; }
+
+.stat-info .label {
+    display: block;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+.stat-info .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+.stat-info .sub-text {
+    font-size: 0.8rem;
+    color: #22c55e; /* Hijau */
+    font-weight: 600;
+}
+
+/* Tip Card */
+.tip-card {
+    background-color: #fffbeb; 
+    border: 1px solid #fcd34d;
+}
+.tip-card h4 { margin-bottom: 0.5rem; color: #b45309; }
+.tip-card p { font-size: 0.9rem; color: #92400e; }
+
+/* Empty State Workout */
+.empty-state {
+    text-align: center;
+    padding: 1rem;
+}
+.empty-state .icon-bg { font-size: 2rem; margin-bottom: 0.5rem; }
+.empty-state p { color: #64748b; margin-bottom: 1rem; }
+.btn-outline-sm {
+    background: white;
+    border: 1px solid #2563eb;
+    color: #2563eb;
+    padding: 8px 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .dashboard-grid { grid-template-columns: 1fr; } 
+    .sidebar { width: 0; overflow: hidden; } 
+    .main-content { margin-left: 0; width: 100%; }
+}
+
+/* --- CUSTOM MODAL ALERT STYLE --- */
+
+/* Overlay Gelap */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Hitam Transparan */
+    display: flex;
+    align-items: center; /* Tengah Vertikal */
+    justify-content: center; /* Tengah Horizontal */
+    z-index: 1000; /* Di atas segalanya */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Class Hidden (Untuk sembunyikan modal) */
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Kotak Modal Putih */
+.modal-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.hidden .modal-box {
+    transform: scale(0.8);
+}
+
+/* Icon Sukses di Modal */
+.modal-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    background-color: #dcfce7;
+    color: #22c55e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto;
+}
+
+.modal-box h3 {
+    font-size: 1.5rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.modal-box p {
+    color: #64748b;
+    margin-bottom: 2rem;
+}
+
+#closeModalBtn {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 100%;
+}
+
+#closeModalBtn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
