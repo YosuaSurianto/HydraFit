@@ -11,7 +11,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #f1f5f9; /* Abu muda */
+    background-color: #f1f5f9; 
     color: #334155;
     overflow-x: hidden;
 }
@@ -82,18 +82,18 @@ body {
     color: #2563eb;
 }
 
-/* --- LOGIKA COLLAPSED BARU (FIX TOMBOL HILANG) --- */
+/* --- LOGIKA COLLAPSED --- */
 
-/* 1. HANYA Sembunyikan Logo Text saat Collapsed */
+/* 1.Sembunyikan Logo Text saat Collapsed */
 .sidebar.collapsed .logo-text {
     display: none;
 }
 
-/* 2. Atur Header saat Collapsed */
+/* 2. Header saat Collapsed */
 .sidebar.collapsed .sidebar-header {
-    justify-content: center; /* Tengahkan isi */
+    justify-content: center; 
     padding: 0;
-    flex-direction: column; /* Susun ke bawah (Logo atas, Tombol bawah) */
+    flex-direction: column; 
     height: auto; 
     padding-top: 1rem;
     gap: 1rem; 
@@ -101,9 +101,9 @@ body {
 
 /* 3. Style Tombol Toggle saat Collapsed */
 .sidebar.collapsed .btn-toggle {
-    display: block; /* PASTIKAN MUNCUL */
+    display: block;
     margin: 0 auto; 
-    transform: rotate(180deg); /* Opsional: Putar panah */
+    transform: rotate(180deg); 
 }
 
 /* 4. Sembunyikan Teks Menu */
@@ -123,7 +123,7 @@ body {
 .menu-list {
     list-style: none;
     padding: 1rem;
-    flex-grow: 1; /* Dorong logout ke bawah */
+    flex-grow: 1; 
     overflow-y: auto;
 }
 
@@ -322,7 +322,7 @@ body {
 }
 .stat-info .sub-text {
     font-size: 0.8rem;
-    color: #22c55e; /* Hijau */
+    color: #22c55e; 
     font-weight: 600;
 }
 
@@ -358,7 +358,7 @@ body {
     .main-content { margin-left: 0; width: 100%; }
 }
 
-/* --- CUSTOM MODAL ALERT STYLE --- */
+/* --- ALERT STYLE --- */
 
 /* Overlay Gelap */
 .modal-overlay {
@@ -367,16 +367,16 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Hitam Transparan */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
-    align-items: center; /* Tengah Vertikal */
-    justify-content: center; /* Tengah Horizontal */
-    z-index: 1000; /* Di atas segalanya */
+    align-items: center; 
+    justify-content: center; 
+    z-index: 1000; 
     opacity: 1;
     transition: opacity 0.3s ease;
 }
 
-/* Class Hidden (Untuk sembunyikan modal) */
+/* Class Hidden */
 .modal-overlay.hidden {
     opacity: 0;
     pointer-events: none;

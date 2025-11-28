@@ -87,13 +87,95 @@ if (canvas) {
 }
 
 /* =========================================
-   BAGIAN 2: LOGIKA INTERAKSI WEB (Navigation)
+   BAGIAN 2: GLOBAL MODAL SYSTEM (POP-UP)
+   ========================================= */
+
+// Fungsi global untuk menampilkan modal
+// Bisa dipanggil dari file JS manapun setelah script.js diload
+function showModal(type, title, message, onConfirm = null) {
+    // 1. Cek apakah HTML modal sudah ada? Kalau belum, inject.
+    if (!document.getElementById('globalModal')) {
+        const modalHTML = `
+            <div id="globalModal" class="modal-overlay">
+                <div class="modal-box">
+                    <div id="modalIcon" class="modal-icon"></div>
+                    <h3 id="modalTitle">Title</h3>
+                    <p id="modalMessage">Message</p>
+                    <div class="modal-actions">
+                        <button id="modalBtnCancel" class="btn-modal secondary" style="display:none">Cancel</button>
+                        <button id="modalBtnConfirm" class="btn-modal primary">OK</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
+
+    const modal = document.getElementById('globalModal');
+    const icon = document.getElementById('modalIcon');
+    const titleEl = document.getElementById('modalTitle');
+    const msgEl = document.getElementById('modalMessage');
+    const btnConfirm = document.getElementById('modalBtnConfirm');
+    const btnCancel = document.getElementById('modalBtnCancel');
+
+    // Set Konten
+    titleEl.innerText = title;
+    msgEl.innerText = message;
+
+    // Set Icon & Warna
+    icon.className = 'modal-icon ' + type; 
+    let iconSVG = '';
+    if (type === 'success') iconSVG = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+    if (type === 'error') iconSVG = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+    if (type === 'info') iconSVG = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+    icon.innerHTML = iconSVG;
+
+    // Reset tombol (kloning node untuk hapus event listener lama)
+    const newBtnConfirm = btnConfirm.cloneNode(true);
+    btnConfirm.parentNode.replaceChild(newBtnConfirm, btnConfirm);
+    
+    const newBtnCancel = btnCancel.cloneNode(true);
+    btnCancel.parentNode.replaceChild(newBtnCancel, btnCancel);
+
+    // Atur Aksi Tombol
+    if (onConfirm) {
+        newBtnCancel.style.display = 'block';
+        newBtnCancel.innerText = "Cancel";
+        newBtnConfirm.innerText = "Yes";
+        
+        newBtnConfirm.addEventListener('click', () => {
+            modal.classList.remove('active');
+            onConfirm();
+        });
+        
+        newBtnCancel.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+    } else {
+        newBtnCancel.style.display = 'none';
+        newBtnConfirm.innerText = "OK";
+        
+        newBtnConfirm.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+    }
+
+    // Tampilkan Modal
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+}
+
+
+/* =========================================
+   BAGIAN 3: LOGIKA NAVIGASI & AUTH
    ========================================= */
 
 const btnLogin = document.getElementById('btnLogin');
 const btnSignup = document.getElementById('btnSignup');
 const btnStart = document.getElementById('btnStart');
 
+// Navigation
 if(btnLogin) {
     btnLogin.addEventListener('click', () => { window.location.href = 'login.html'; });
 }
@@ -104,7 +186,7 @@ if(btnStart) {
     btnStart.addEventListener('click', () => { window.location.href = 'register.html'; });
 }
 
-// TOGGLE PASSWORD
+// Toggle Password (Mata)
 const togglePassword = document.getElementById('togglePassword');
 const passwordInputReg = document.getElementById('passwordInput');
 const passwordInputLog = document.getElementById('loginPassword');
@@ -123,9 +205,6 @@ if (togglePassword && activePasswordInput) {
     });
 }
 
-/* =========================================
-   BAGIAN 3: SISTEM REGISTER & LOGIN (LOCALSTORAGE)
-   ========================================= */
 
 // --- A. REGISTER SYSTEM ---
 const registerForm = document.getElementById('registerForm');
@@ -139,36 +218,32 @@ if (registerForm) {
 
         let users = JSON.parse(localStorage.getItem('users')) || [];
 
-        // Cek duplikat
         const isEmailExist = users.find(user => user.email === email);
         if (isEmailExist) {
-            alert("Email ini sudah terdaftar! Silakan login.");
+            showModal('error', 'Gagal Daftar', 'Email ini sudah terdaftar! Silakan login.');
             return;
         }
 
-        // Masukkan user baru dengan STATUS: BELUM SELESAI
         users.push({
             email: email,
             password: password,
-            isSetupDone: false, // <--- INI KUNCINYA
+            isSetupDone: false, // Menandakan profil belum lengkap
             
-            // Data lain masih kosong
+            // Placeholder data
             name: "", 
             username: "",
-            birthdate: "",
-            gender: "",
-            blood: "",
-            weight: "",
-            height: ""
+            weightHistory: [], // Array untuk menyimpan riwayat berat badan
+            
+            birthdate: "", gender: "", blood: "", weight: "", height: ""
         });
 
         localStorage.setItem('users', JSON.stringify(users));
-        
-        // Simpan email sementara
         localStorage.setItem('registeringEmail', email);
 
-        // Redirect ke STEP 2
-        window.location.href = 'create-profile.html';
+        // Pakai Modal Sukses, lalu redirect
+        showModal('success', 'Akun Terdaftar!', 'Silakan lengkapi profil Anda.', () => {
+            window.location.href = 'create-profile.html';
+        });
     });
 }
 
@@ -186,28 +261,26 @@ if (loginForm) {
         const validUser = users.find(user => user.email === email && user.password === password);
 
         if (validUser) {
-            // --- LOGIKA SATPAM (DIPERKETAT) ---
-            // Jika isSetupDone TIDAK true (berarti bisa false, atau tidak ada/undefined), maka TOLAK.
+            // Cek Status Setup
             if (validUser.isSetupDone !== true) {
-                alert("Pendaftaran Anda belum selesai! Harap lengkapi profil Anda.");
-                
-                // Simpan emailnya biar sistem tau siapa yg mau dilanjutin
-                localStorage.setItem('registeringEmail', validUser.email);
-                
-                // Paksa pindah ke Step 2
-                window.location.href = 'create-profile.html';
-                return; // Stop di sini, jangan lanjut login
+                showModal('info', 'Profil Belum Lengkap', 'Harap selesaikan pendaftaran profil Anda.', () => {
+                    localStorage.setItem('registeringEmail', validUser.email);
+                    window.location.href = 'create-profile.html';
+                });
+                return;
             }
 
-            // Kalau sudah lulus, baru boleh masuk
+            // Login Sukses
             localStorage.setItem('currentUser', JSON.stringify(validUser));
             
             const displayName = validUser.name ? validUser.name : "User";
-            alert("Login Berhasil! Selamat datang, " + displayName);
             
-            window.location.href = 'dashboard.html'; 
+            showModal('success', 'Login Berhasil!', `Selamat datang kembali, ${displayName}`, () => {
+                window.location.href = 'dashboard.html';
+            });
+
         } else {
-            alert("Email atau Password salah!");
+            showModal('error', 'Login Gagal', 'Email atau Password salah!');
         }
     });
 }

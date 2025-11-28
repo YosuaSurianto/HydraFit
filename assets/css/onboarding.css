@@ -12,12 +12,12 @@
     margin-top: -10px; /* Rapatkan ke judul */
 }
 
-/* Tombol NEXT / CREATE PROFILE (Warna Cyan/Tosca) */
+/* Tombol NEXT / CREATE PROFILE  */
 .btn-next {
     width: 100%;
     padding: 14px;
     border: none;
-    /* Gradient Tosca Keren */
+
     background: linear-gradient(to right, #06b6d4, #2dd4bf); 
     color: white;
     font-weight: 600;
@@ -55,9 +55,9 @@
     text-decoration: underline;
 }
 
-/* --- TAMBAHAN KHUSUS UNTUK INPUT DI STEP 3 --- */
+/* --- INPUT DI STEP 3 --- */
 
-/* Styling Dropdown (Select) agar mirip Input Text */
+/* Styling Dropdown (Select) */
 select {
     width: 100%;
     padding: 12px 16px;
@@ -82,7 +82,7 @@ select {
 }
 
 select:focus {
-    border-color: #06b6d4; /* Warna border fokus jadi Tosca */
+    border-color: #06b6d4; /* Warna border  Tosca */
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
 }
 

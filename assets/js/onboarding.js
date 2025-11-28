@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Hapus sesi register sementara (bersih-bersih) karena sudah selesai
                 localStorage.removeItem('registeringEmail');
 
-               // 4. Redirect ke WELCOME PAGE (Sesuai request)
+               // 4. Redirect ke WELCOME PAGE 
                // // alert dihapus biar smooth
                window.location.href = 'welcome.html';
             } else {
