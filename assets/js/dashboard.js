@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const newWeight = parseFloat(newWeightInput.value);
 
             // Validasi Input
-            if (newWeight >= 30 && newWeight <= 300) { 
+            if (newWeight >= 20 && newWeight <= 400) { 
                 // A. Update Data Utama
                 currentUser.weight = newWeight;
 
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showCustomAlert(`Berat badan berhasil diupdate menjadi ${newWeight} kg!`);
                 
             } else {
-                alert("Mohon masukkan berat badan yang valid (30kg - 300kg).");
+                alert("Mohon masukkan berat badan yang valid (20kg - 300kg).");
             }
         });
     }
