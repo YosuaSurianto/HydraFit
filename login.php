@@ -18,7 +18,7 @@
     <!-- Navbar Khusus Auth (Pojok Kiri Atas) -->
     <nav class="auth-navbar">
         <!-- Klik Logo untuk kembali ke Landing Page -->
-        <a href="index.html" class="logo">
+        <a href="index.php" class="logo">
             <div class="logo-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
@@ -35,23 +35,23 @@
             <!-- Toggle Atas (Pilihan Sign Up / Login) -->
             <div class="auth-toggle">
                 <!-- Sign Up jadi Link biasa (Inactive) -->
-                <a href="register.html" class="toggle-btn inactive">Sign up</a>
+                <a href="register.php" class="toggle-btn inactive">Sign up</a>
                 <!-- Log In jadi tombol Aktif -->
-                 <a href="login.html" class="toggle-btn active">Log in</a>
+                 <a href="login.php" class="toggle-btn active">Log in</a>
             </div>
 
             <h2 class="auth-title">Log In</h2>
 
             <!-- Tombol Google -->
-            <button class="btn-google">
+            <!-- <button class="btn-google"> -->
                 <!-- Gambar Logo Google dari Assets Lokal -->
-                <img src="assets/image/google.png" alt="Google Logo" width="20" height="20">
+                <!-- <img src="assets/image/google.png" alt="Google Logo" width="20" height="20">
                 Log in with Google
-            </button>
+            </button> -->
 
-            <div class="divider">
+            <!-- <div class="divider">
                 <span>OR</span>
-            </div>
+            </div> -->
 
             <!-- Form Login -->
             <!-- PENTING: id="loginForm" digunakan oleh script.js untuk memproses login -->
@@ -93,6 +93,6 @@
     </div>
 
     <!-- Script JS Utama -->
-    <script src="assets/js/script.js"></script>
+    <!-- <script src="assets/js/script.js"></script> -->
 </body>
 </html>

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Validasi Login
     if (!currentUser) {
         alert("Anda belum login!"); 
-        window.location.href = 'login.html';
+        window.location.href = 'login.php';
         return;
     }
 
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnLogout.addEventListener('click', () => {
             if (confirm("Yakin ingin keluar?")) {
                 localStorage.removeItem('currentUser');
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
             }
         });
     }

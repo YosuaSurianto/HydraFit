@@ -177,13 +177,13 @@ const btnStart = document.getElementById('btnStart');
 
 // Navigation
 if(btnLogin) {
-    btnLogin.addEventListener('click', () => { window.location.href = 'login.html'; });
+    btnLogin.addEventListener('click', () => { window.location.href = 'login.php'; });
 }
 if(btnSignup) {
-    btnSignup.addEventListener('click', () => { window.location.href = 'register.html'; });
+    btnSignup.addEventListener('click', () => { window.location.href = 'register.php'; });
 }
 if(btnStart) {
-    btnStart.addEventListener('click', () => { window.location.href = 'register.html'; });
+    btnStart.addEventListener('click', () => { window.location.href = 'register.php'; });
 }
 
 // Toggle Password (Mata)
@@ -242,7 +242,7 @@ if (registerForm) {
 
         // Pakai Modal Sukses, lalu redirect
         showModal('success', 'Akun Terdaftar!', 'Silakan lengkapi profil Anda.', () => {
-            window.location.href = 'create-profile.html';
+            window.location.href = 'create-profile.php';
         });
     });
 }
@@ -265,7 +265,7 @@ if (loginForm) {
             if (validUser.isSetupDone !== true) {
                 showModal('info', 'Profil Belum Lengkap', 'Harap selesaikan pendaftaran profil Anda.', () => {
                     localStorage.setItem('registeringEmail', validUser.email);
-                    window.location.href = 'create-profile.html';
+                    window.location.href = 'create-profile.php';
                 });
                 return;
             }
@@ -276,7 +276,7 @@ if (loginForm) {
             const displayName = validUser.name ? validUser.name : "User";
             
             showModal('success', 'Login Berhasil!', `Selamat datang kembali, ${displayName}`, () => {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'dashboard.php';
             });
 
         } else {

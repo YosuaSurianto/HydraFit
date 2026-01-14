@@ -32,8 +32,8 @@
 
         <div class="nav-buttons">
             <!-- Tombol Navigasi -->
-            <a href="login.html" class="btn-outline">Login</a>
-            <a href="register.html" class="btn-outline">Sign Up</a>
+            <a href="login.php" class="btn-outline">Login</a>
+            <a href="register.php" class="btn-outline">Sign Up</a>
         </div>
     </nav>
 
@@ -56,7 +56,7 @@
             </p>
 
             <div class="cta-group">
-                <a href="register.html" class="btn-primary btn-large" id="btnStart"> Workout Now 
+                <a href="register.php" class="btn-primary btn-large" id="btnStart"> Workout Now 
                     <!-- Icon Panah Kanan -->
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;">
                         <path d="M5 12h14M12 5l7 7-7 7"/>

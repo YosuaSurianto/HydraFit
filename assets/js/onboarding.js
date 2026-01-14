@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- LOGIKA STEP 2 (create-profile.html) ---
+    // --- LOGIKA STEP 2 (create-profile.php) ---
     const profileForm = document.getElementById('profileForm');
 
     if (profileForm) {
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!currentEmail) {
             // Kalau user nyasar langsung buka file ini tanpa register dulu, tendang balik
             alert("Akses Ditolak! Harap Sign Up terlebih dahulu.");
-            window.location.href = 'register.html';
+            window.location.href = 'register.php';
             return;
         }
 
@@ -46,16 +46,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 7. Lanjut ke STEP 3
                 // Redirect ke halaman data fisik
-                window.location.href = 'complete-profile.html';
+                window.location.href = 'complete-profile.php';
             } else {
                 alert("Error: User tidak ditemukan. Silakan register ulang.");
-                window.location.href = 'register.html';
+                window.location.href = 'register.php';
             }
         });
     }
 
 
-    // --- LOGIKA STEP 3 (complete-profile.html) ---
+    // --- LOGIKA STEP 3 (complete-profile.php) ---
     const completeProfileForm = document.getElementById('completeProfileForm');
 
     if (completeProfileForm) {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!currentEmail) {
             alert("Akses Ditolak! Silakan login/register dulu.");
-            window.location.href = 'register.html';
+            window.location.href = 'register.php';
             return;
         }
 
@@ -105,10 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                // 4. Redirect ke WELCOME PAGE 
                // // alert dihapus biar smooth
-               window.location.href = 'welcome.html';
+               window.location.href = 'welcome.php';
             } else {
                 alert("Error: User data corrupt. Silakan ulang.");
-                window.location.href = 'register.html';
+                window.location.href = 'register.php';
             }
         });
     }

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Kalau error/gak ada data (misal nyasar), tampilkan Guest
         displayUsername.textContent = "Guest";
         // Opsional: Tendang balik ke login
-        // window.location.href = 'login.html';
+        // window.location.href = 'login.php';
     }
 
     // 3. Tombol GET STARTED
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnGetStarted) {
         btnGetStarted.addEventListener('click', () => {
             // Redirect FINAL ke Dashboard
-            window.location.href = 'dashboard.html';
+            window.location.href = 'dashboard.php';
         });
     }
 
