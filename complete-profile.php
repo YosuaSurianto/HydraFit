@@ -58,70 +58,11 @@ if (isset($_POST['finish_setup'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/onboarding.css">
-
-    <style>
-        /* 1. KEMBALI KE UKURAN ASLI */
-        .auth-card {
-            /* Kita HAPUS max-width custom.
-               Biarkan dia pakai ukuran default dari style.css 
-               sehingga ukurannya SAMA PERSIS dengan create-profile.php */
-            
-            position: relative; /* Wajib ada biar icon bisa dipaku */
-            padding-top: 50px; /* Sedikit padding atas biar icon tidak nabrak judul */
-        }
-
-        /* 2. STYLE ICON POJOK KIRI ATAS (ABSOLUTE) */
-        .back-icon {
-            position: absolute;
-            top: 20px;          
-            left: 20px;         
-            
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: #94a3b8; /* Abu-abu lebih soft */
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-            background-color: transparent; 
-        }
-
-        .back-icon:hover {
-            background-color: #f1f5f9; 
-            color: #0f172a;
-        }
-
-        /* 3. TOMBOL FINISH FULL WIDTH */
-        .btn-finish-full {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background-color: #06b6d4; /* Cyan */
-            color: white;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 1rem;
-            margin-top: 20px;
-        }
-        .btn-finish-full:hover {
-            background-color: #0891b2;
-            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
-        }
-
-        /* Jarak antar input */
-        .input-group {
-            margin-bottom: 15px; 
-        }
-    </style>
 </head>
 <body class="auth-body">
 
     <nav class="auth-navbar">
-        <a href="#" class="logo">
+        <a href="index.php" class="logo">
             <div class="logo-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
@@ -130,7 +71,7 @@ if (isset($_POST['finish_setup'])) {
     </nav>
 
     <div class="auth-container">
-        <div class="auth-card fade-in">
+<div class="auth-card fade-in card-step-3">
             
             <a href="create-profile.php" class="back-icon" title="Go Back">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
