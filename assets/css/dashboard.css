@@ -196,3 +196,33 @@ body {
     background-color: #2563eb; color: white; border: none; padding: 12px 30px;
     border-radius: 50px; font-weight: 600; cursor: pointer; width: 100%;
 }
+
+/* --- TYLE UNTUK MODAL DINAMIS --- */
+
+/* 1. Warna Icon Wrapper Berbeda */
+.modal-icon-wrapper.success { background-color: #dcfce7; color: #22c55e; } /* Hijau */
+.modal-icon-wrapper.error   { background-color: #fee2e2; color: #ef4444; } /* Merah */
+.modal-icon-wrapper.warning { background-color: #ffedd5; color: #f97316; } /* Oranye */
+
+/* 2. Tombol Cancel (Khusus Logout) */
+.btn-cancel {
+    background-color: #f1f5f9;
+    color: #64748b;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    transition: 0.3s;
+}
+.btn-cancel:hover { background-color: #e2e8f0; }
+
+/* 3. Gap untuk tombol logout (Yes/No) */
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1.5rem;
+}

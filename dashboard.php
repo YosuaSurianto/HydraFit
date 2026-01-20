@@ -2,7 +2,9 @@
 session_start();
 include 'koneksi.php';
 
-// 1. CEK LOGIN (Security)
+// =========================================
+// 1. CEK LOGIN (SECURITY LAYER)
+// =========================================
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -10,26 +12,34 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// 2. AMBIL DATA USER
+// =========================================
+// 2. AMBIL DATA USER DARI DATABASE
+// =========================================
 $query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
 
-// Default values jika data kosong
+// Set Default Values jika data kosong/error
 $first_name = $user['first_name'] ?? 'User';
 $weight = $user['current_weight'] ?? 0;
 $height = $user['height'] ?? 0;
 
-// 3. HITUNG BMI (Server Side Logic)
+// =========================================
+// 3. HITUNG BMI AWAL (SERVER SIDE)
+// =========================================
+// Ini untuk tampilan awal saat halaman diload.
+// Nanti kalau user update berat, JS yang akan update angka ini via AJAX.
+
 $bmi_score = 0;
 $bmi_status = "No Data";
-$bmi_color = "#64748b"; // Abu-abu
+$bmi_color = "#64748b"; // Warna default (Abu-abu)
 
 if ($weight > 0 && $height > 0) {
-    $height_m = $height / 100;
+    $height_m = $height / 100; // Konversi cm ke meter
     $bmi_score = $weight / ($height_m * $height_m);
-    $bmi_score = number_format($bmi_score, 1);
+    $bmi_score = number_format($bmi_score, 1); // Ambil 1 desimal
 
+    // Tentukan Status & Warna
     if ($bmi_score < 18.5) {
         $bmi_status = "Underweight";
         $bmi_color = "#3b82f6"; // Biru
@@ -81,9 +91,11 @@ if ($weight > 0 && $height > 0) {
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
+            
             <li class="menu-spacer"></li>
+            
             <li>
-                <a href="logout.php" class="logout-link" onclick="return confirm('Are you sure to logout?');">
+                <a href="#" id="navLogoutBtn" class="logout-link">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                     <span class="link-text">Logout</span>
                 </a>
@@ -164,12 +176,26 @@ if ($weight > 0 && $height > 0) {
 
     <div id="customAlert" class="modal-overlay hidden">
         <div class="modal-box fade-in-up">
-            <div class="modal-icon-wrapper">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <div id="alertIcon" class="modal-icon-wrapper success"></div>
+            
+            <h3 id="alertTitle">Success!</h3>
+            <p id="alertMessage">Action completed.</p>
+            <button id="closeAlertBtn" class="btn-update" style="width:100%">OK, Thanks!</button>
+        </div>
+    </div>
+
+    <div id="logoutModal" class="modal-overlay hidden">
+        <div class="modal-box fade-in-up">
+            <div class="modal-icon-wrapper warning">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
             </div>
-            <h3>Success!</h3>
-            <p id="modalMessage">Data updated successfully.</p>
-            <button id="closeModalBtn">OK, Great!</button>
+            <h3>Log Out?</h3>
+            <p>Are you sure you want to end your session?</p>
+            
+            <div class="modal-actions">
+                <button id="confirmLogoutBtn" class="btn-update" style="background: #ef4444;">Yes, Log Me Out</button>
+                <button id="cancelLogoutBtn" class="btn-cancel">Cancel</button>
+            </div>
         </div>
     </div>
 

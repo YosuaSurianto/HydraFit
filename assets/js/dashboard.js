@@ -1,5 +1,5 @@
 /* =========================================
-   DASHBOARD LOGIC (AJAX & CHART.JS)
+   DASHBOARD LOGIC (FINAL + CUSTOM ALERTS)
    ========================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,25 +9,80 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnUpdate = document.getElementById('btnUpdateWeight');
     const inputWeight = document.getElementById('newWeight');
     const displayWeight = document.getElementById('displayWeight');
-    
-    // Timeframe Buttons
     const timeBtns = document.querySelectorAll('.time-btn');
 
-    // Modal Elements
+    // --- SETUP MODAL ELEMENTS ---
     const customAlert = document.getElementById('customAlert');
-    const modalMessage = document.getElementById('modalMessage');
-    const closeModalBtn = document.getElementById('closeModalBtn');
+    const alertIcon = document.getElementById('alertIcon');
+    const alertTitle = document.getElementById('alertTitle');
+    const alertMessage = document.getElementById('alertMessage');
+    const closeAlertBtn = document.getElementById('closeAlertBtn');
 
-    let myChart; // Variabel global untuk Chart
+    const logoutModal = document.getElementById('logoutModal');
+    const navLogoutBtn = document.getElementById('navLogoutBtn');
+    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+    const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
 
-    // --- 2. FUNGSI UNTUK MENGGAMBAR CHART ---
-    function renderChart(labels, dataPoints) {
-        // Hancurkan chart lama jika ada (biar gak numpuk pas ganti timeframe)
-        if (myChart) {
-            myChart.destroy();
+    let myChart; 
+
+    // --- 2. FUNGSI ALERT PINTAR (GANTI ALERT BAWAAN) ---
+    function showAlert(type, title, message) {
+        if (!customAlert) return;
+
+        // Reset Kelas Warna
+        alertIcon.className = 'modal-icon-wrapper'; // Hapus semua warna dulu
+        
+        let iconSVG = '';
+
+        if (type === 'success') {
+            alertIcon.classList.add('success'); // Tambah warna hijau
+            // Icon Centang
+            iconSVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
+        } else if (type === 'error') {
+            alertIcon.classList.add('error'); // Tambah warna merah
+            // Icon Silang (X)
+            iconSVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
         }
 
-        // Buat Chart Baru
+        // Isi Konten Modal
+        alertIcon.innerHTML = iconSVG;
+        alertTitle.innerText = title;
+        alertMessage.innerText = message;
+
+        // Munculkan Modal
+        customAlert.classList.remove('hidden');
+    }
+
+    // Event Tutup Alert
+    if (closeAlertBtn) {
+        closeAlertBtn.addEventListener('click', () => {
+            customAlert.classList.add('hidden');
+        });
+    }
+
+    // --- 3. LOGIKA LOGOUT (MODAL KONFIRMASI) ---
+    if (navLogoutBtn) {
+        navLogoutBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Cegah link langsung jalan
+            logoutModal.classList.remove('hidden'); // Munculkan modal logout
+        });
+    }
+
+    if (cancelLogoutBtn) {
+        cancelLogoutBtn.addEventListener('click', () => {
+            logoutModal.classList.add('hidden'); // Batal logout
+        });
+    }
+
+    if (confirmLogoutBtn) {
+        confirmLogoutBtn.addEventListener('click', () => {
+            window.location.href = 'logout.php'; // Gass logout beneran
+        });
+    }
+
+    // --- 4. RENDER CHART (Sama seperti sebelumnya) ---
+    function renderChart(labels, dataPoints) {
+        if (myChart) myChart.destroy();
         myChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -35,88 +90,69 @@ document.addEventListener('DOMContentLoaded', () => {
                 datasets: [{
                     label: 'Berat Badan (kg)',
                     data: dataPoints,
-                    borderColor: '#2563eb', // Warna Biru Utama
-                    backgroundColor: 'rgba(37, 99, 235, 0.1)', // Arsir Bawah
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
                     borderWidth: 2,
-                    tension: 0.3, // Kelengkungan garis (0 = kaku, 0.4 = mulus)
+                    tension: 0.3,
                     pointBackgroundColor: '#fff',
                     pointBorderColor: '#2563eb',
                     pointRadius: 4,
-                    pointHoverRadius: 6,
                     fill: true
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } }, // Sembunyikan legenda
+                plugins: { legend: { display: false } },
                 scales: {
-                    y: { 
-                        beginAtZero: false, 
-                        grid: { color: '#f1f5f9' } 
-                    },
-                    x: { 
-                        grid: { display: false },
-                        ticks: { maxTicksLimit: 8 } // Batasi label bawah biar gak penuh
-                    }
+                    y: { beginAtZero: false, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false }, ticks: { maxTicksLimit: 8 } }
                 }
             }
         });
     }
 
-    // --- 3. FUNGSI FETCH DATA DARI API (GET) ---
+    // --- 5. FETCH DATA (GET) ---
     async function loadChartData(range = '1W') {
         try {
-            // Panggil API PHP kita
             const response = await fetch(`api_weight.php?range=${range}`);
             const result = await response.json();
 
             if (result.status === 'success') {
-                // Pisahkan data untuk sumbu X (Label) dan Y (Berat)
                 const labels = result.data.map(item => item.label);
                 const values = result.data.map(item => item.value);
-
-                // Gambar grafiknya
                 renderChart(labels, values);
-            } else {
-                console.error("Gagal memuat data:", result.message);
             }
         } catch (error) {
-            console.error("Error Fetching Data:", error);
+            console.error("Error:", error);
         }
     }
 
-    // --- 4. LOGIKA TOMBOL TIMEFRAME (1W, 1M, ALL) ---
+    // --- 6. TIMEFRAME BUTTONS ---
     timeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Hapus kelas active dari semua tombol
             timeBtns.forEach(b => b.classList.remove('active'));
-            // Tambah kelas active ke tombol yang diklik
             btn.classList.add('active');
-
-            // Ambil data range (1W/1M/ALL) dan muat ulang chart
-            const range = btn.getAttribute('data-time');
-            loadChartData(range);
+            loadChartData(btn.getAttribute('data-time'));
         });
     });
 
-    // --- 5. LOGIKA UPDATE BERAT BADAN (AJAX POST) ---
+    // --- 7. UPDATE BERAT (POST) ---
     if (btnUpdate) {
         btnUpdate.addEventListener('click', async () => {
             const weightVal = parseFloat(inputWeight.value);
 
+            // GANTI ALERT BAWAAN DISINI
             if (!weightVal || weightVal <= 0) {
-                alert("Masukkan berat badan yang valid!");
+                showAlert('error', 'Invalid Input', 'Please enter a valid weight number!');
                 return;
             }
 
-            // Ubah tombol jadi 'Loading...'
             const originalText = btnUpdate.innerText;
             btnUpdate.innerText = "Saving...";
             btnUpdate.disabled = true;
 
             try {
-                // Kirim data ke API tanpa reload halaman
                 const response = await fetch('api_weight.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -126,59 +162,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    // 1. Munculkan Modal Sukses
-                    if(customAlert) {
-                        modalMessage.innerText = `Berat badan berhasil diupdate menjadi ${weightVal} kg!`;
-                        customAlert.classList.remove('hidden');
-                    }
-
-                    // 2. Update Angka Besar di Dashboard (Tanpa Reload)
-                    if(displayWeight) {
-                        displayWeight.innerText = `${weightVal} kg`;
-                    }
-
-                    // --- 3. UPDATE BMI (BAGIAN UTAMA YANG KITA PERBAIKI) ---
+                    // Update UI Dashboard
+                    if(displayWeight) displayWeight.innerText = `${weightVal} kg`;
+                    
+                    // Update BMI
                     const bmiValue = document.getElementById('bmiValue');
                     const bmiStatus = document.getElementById('bmiStatus');
-
-                    if (bmiValue && result.new_bmi) {
-                        bmiValue.innerText = result.new_bmi.score;
-                    }
+                    if (bmiValue && result.new_bmi) bmiValue.innerText = result.new_bmi.score;
                     if (bmiStatus && result.new_bmi) {
                         bmiStatus.innerText = result.new_bmi.status;
                         bmiStatus.style.color = result.new_bmi.color;
                     }
 
-                    // 4. Refresh Grafik (Ambil data terbaru)
+                    // Refresh Chart & Reset Input
                     const activeRange = document.querySelector('.time-btn.active').getAttribute('data-time');
                     loadChartData(activeRange);
-
-                    // 5. Reset Input
                     inputWeight.value = '';
 
+                    // PAKAI ALERT KITA (SUKSES)
+                    showAlert('success', 'Great Job!', `Weight updated to ${weightVal} kg.`);
+
                 } else {
-                    alert("Gagal update: " + result.message);
+                    // PAKAI ALERT KITA (ERROR SERVER)
+                    showAlert('error', 'Update Failed', result.message);
                 }
 
             } catch (error) {
                 console.error("Error Updating:", error);
-                alert("Terjadi kesalahan sistem.");
+                showAlert('error', 'System Error', 'Something went wrong. Try again.');
             } finally {
-                // Kembalikan tombol seperti semula
                 btnUpdate.innerText = originalText;
                 btnUpdate.disabled = false;
             }
         });
     }
 
-    // --- 6. LOGIKA TUTUP MODAL ---
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-            customAlert.classList.add('hidden');
-        });
-    }
-
-    // === JALANKAN PERTAMA KALI ===
-    // Load data default (1 Minggu terakhir)
+    // --- LOAD AWAL ---
     loadChartData('1W'); 
 });
