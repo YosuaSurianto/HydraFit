@@ -1,139 +1,169 @@
 /* --- WELCOME PAGE STYLES --- */
 
-/* Kartu Welcome  */
+/* 1. KARTU WELCOME (Dibuat Ramping & Relative) */
 .welcome-card {
     background-color: white;
     width: 100%;
-    /* Lebar Maksimal 800px sesuai revisi agar konten lega */
-    max-width: 800px; 
-    padding: 3rem;
+    
+    /* REVISI: Dikecilkan jadi 500px biar ramping & konsisten dengan Step 3 */
+    max-width: 500px; 
+    
+    /* REVISI: Ditambah padding atas untuk tempat Icon Back */
+    padding: 3rem 2rem; 
+    padding-top: 50px; 
+    
+    /* REVISI: Wajib relative biar icon back bisa dipaku di pojok */
+    position: relative; 
+    
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
     text-align: center;
-    margin: 20px;
+    margin: 20px auto; /* Auto biar tengah */
 }
 
+/* 2. STYLE ICON BACK (BARU DITAMBAHKAN) */
+.back-icon {
+    position: absolute; /* Teknik memaku posisi */
+    top: 25px;          
+    left: 25px;         
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;        
+    height: 40px;       
+    border-radius: 50%; 
+    
+    color: #94a3b8;    
+    transition: all 0.2s ease; 
+}
+
+.back-icon:hover {
+    background-color: #f1f5f9; 
+    color: #0f172a;            
+}
+
+/* Judul & Subjudul */
 .welcome-title {
-    font-size: 2rem;
+    font-size: 1.8rem; /* Dikecilkan dikit biar pas sama kartu ramping */
     color: #1e293b;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
 }
 
 .welcome-subtitle {
     color: #64748b;
-    margin-bottom: 2.5rem;
-    font-size: 1rem;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
     line-height: 1.5;
 }
 
-/* Trust Box (Kotak Abu di tengah berisi poin-poin) */
+/* Trust Box (Kotak Fitur) */
 .trust-box {
     background-color: #f8fafc;
     border-radius: 16px;
-    padding: 2rem; /* Padding agak besar biar lega */
+    padding: 1.5rem; 
     text-align: left;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     border: 1px solid #e2e8f0;
 }
 
 .trust-item {
     display: flex;
     gap: 15px;
-    margin-bottom: 1.5rem; /* Jarak antar item */
-    align-items: flex-start;
+    margin-bottom: 1.2rem;
+    align-items: center; /* Center vertikal biar rapi */
 }
 
 .trust-item:last-child {
     margin-bottom: 0;
 }
 
-/* Icon Bulat Warna-warni (FIXED GEPENG ISSUE) */
+/* Icon Bulat Fitur */
 .trust-icon {
-    /* KUNCI MATI UKURANNYA BIAR GAK GEPENG */
-    width: 45px;       
-    height: 45px;      
-    
-    /* Mencegah icon mengecil/membesar otomatis oleh flexbox */
+    width: 40px;       
+    height: 40px;      
     flex-shrink: 0;    
-    flex-grow: 0;
-    
-    border-radius: 50%; /* Wajib 50% biar bulat */
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    margin-right: 15px; /* Pastikan ada jarak dengan teks */
 }
 
 .trust-icon svg { 
-    width: 22px; 
-    height: 22px; 
+    width: 20px; 
+    height: 20px; 
 }
 
-/* Warna-warni Icon */
-.trust-icon.blue { background-color: #3b82f6; }
-.trust-icon.green { background-color: #22c55e; }
-.trust-icon.purple { background-color: #a855f7; }
-.trust-icon.orange { background-color: #f97316; }
+/* Warna Icon */
+.trust-icon.blue { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.trust-icon.green { background-color: rgba(34, 197, 94, 0.1); color: #22c55e; }
+.trust-icon.purple { background-color: rgba(168, 85, 247, 0.1); color: #a855f7; }
 
 .trust-text strong {
     display: block;
     color: #334155;
-    font-size: 1rem;
-    margin-bottom: 4px;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
 }
 
 .trust-text p {
     margin: 0;
     color: #64748b;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    font-size: 0.85rem;
+    line-height: 1.3;
 }
 
-/* Tombol GET STARTED (Cyan/Tosca) */
+/* 3. TOMBOL GET STARTED (REVISI: GRADIENT & CAPSULE) */
 .btn-get-started {
+    display: block; /* Biar bisa dikasih margin/padding */
     width: 100%;
-    padding: 16px;
+    padding: 15px;
     border: none;
-    background-color: #06b6d4; /* Warna Tosca */
+    
+    /* REVISI: Gradient & Radius Kapsul (Sama kek Step 2/3) */
+    background: linear-gradient(to right, #06b6d4, #2dd4bf); 
+    border-radius: 50px; 
+    
     color: white;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1rem;
-    border-radius: 10px;
     cursor: pointer;
     transition: 0.3s;
-    letter-spacing: 1px;
+    text-decoration: none; /* Hilangkan garis bawah karena ini tag <a> */
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
 }
 
 .btn-get-started:hover {
-    background-color: #0891b2;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(6, 182, 212, 0.3);
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+    opacity: 0.95;
 }
 
-/* Footer Link */
+/* Footer & User Display (Tetap sama) */
 .welcome-footer {
     margin-top: 2rem;
     display: flex;
-    justify-content: space-between; /* Kiri-Kanan mentok */
+    justify-content: center;
+    gap: 15px;
     font-size: 0.8rem;
-    padding: 0 10px; /* Tambah padding dikit */
 }
 
 .welcome-footer a {
     color: #94a3b8;
     text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-weight: 500;
     transition: 0.3s;
 }
 
 .welcome-footer a:hover {
-    color: #334155;
+    color: #06b6d4;
+    text-decoration: underline;
 }
 
-/* User Display di Navbar (Pojok Kanan) */
+/* Navbar User */
 .user-display {
     display: flex;
     align-items: center;
@@ -146,23 +176,19 @@
 .user-avatar-small {
     width: 36px;
     height: 36px;
-    background-color: #e2e8f0;
+    background-color: #eff6ff;
+    color: #3b82f6;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #64748b;
+    font-weight: 700;
 }
 
-/* Responsif: Di HP kartu tetap 100% lebar, font disesuaikan */
+/* Responsif */
 @media (max-width: 768px) {
     .welcome-card {
         padding: 2rem;
-        max-width: 100%;
         width: 90%;
-    }
-    
-    .trust-box {
-        padding: 1.5rem;
     }
 }

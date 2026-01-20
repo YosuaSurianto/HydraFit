@@ -1,98 +1,138 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+// --- FITUR AUTO-LOGOUT ---
+// Jika user iseng balik ke halaman login saat masih login,
+// kita ANGGAP dia mau logout. Kita hancurkan session lamanya.
+if (isset($_SESSION['user_id'])) {
+    session_unset();
+    session_destroy();
+    session_start(); // Mulai session baru yang bersih
+}
+
+$error_msg = "";
+
+if (isset($_POST['login'])) {
+    // 1. Ambil inputan user (bisa email, bisa username)
+    $login_input = mysqli_real_escape_string($conn, $_POST['login_input']);
+    $password    = $_POST['password'];
+
+    // 2. Query Cerdas: Cari di kolom email ATAU username
+    $query = "SELECT * FROM users WHERE email = '$login_input' OR username = '$login_input'";
+    $result = mysqli_query($conn, $query);
+
+    if (mysqli_num_rows($result) === 1) {
+        $row = mysqli_fetch_assoc($result);
+
+        // 3. Cek Password (Hash)
+        if (password_verify($password, $row['password'])) {
+            // Login Sukses! 
+            
+            // TIPS TAMBAHAN: Kita perbarui ID session biar lebih aman (Security Best Practice)
+            session_regenerate_id(true);
+
+            // Simpan ID user yang BARU LOGIN ke session
+            $_SESSION['user_id'] = $row['id'];
+            
+            // Lempar ke Welcome Page
+            header("Location: welcome.php");
+            exit();
+        } else {
+            // Password Salah -> Muncul Error (Sesuai requestmu)
+            $error_msg = "Wrong Password!";
+        }
+    } else {
+        // User Gak Ketemu -> Muncul Error
+        $error_msg = "Username or Email not found!";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In - HydraFit</title>
+    <title>Login - HydraFit</title>
     
-    <!-- Google Fonts (Poppins) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    
+    <link rel="stylesheet" href="assets/css/onboarding.css?v=3">
+
+    <style>
+        .auth-card {
+            max-width: 450px; 
+            margin: 40px auto;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .register-link a {
+            color: #06b6d4;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body class="auth-body">
 
-    <!-- Navbar Khusus Auth (Pojok Kiri Atas) -->
     <nav class="auth-navbar">
-        <!-- Klik Logo untuk kembali ke Landing Page -->
-        <a href="index.php" class="logo">
+        <a href="#" class="logo">
             <div class="logo-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                </svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
             <span>HydraFit</span>
         </a>
     </nav>
 
-    <!-- Container Utama -->
     <div class="auth-container">
         <div class="auth-card fade-in">
             
-            <!-- Toggle Atas (Pilihan Sign Up / Login) -->
-            <div class="auth-toggle">
-                <!-- Sign Up jadi Link biasa (Inactive) -->
-                <a href="register.php" class="toggle-btn inactive">Sign up</a>
-                <!-- Log In jadi tombol Aktif -->
-                 <a href="login.php" class="toggle-btn active">Log in</a>
+            <div class="onboarding-header">
+                <h2 class="auth-title">Welcome Back! 👋</h2>
+                <p class="step-indicator">Please login to continue</p>
             </div>
 
-            <h2 class="auth-title">Log In</h2>
+            <?php if($error_msg): ?>
+                <div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 10px; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">
+                    <?php echo $error_msg; ?>
+                </div>
+            <?php endif; ?>
 
-            <!-- Tombol Google -->
-            <!-- <button class="btn-google"> -->
-                <!-- Gambar Logo Google dari Assets Lokal -->
-                <!-- <img src="assets/image/google.png" alt="Google Logo" width="20" height="20">
-                Log in with Google
-            </button> -->
-
-            <!-- <div class="divider">
-                <span>OR</span>
-            </div> -->
-
-            <!-- Form Login -->
-            <!-- PENTING: id="loginForm" digunakan oleh script.js untuk memproses login -->
-            <form class="auth-form" id="loginForm">
+            <form class="auth-form" method="POST" action="">
                 
-                <div class="input-group">
-                    <label>Email address</label>
-                    <!-- PENTING: id="loginEmail" untuk mencocokkan data email -->
-                    <input type="email" id="loginEmail" placeholder="example@gmail.com" required>
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; color: #334155; font-weight: 500;">Email or Username</label>
+                    <input type="text" name="login_input" placeholder="Enter email or username" required>
                 </div>
 
-                <div class="input-group">
-                    <label>Password</label>
-                    <div class="password-wrapper">
-                        <!-- PENTING: id="loginPassword" (beda ID dengan register agar tidak bentrok) -->
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
-                        
-                        <!-- Icon Mata (Toggle Password) -->
-                        <!-- class="eye-icon" digunakan script.js untuk trigger klik -->
-                        <span id="togglePassword" class="eye-icon">
-                            <!-- Default Icon: Mata Dicoret (Hide) -->
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                                <line x1="1" y1="1" x2="23" y2="23"></line>
-                            </svg>
-                        </span>
-                    </div>
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <label style="display: block; margin-bottom: 8px; color: #334155; font-weight: 500;">Password</label>
+                    <input type="password" name="password" placeholder="Enter password" required>
                 </div>
 
-                <!-- Link Lupa Password (Fitur Khas Halaman Login) -->
-                <div class="forgot-password">
-                    <a href="#">Forgot Password?</a>
+                <div style="text-align: right; margin-bottom: 25px;">
+                    <a href="#" style="font-size: 0.85rem; color: #64748b; text-decoration: none;">Forgot Password?</a>
                 </div>
 
-                <button type="submit" class="btn-submit">Log In</button>
+                <button type="submit" name="login" class="btn-next">Log In</button>
+
+                <div class="register-link">
+                    Don't have an account? <a href="register.php">Sign Up</a>
+                </div>
+
             </form>
-            
         </div>
     </div>
 
-    <!-- Script JS Utama -->
-    <!-- <script src="assets/js/script.js"></script> -->
 </body>
 </html>
