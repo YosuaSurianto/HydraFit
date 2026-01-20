@@ -68,6 +68,9 @@ if ($weight > 0 && $height > 0) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 
@@ -173,31 +176,6 @@ if ($weight > 0 && $height > 0) {
             </div>
         </div>
     </main>
-
-    <div id="customAlert" class="modal-overlay hidden">
-        <div class="modal-box fade-in-up">
-            <div id="alertIcon" class="modal-icon-wrapper success"></div>
-            
-            <h3 id="alertTitle">Success!</h3>
-            <p id="alertMessage">Action completed.</p>
-            <button id="closeAlertBtn" class="btn-update" style="width:100%">OK, Thanks!</button>
-        </div>
-    </div>
-
-    <div id="logoutModal" class="modal-overlay hidden">
-        <div class="modal-box fade-in-up">
-            <div class="modal-icon-wrapper warning">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            </div>
-            <h3>Log Out?</h3>
-            <p>Are you sure you want to end your session?</p>
-            
-            <div class="modal-actions">
-                <button id="confirmLogoutBtn" class="btn-update" style="background: #ef4444;">Yes, Log Me Out</button>
-                <button id="cancelLogoutBtn" class="btn-cancel">Cancel</button>
-            </div>
-        </div>
-    </div>
 
     <script src="assets/js/dashboard.js"></script>
 

@@ -1,5 +1,5 @@
 /* =========================================
-   DASHBOARD LOGIC (FINAL + CUSTOM ALERTS)
+   DASHBOARD LOGIC (WITH SWEETALERT2)
    ========================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,77 +10,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputWeight = document.getElementById('newWeight');
     const displayWeight = document.getElementById('displayWeight');
     const timeBtns = document.querySelectorAll('.time-btn');
-
-    // --- SETUP MODAL ELEMENTS ---
-    const customAlert = document.getElementById('customAlert');
-    const alertIcon = document.getElementById('alertIcon');
-    const alertTitle = document.getElementById('alertTitle');
-    const alertMessage = document.getElementById('alertMessage');
-    const closeAlertBtn = document.getElementById('closeAlertBtn');
-
-    const logoutModal = document.getElementById('logoutModal');
-    const navLogoutBtn = document.getElementById('navLogoutBtn');
-    const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
-    const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+    const navLogoutBtn = document.getElementById('navLogoutBtn'); // Tombol Logout di Sidebar
 
     let myChart; 
 
-    // --- 2. FUNGSI ALERT PINTAR (GANTI ALERT BAWAAN) ---
-    function showAlert(type, title, message) {
-        if (!customAlert) return;
-
-        // Reset Kelas Warna
-        alertIcon.className = 'modal-icon-wrapper'; // Hapus semua warna dulu
-        
-        let iconSVG = '';
-
-        if (type === 'success') {
-            alertIcon.classList.add('success'); // Tambah warna hijau
-            // Icon Centang
-            iconSVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
-        } else if (type === 'error') {
-            alertIcon.classList.add('error'); // Tambah warna merah
-            // Icon Silang (X)
-            iconSVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
-        }
-
-        // Isi Konten Modal
-        alertIcon.innerHTML = iconSVG;
-        alertTitle.innerText = title;
-        alertMessage.innerText = message;
-
-        // Munculkan Modal
-        customAlert.classList.remove('hidden');
-    }
-
-    // Event Tutup Alert
-    if (closeAlertBtn) {
-        closeAlertBtn.addEventListener('click', () => {
-            customAlert.classList.add('hidden');
-        });
-    }
-
-    // --- 3. LOGIKA LOGOUT (MODAL KONFIRMASI) ---
+    // --- 2. LOGIKA LOGOUT (SWEETALERT2) ---
     if (navLogoutBtn) {
         navLogoutBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Cegah link langsung jalan
-            logoutModal.classList.remove('hidden'); // Munculkan modal logout
+            e.preventDefault(); 
+            
+            // Panggil SweetAlert2 tipe 'confirm'
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will be logged out of your session.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444', // Merah
+                cancelButtonColor: '#64748b',  // Abu-abu
+                confirmButtonText: 'Yes, Log Me Out'
+            }).then((result) => {
+                // Jika user klik tombol "Yes"
+                if (result.isConfirmed) {
+                    window.location.href = 'logout.php';
+                }
+            });
         });
     }
 
-    if (cancelLogoutBtn) {
-        cancelLogoutBtn.addEventListener('click', () => {
-            logoutModal.classList.add('hidden'); // Batal logout
-        });
-    }
-
-    if (confirmLogoutBtn) {
-        confirmLogoutBtn.addEventListener('click', () => {
-            window.location.href = 'logout.php'; // Gass logout beneran
-        });
-    }
-
-    // --- 4. RENDER CHART (Sama seperti sebelumnya) ---
+    // --- 3. RENDER CHART (Sama seperti sebelumnya) ---
     function renderChart(labels, dataPoints) {
         if (myChart) myChart.destroy();
         myChart = new Chart(ctx, {
@@ -112,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. FETCH DATA (GET) ---
+    // --- 4. FETCH DATA (GET) ---
     async function loadChartData(range = '1W') {
         try {
             const response = await fetch(`api_weight.php?range=${range}`);
@@ -128,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 6. TIMEFRAME BUTTONS ---
+    // --- 5. TIMEFRAME BUTTONS ---
     timeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             timeBtns.forEach(b => b.classList.remove('active'));
@@ -137,14 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 7. UPDATE BERAT (POST) ---
+    // --- 6. UPDATE BERAT (POST) ---
     if (btnUpdate) {
         btnUpdate.addEventListener('click', async () => {
             const weightVal = parseFloat(inputWeight.value);
 
-            // GANTI ALERT BAWAAN DISINI
+            // VALIDASI INPUT (SWEETALERT ERROR)
             if (!weightVal || weightVal <= 0) {
-                showAlert('error', 'Invalid Input', 'Please enter a valid weight number!');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Input',
+                    text: 'Please enter a valid weight number!',
+                    confirmButtonColor: '#2563eb'
+                });
                 return;
             }
 
@@ -179,17 +141,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadChartData(activeRange);
                     inputWeight.value = '';
 
-                    // PAKAI ALERT KITA (SUKSES)
-                    showAlert('success', 'Great Job!', `Weight updated to ${weightVal} kg.`);
+                    // SUKSES UPDATE (SWEETALERT SUCCESS)
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Great Job!',
+                        text: `Weight updated to ${weightVal} kg.`,
+                        timer: 2000, // Otomatis tutup dalam 2 detik
+                        showConfirmButton: false
+                    });
 
                 } else {
-                    // PAKAI ALERT KITA (ERROR SERVER)
-                    showAlert('error', 'Update Failed', result.message);
+                    // ERROR DARI SERVER
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed',
+                        text: result.message
+                    });
                 }
 
             } catch (error) {
                 console.error("Error Updating:", error);
-                showAlert('error', 'System Error', 'Something went wrong. Try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'System Error',
+                    text: 'Something went wrong. Try again.'
+                });
             } finally {
                 btnUpdate.innerText = originalText;
                 btnUpdate.disabled = false;
