@@ -1,227 +1,184 @@
 /* =========================================
-   LOGIKA DASHBOARD (FULL FEATURES)
+   DASHBOARD LOGIC (AJAX & CHART.JS)
    ========================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. SETUP DATA & ELEMEN ---
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    
-    // Elemen UI Dasar
-    const welcomeMsg = document.getElementById('welcomeMsg');
-    const userAvatar = document.getElementById('userAvatar');
+    // --- 1. SETUP ELEMEN ---
+    const ctx = document.getElementById('weightChart');
+    const btnUpdate = document.getElementById('btnUpdateWeight');
+    const inputWeight = document.getElementById('newWeight');
     const displayWeight = document.getElementById('displayWeight');
-    const bmiValueElement = document.getElementById('bmiValue');
-    const bmiStatusElement = document.getElementById('bmiStatus');
-    const newWeightInput = document.getElementById('newWeight');
-    const btnUpdateWeight = document.querySelector('.btn-update'); 
+    
+    // Timeframe Buttons
+    const timeBtns = document.querySelectorAll('.time-btn');
 
-    // Elemen Custom Alert Modal
+    // Modal Elements
     const customAlert = document.getElementById('customAlert');
     const modalMessage = document.getElementById('modalMessage');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Validasi Login
-    if (!currentUser) {
-        alert("Anda belum login!"); 
-        window.location.href = 'login.php';
-        return;
-    }
+    let myChart; // Variabel global untuk Chart
 
-    // --- FUNGSI CUSTOM ALERT (MODAL) ---
-    function showCustomAlert(message) {
-        if (customAlert && modalMessage) {
-            modalMessage.innerText = message;
-            customAlert.classList.remove('hidden'); // Munculkan modal
-        } else {
-            // Fallback jika HTML modal tidak ditemukan
-            alert(message); 
-        }
-    }
-
-    // Event Listener Tutup Modal
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-            customAlert.classList.add('hidden'); // Sembunyikan modal
-            // Reload halaman setelah user klik OK (biar grafik update)
-            location.reload(); 
-        });
-    }
-
-    // --- UPDATE UI DASHBOARD ---
-    function updateDashboardUI() {
-        // A. Update Nama
-        if (welcomeMsg) {
-            const firstName = currentUser.name.split(' ')[0];
-            welcomeMsg.innerText = `Hello, ${firstName}! 👋`;
+    // --- 2. FUNGSI UNTUK MENGGAMBAR CHART ---
+    function renderChart(labels, dataPoints) {
+        // Hancurkan chart lama jika ada (biar gak numpuk pas ganti timeframe)
+        if (myChart) {
+            myChart.destroy();
         }
 
-        // B. Update Avatar
-        if (userAvatar) {
-            userAvatar.innerText = currentUser.name.charAt(0).toUpperCase();
-        }
-
-        // C. Update Berat Badan Utama
-        if (displayWeight) {
-            displayWeight.innerText = currentUser.weight ? `${currentUser.weight} kg` : "-- kg";
-        }
-
-        // D. Hitung BMI
-        if (bmiValueElement && bmiStatusElement) {
-            if (currentUser.weight && currentUser.height) {
-                const weight = parseFloat(currentUser.weight);
-                const heightCm = parseFloat(currentUser.height);
-                
-                if (weight > 0 && heightCm > 0) {
-                    const heightM = heightCm / 100;
-                    const bmi = weight / (heightM * heightM);
-                    
-                    bmiValueElement.innerText = bmi.toFixed(1);
-
-                    let status = "Unknown";
-                    let color = "#334155";
-
-                    if (bmi < 18.5) { status = "Underweight"; color = "#3b82f6"; }
-                    else if (bmi >= 18.5 && bmi < 24.9) { status = "Normal"; color = "#22c55e"; }
-                    else if (bmi >= 25 && bmi < 29.9) { status = "Overweight"; color = "#f97316"; }
-                    else { status = "Obesity"; color = "#ef4444"; }
-
-                    bmiStatusElement.innerText = status;
-                    bmiStatusElement.style.color = color;
-                }
-            } else {
-                bmiValueElement.innerText = "--.--";
-                bmiStatusElement.innerText = "No Data";
-            }
-        }
-    }
-
-    // Jalankan update tampilan saat load
-    updateDashboardUI();
-
-
-    // --- 2. UPDATE BERAT BADAN (DENGAN CUSTOM ALERT) ---
-    if (btnUpdateWeight && newWeightInput) {
-        btnUpdateWeight.addEventListener('click', () => {
-            const newWeight = parseFloat(newWeightInput.value);
-
-            // Validasi Input
-            if (newWeight >= 20 && newWeight <= 400) { 
-                // A. Update Data Utama
-                currentUser.weight = newWeight;
-
-                // B. Update History (Buat array baru jika belum ada)
-                if (!currentUser.weightHistory) {
-                    currentUser.weightHistory = []; 
-                }
-                
-                const todayDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-                
-                currentUser.weightHistory.push({
-                    date: todayDate,
-                    weight: newWeight
-                });
-
-                // C. Simpan ke LocalStorage (Sesi Ini)
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-                // D. Simpan ke Database Users (Semua User)
-                let users = JSON.parse(localStorage.getItem('users')) || [];
-                const userIndex = users.findIndex(u => u.email === currentUser.email);
-                if (userIndex !== -1) {
-                    users[userIndex].weight = newWeight;
-                    users[userIndex].weightHistory = currentUser.weightHistory;
-                    localStorage.setItem('users', JSON.stringify(users));
-                }
-
-                // E. TAMPILKAN CUSTOM ALERT
-                showCustomAlert(`Berat badan berhasil diupdate menjadi ${newWeight} kg!`);
-                
-            } else {
-                alert("Mohon masukkan berat badan yang valid (20kg - 300kg).");
-            }
-        });
-    }
-
-
-    // --- 3. SIDEBAR & LOGOUT ---
-    const toggleSidebarBtn = document.getElementById('toggleSidebar');
-    const sidebar = document.getElementById('sidebar');
-    const btnLogout = document.getElementById('btnLogout');
-    
-    if (toggleSidebarBtn && sidebar) {
-        toggleSidebarBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-        });
-    }
-
-    if (btnLogout) {
-        btnLogout.addEventListener('click', () => {
-            if (confirm("Yakin ingin keluar?")) {
-                localStorage.removeItem('currentUser');
-                window.location.href = 'index.php';
-            }
-        });
-    }
-
-
-    // --- 4. GRAFIK (REALTIME DATA) ---
-    const ctx = document.getElementById('weightChart');
-    
-    // Cek apakah ada data history untuk digambar
-    if (ctx && currentUser.weightHistory) {
-        const labels = currentUser.weightHistory.map(item => item.date);
-        const dataPoints = currentUser.weightHistory.map(item => item.weight);
-
-        new Chart(ctx, {
+        // Buat Chart Baru
+        myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
                     label: 'Berat Badan (kg)',
                     data: dataPoints,
-                    borderColor: '#2563eb',
-                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                    borderColor: '#2563eb', // Warna Biru Utama
+                    backgroundColor: 'rgba(37, 99, 235, 0.1)', // Arsir Bawah
                     borderWidth: 2,
-                    tension: 0.4,
+                    tension: 0.3, // Kelengkungan garis (0 = kaku, 0.4 = mulus)
                     pointBackgroundColor: '#fff',
                     pointBorderColor: '#2563eb',
-                    pointRadius: 5,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
                     fill: true
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: { legend: { display: false } }, // Sembunyikan legenda
                 scales: {
-                    y: { beginAtZero: false, grid: { color: '#f1f5f9' } },
-                    x: { grid: { display: false } }
+                    y: { 
+                        beginAtZero: false, 
+                        grid: { color: '#f1f5f9' } 
+                    },
+                    x: { 
+                        grid: { display: false },
+                        ticks: { maxTicksLimit: 8 } // Batasi label bawah biar gak penuh
+                    }
                 }
-            }
-        });
-    } else if (ctx && currentUser.weight) {
-        // Fallback: Jika belum ada history, tampilkan 1 titik saja (Data Hari Ini)
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Hari Ini'],
-                datasets: [{
-                    label: 'Berat Badan (kg)',
-                    data: [parseFloat(currentUser.weight)],
-                    borderColor: '#2563eb',
-                    backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: false } }
             }
         });
     }
 
+    // --- 3. FUNGSI FETCH DATA DARI API (GET) ---
+    async function loadChartData(range = '1W') {
+        try {
+            // Panggil API PHP kita
+            const response = await fetch(`api_weight.php?range=${range}`);
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                // Pisahkan data untuk sumbu X (Label) dan Y (Berat)
+                const labels = result.data.map(item => item.label);
+                const values = result.data.map(item => item.value);
+
+                // Gambar grafiknya
+                renderChart(labels, values);
+            } else {
+                console.error("Gagal memuat data:", result.message);
+            }
+        } catch (error) {
+            console.error("Error Fetching Data:", error);
+        }
+    }
+
+    // --- 4. LOGIKA TOMBOL TIMEFRAME (1W, 1M, ALL) ---
+    timeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Hapus kelas active dari semua tombol
+            timeBtns.forEach(b => b.classList.remove('active'));
+            // Tambah kelas active ke tombol yang diklik
+            btn.classList.add('active');
+
+            // Ambil data range (1W/1M/ALL) dan muat ulang chart
+            const range = btn.getAttribute('data-time');
+            loadChartData(range);
+        });
+    });
+
+    // --- 5. LOGIKA UPDATE BERAT BADAN (AJAX POST) ---
+    if (btnUpdate) {
+        btnUpdate.addEventListener('click', async () => {
+            const weightVal = parseFloat(inputWeight.value);
+
+            if (!weightVal || weightVal <= 0) {
+                alert("Masukkan berat badan yang valid!");
+                return;
+            }
+
+            // Ubah tombol jadi 'Loading...'
+            const originalText = btnUpdate.innerText;
+            btnUpdate.innerText = "Saving...";
+            btnUpdate.disabled = true;
+
+            try {
+                // Kirim data ke API tanpa reload halaman
+                const response = await fetch('api_weight.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ weight: weightVal })
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    // 1. Munculkan Modal Sukses
+                    if(customAlert) {
+                        modalMessage.innerText = `Berat badan berhasil diupdate menjadi ${weightVal} kg!`;
+                        customAlert.classList.remove('hidden');
+                    }
+
+                    // 2. Update Angka Besar di Dashboard (Tanpa Reload)
+                    if(displayWeight) {
+                        displayWeight.innerText = `${weightVal} kg`;
+                    }
+
+                    // --- 3. UPDATE BMI (BAGIAN UTAMA YANG KITA PERBAIKI) ---
+                    const bmiValue = document.getElementById('bmiValue');
+                    const bmiStatus = document.getElementById('bmiStatus');
+
+                    if (bmiValue && result.new_bmi) {
+                        bmiValue.innerText = result.new_bmi.score;
+                    }
+                    if (bmiStatus && result.new_bmi) {
+                        bmiStatus.innerText = result.new_bmi.status;
+                        bmiStatus.style.color = result.new_bmi.color;
+                    }
+
+                    // 4. Refresh Grafik (Ambil data terbaru)
+                    const activeRange = document.querySelector('.time-btn.active').getAttribute('data-time');
+                    loadChartData(activeRange);
+
+                    // 5. Reset Input
+                    inputWeight.value = '';
+
+                } else {
+                    alert("Gagal update: " + result.message);
+                }
+
+            } catch (error) {
+                console.error("Error Updating:", error);
+                alert("Terjadi kesalahan sistem.");
+            } finally {
+                // Kembalikan tombol seperti semula
+                btnUpdate.innerText = originalText;
+                btnUpdate.disabled = false;
+            }
+        });
+    }
+
+    // --- 6. LOGIKA TUTUP MODAL ---
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            customAlert.classList.add('hidden');
+        });
+    }
+
+    // === JALANKAN PERTAMA KALI ===
+    // Load data default (1 Minggu terakhir)
+    loadChartData('1W'); 
 });
