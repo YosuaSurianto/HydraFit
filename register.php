@@ -2,8 +2,8 @@
 session_start();
 include 'koneksi.php'; // Panggil jembatan database
 
-// Variabel untuk menampung pesan error/sukses
-$error_msg = "";
+// Variabel untuk menampung script SweetAlert (Default kosong)
+$swal_script = "";
 
 // Cek apakah tombol "Sign Up" ditekan
 if (isset($_POST['sign_up'])) {
@@ -13,13 +13,19 @@ if (isset($_POST['sign_up'])) {
     $password_raw = $_POST['password'];
 
     // Cek apakah Email atau Username sudah ada di database?
-    // Kita pakai OR karena keduanya harus unik
     $check_query = "SELECT * FROM users WHERE email = '$email' OR username = '$username'";
     $result_check = mysqli_query($conn, $check_query);
 
     if (mysqli_num_rows($result_check) > 0) {
-        // Kalau ketemu datanya, berarti sudah terpakai
-        $error_msg = "Email or Username already taken! Please choose another.";
+        // ERROR: Email/Username sudah terpakai -> Siapkan SweetAlert Error
+        $swal_script = "
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Email or Username already taken! Please choose another.',
+                confirmButtonColor: '#ef4444'
+            });
+        ";
     } else {
         // Enkripsi Password (Wajib biar aman)
         $password_hash = password_hash($password_raw, PASSWORD_DEFAULT);
@@ -35,11 +41,19 @@ if (isset($_POST['sign_up'])) {
             // Simpan ID ke Session (biar sistem tau siapa yang lagi login)
             $_SESSION['user_id'] = $new_user_id;
             
-            // Lempar ke Step 2 (Isi Nama)
+            // SUKSES: Langsung Lempar ke Step 2 (Tanpa Alert, biar cepat)
             header("Location: create-profile.php");
             exit();
         } else {
-            $error_msg = "Error System: " . mysqli_error($conn);
+            // Error System Database
+            $sys_error = mysqli_error($conn);
+            $swal_script = "
+                Swal.fire({
+                    icon: 'error',
+                    title: 'System Error',
+                    text: 'Database Error: $sys_error'
+                });
+            ";
         }
     }
 }
@@ -57,6 +71,8 @@ if (isset($_POST['sign_up'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="auth-body">
 
@@ -80,12 +96,6 @@ if (isset($_POST['sign_up'])) {
             </div>
 
             <h2 class="auth-title">Create Account</h2>
-
-            <?php if(!empty($error_msg)): ?>
-                <div style="background-color: #fee2e2; color: #ef4444; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 0.9rem;">
-                    <?php echo $error_msg; ?>
-                </div>
-            <?php endif; ?>
 
             <form class="auth-form" method="POST" action="">
                 
@@ -120,6 +130,7 @@ if (isset($_POST['sign_up'])) {
     </div>
 
     <script>
+        // 1. Logic Toggle Password (Bawaan Lama)
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('passwordInput');
 
@@ -136,6 +147,9 @@ if (isset($_POST['sign_up'])) {
                 }
             });
         }
+
+        // 2. Logic SweetAlert (Dari PHP)
+        <?php echo $swal_script; ?>
     </script>
 </body>
 </html>
