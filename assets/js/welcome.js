@@ -4,11 +4,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Ambil data user yang sedang login dari LocalStorage
+    // Ambil data user yang sedang login dari LocalStorage
     // (Data ini sudah disimpan oleh Step 3 sebelumnya)
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    // 2. Tampilkan Username di Navbar
+    // Tampilkan Username di Navbar
     const displayUsername = document.getElementById('displayUsername');
     
     if (currentUser && currentUser.username) {
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // window.location.href = 'login.php';
     }
 
-    // 3. Tombol GET STARTED
+    // Tombol GET STARTED
     const btnGetStarted = document.getElementById('btnGetStarted');
     
     if (btnGetStarted) {

@@ -19,7 +19,7 @@ body {
 }
 
 /* =========================================
-   2. BACKGROUND CANVAS (ANIMASI)
+   BACKGROUND CANVAS (ANIMASI)
    ========================================= */
 #particles-canvas {
     position: absolute;
@@ -34,7 +34,7 @@ body {
 }
 
 /* =========================================
-   3. NAVBAR UTAMA (LANDING PAGE)
+   NAVBAR UTAMA (LANDING PAGE)
    ========================================= */
 .navbar {
     display: flex;
@@ -74,7 +74,7 @@ body {
 }
 
 /* =========================================
-   4. COMPONENT TOMBOL (CUSTOM BUTTONS)
+   COMPONENT TOMBOL (CUSTOM BUTTONS)
    ========================================= */
 
 /* Agar Button nya itu bawahannya gak ada garis */
@@ -132,18 +132,16 @@ button {
 
 /* Ukuran Jumbo untuk Tombol CTA Utama */
 .btn-large {
-    padding: 16px 40px; /* Lebih tebal dari default 12px 32px */
-    font-size: 1.1rem;  /* Teks lebih besar */
+    padding: 16px 40px; 
+    font-size: 1.1rem;  
 }
-
-/* Pastikan icon panah di dalamnya ikut menyesuaikan */
 .btn-large svg {
     width: 24px;
     height: 24px;
 }
 
 /* =========================================
-   5. HERO SECTION (LAYOUT UTAMA)
+   HERO SECTION (LAYOUT UTAMA)
    ========================================= */
 .hero-container {
     flex-grow: 1; /* Mengisi sisa ruang layar */
@@ -270,7 +268,7 @@ h1 {
 .purple { width: 200px; height: 200px; background: #e9d5ff; bottom: -20px; left: -20px; }
 
 /* =========================================
-   6. RESPONSIVE (LAYOUT HP/TABLET)
+   RESPONSIVE (LAYOUT HP/TABLET)
    ========================================= */
 @media (max-width: 900px) {
     .navbar { 
@@ -305,7 +303,7 @@ h1 {
 }
 
 /* =========================================
-   7. ANIMASI MASUK (FADE IN)
+   ANIMASI MASUK (FADE IN)
    ========================================= */
 .fade-in {
     opacity: 0;
@@ -325,7 +323,7 @@ h1 {
 }
 
 /* =========================================
-   8. HALAMAN AUTH (LOGIN & REGISTER & WELCOME)
+   HALAMAN AUTH (LOGIN & REGISTER & WELCOME)
    ========================================= */
 
 /* Background Abu-abu (Sesuai desain Figma) */

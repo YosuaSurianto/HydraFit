@@ -14,18 +14,18 @@ if (isset($_SESSION['user_id'])) {
 $error_msg = "";
 
 if (isset($_POST['login'])) {
-    // 1. Ambil inputan user (bisa email, bisa username)
+    // Ambil inputan user (bisa email, bisa username)
     $login_input = mysqli_real_escape_string($conn, $_POST['login_input']);
     $password    = $_POST['password'];
 
-    // 2. Query Cerdas: Cari di kolom email ATAU username
+    // Query Cerdas: Cari di kolom email ATAU username
     $query = "SELECT * FROM users WHERE email = '$login_input' OR username = '$login_input'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
 
-        // 3. Cek Password (Hash)
+        // Cek Password (Hash)
         if (password_verify($password, $row['password'])) {
             // Login Sukses! 
             

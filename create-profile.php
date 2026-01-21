@@ -2,14 +2,13 @@
 session_start();
 include 'koneksi.php';
 
-// 1. CEK KEAMANAN: Apakah user sudah login/register?
-// Kalau user_id kosong, berarti dia nyelonong masuk tanpa lewat register.php
+// CEK KEAMANAN: Apakah user sudah login/register?
 if (!isset($_SESSION['user_id'])) {
     header("Location: register.php"); 
     exit();
 }
 
-// 2. PROSES UPDATE DATA SAAT TOMBOL DITEKAN
+// PROSES UPDATE DATA SAAT TOMBOL DITEKAN
 if (isset($_POST['save_profile'])) {
     $user_id = $_SESSION['user_id'];
     

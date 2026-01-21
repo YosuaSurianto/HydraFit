@@ -7,12 +7,12 @@ $error_msg = "";
 
 // Cek apakah tombol "Sign Up" ditekan
 if (isset($_POST['sign_up'])) {
-    // 1. Ambil data dari form dan bersihkan (biar aman dari hacker)
+    // Ambil data dari form dan bersihkan 
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password_raw = $_POST['password'];
 
-    // 2. Cek apakah Email atau Username sudah ada di database?
+    // Cek apakah Email atau Username sudah ada di database?
     // Kita pakai OR karena keduanya harus unik
     $check_query = "SELECT * FROM users WHERE email = '$email' OR username = '$username'";
     $result_check = mysqli_query($conn, $check_query);
@@ -21,10 +21,10 @@ if (isset($_POST['sign_up'])) {
         // Kalau ketemu datanya, berarti sudah terpakai
         $error_msg = "Email or Username already taken! Please choose another.";
     } else {
-        // 3. Enkripsi Password (Wajib biar aman)
+        // Enkripsi Password (Wajib biar aman)
         $password_hash = password_hash($password_raw, PASSWORD_DEFAULT);
 
-        // 4. Masukkan data ke Database
+        // Masukkan data ke Database
         $insert_query = "INSERT INTO users (email, username, password) VALUES ('$email', '$username', '$password_hash')";
         
         if (mysqli_query($conn, $insert_query)) {

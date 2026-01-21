@@ -4,7 +4,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. SETUP ELEMEN ---
+    // ---SETUP ELEMEN ---
     const ctx = document.getElementById('weightChart');
     const btnUpdate = document.getElementById('btnUpdateWeight');
     const inputWeight = document.getElementById('newWeight');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let myChart; 
 
-    // --- 2. LOGIKA LOGOUT (SWEETALERT2) ---
+    // ---LOGIKA LOGOUT (SWEETALERT2) ---
     if (navLogoutBtn) {
         navLogoutBtn.addEventListener('click', (e) => {
             e.preventDefault(); 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 3. RENDER CHART (Sama seperti sebelumnya) ---
+    // ---RENDER CHART (Sama seperti sebelumnya) ---
     function renderChart(labels, dataPoints) {
         if (myChart) myChart.destroy();
         myChart = new Chart(ctx, {
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. FETCH DATA (GET) ---
+    // ---FETCH DATA (GET) ---
     async function loadChartData(range = '1W') {
         try {
             const response = await fetch(`api_weight.php?range=${range}`);
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 5. TIMEFRAME BUTTONS ---
+    // ---TIMEFRAME BUTTONS ---
     timeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             timeBtns.forEach(b => b.classList.remove('active'));
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 6. UPDATE BERAT (POST) ---
+    // ---UPDATE BERAT (POST) ---
     if (btnUpdate) {
         btnUpdate.addEventListener('click', async () => {
             const weightVal = parseFloat(inputWeight.value);

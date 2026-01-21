@@ -11,7 +11,7 @@ body {
     overflow-x: hidden;
 }
 
-/* --- 1. SIDEBAR (Menu Kiri) --- */
+/* --- SIDEBAR (Menu Kiri) --- */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -70,7 +70,7 @@ body {
 .logout-link:hover { background-color: #fef2f2 !important; color: #ef4444 !important; }
 
 
-/* --- 2. MAIN CONTENT --- */
+/* --- MAIN CONTENT --- */
 .main-content {
     margin-left: 250px; 
     width: calc(100% - 250px);

@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileForm = document.getElementById('profileForm');
 
     if (profileForm) {
-        // 1. Cek validasi akses: Apakah user ini beneran habis dari register?
-        // Kita ambil email "sementara" yang disimpan script.js di Step 1
+        // Cek validasi akses: Apakah user ini beneran habis dari register?
+        // ambil email "sementara" yang disimpan script.js di Step 1
         const currentEmail = localStorage.getItem('registeringEmail');
 
         if (!currentEmail) {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         profileForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // 2. Ambil data dari input Step 2
+            // Ambil data dari input Step 2
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const username = document.getElementById('username').value;
@@ -30,22 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Gabung jadi Full Name
             const fullName = `${firstName} ${lastName}`; 
 
-            // 3. Ambil database users dari localStorage
+            // Ambil database users dari localStorage
             let users = JSON.parse(localStorage.getItem('users')) || [];
 
-            // 4. Cari user yang sedang mendaftar berdasarkan Email
+            // Cari user yang sedang mendaftar berdasarkan Email
             const userIndex = users.findIndex(u => u.email === currentEmail);
 
             if (userIndex !== -1) {
-                // 5. UPDATE data user tersebut (masukkan nama)
+                // UPDATE data user tersebut (masukkan nama)
                 users[userIndex].name = fullName; 
                 users[userIndex].username = username; 
                 
-                // 6. Simpan perubahan ke LocalStorage
+                // Simpan perubahan ke LocalStorage
                 localStorage.setItem('users', JSON.stringify(users));
 
-                // 7. Lanjut ke STEP 3
-                // Redirect ke halaman data fisik
+                // Lanjut ke STEP 3
                 window.location.href = 'complete-profile.php';
             } else {
                 alert("Error: User tidak ditemukan. Silakan register ulang.");
@@ -59,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const completeProfileForm = document.getElementById('completeProfileForm');
 
     if (completeProfileForm) {
-        // 1. Cek validasi akses (sama kayak step 2, user harus punya sesi register)
+        // Cek validasi akses (sama kayak step 2, user harus punya sesi register)
         const currentEmail = localStorage.getItem('registeringEmail');
         
         if (!currentEmail) {
@@ -71,14 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
         completeProfileForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // 2. Ambil data fisik dari input Step 3
+            // Ambil data fisik dari input Step 3
             const birthDate = document.getElementById('birthDate').value;
             const gender = document.getElementById('gender').value;
             const bloodType = document.getElementById('bloodType').value;
             const weight = document.getElementById('weight').value;
             const height = document.getElementById('height').value;
 
-            // 3. Update Database User
+            // Update Database User
             let users = JSON.parse(localStorage.getItem('users')) || [];
             const userIndex = users.findIndex(u => u.email === currentEmail);
 
@@ -103,8 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Hapus sesi register sementara (bersih-bersih) karena sudah selesai
                 localStorage.removeItem('registeringEmail');
 
-               // 4. Redirect ke WELCOME PAGE 
-               // // alert dihapus biar smooth
+               // Redirect ke WELCOME PAGE 
                window.location.href = 'welcome.php';
             } else {
                 alert("Error: User data corrupt. Silakan ulang.");

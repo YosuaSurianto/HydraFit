@@ -3,7 +3,7 @@ session_start();
 header('Content-Type: application/json'); // Wajib biar JS tau ini data JSON
 include 'koneksi.php';
 
-// 1. Cek Login (Security Layer)
+// Cek Login (Security Layer)
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
     exit();
@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $method = $_SERVER['REQUEST_METHOD'];
 
-// --- BAGIAN 1: AMBIL DATA (GET) ---
+// ---  AMBIL DATA (GET) ---
 // Dipanggil saat chart mau digambar atau ganti timeframe
 if ($method === 'GET') {
     $range = isset($_GET['range']) ? $_GET['range'] : '1W';
@@ -56,10 +56,7 @@ if ($method === 'GET') {
     echo json_encode(['status' => 'success', 'data' => $data]);
     exit();
 }
-
-// ... (Bagian atas biarkan sama) ...
-
-// --- BAGIAN 2: UPDATE BERAT (POST) ---
+// --- UPDATE BERAT (POST) ---
 if ($method === 'POST') {
     // Ambil data JSON yang dikirim JS
     $input = json_decode(file_get_contents('php://input'), true);
@@ -68,15 +65,15 @@ if ($method === 'POST') {
         $new_weight = floatval($input['weight']);
 
         if ($new_weight > 0) {
-            // A. Masukkan ke tabel history
+            // Masukkan ke tabel history
             $query_history = "INSERT INTO weight_tracking (user_id, weight) VALUES ('$user_id', '$new_weight')";
             mysqli_query($conn, $query_history);
 
-            // B. Update berat saat ini di tabel users
+            // Update berat saat ini di tabel users
             $query_update = "UPDATE users SET current_weight = '$new_weight' WHERE id = '$user_id'";
             mysqli_query($conn, $query_update);
 
-            // --- C. HITUNG BMI BARU (LOGIKA TAMBAHAN) ---
+            // ---HITUNG BMI BARU (LOGIKA TAMBAHAN) ---
             // Ambil tinggi badan user untuk hitung ulang BMI
             $q_user = mysqli_query($conn, "SELECT height FROM users WHERE id = '$user_id'");
             $d_user = mysqli_fetch_assoc($q_user);

@@ -1,5 +1,5 @@
 /* =========================================
-   BAGIAN 1: ANIMASI BACKGROUND (CANVAS)
+   ANIMASI BACKGROUND (CANVAS)
    ========================================= */
 const canvas = document.getElementById('particles-canvas');
 
@@ -87,13 +87,13 @@ if (canvas) {
 }
 
 /* =========================================
-   BAGIAN 2: GLOBAL MODAL SYSTEM (POP-UP)
+   GLOBAL MODAL SYSTEM (POP-UP)
    ========================================= */
 
 // Fungsi global untuk menampilkan modal
 // Bisa dipanggil dari file JS manapun setelah script.js diload
 function showModal(type, title, message, onConfirm = null) {
-    // 1. Cek apakah HTML modal sudah ada? Kalau belum, inject.
+    // Cek apakah HTML modal sudah ada? Kalau belum, inject.
     if (!document.getElementById('globalModal')) {
         const modalHTML = `
             <div id="globalModal" class="modal-overlay">
@@ -168,7 +168,7 @@ function showModal(type, title, message, onConfirm = null) {
 
 
 /* =========================================
-   BAGIAN 3: LOGIKA NAVIGASI & AUTH
+   LOGIKA NAVIGASI & AUTH
    ========================================= */
 
 const btnLogin = document.getElementById('btnLogin');
@@ -206,7 +206,7 @@ if (togglePassword && activePasswordInput) {
 }
 
 
-// --- A. REGISTER SYSTEM ---
+// --- REGISTER SYSTEM ---
 const registerForm = document.getElementById('registerForm');
 
 if (registerForm) {
@@ -247,7 +247,7 @@ if (registerForm) {
     });
 }
 
-// --- B. LOGIN SYSTEM ---
+// --- LOGIN SYSTEM ---
 const loginForm = document.getElementById('loginForm');
 
 if (loginForm) {

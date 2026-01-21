@@ -2,13 +2,13 @@
 session_start();
 include 'koneksi.php';
 
-// 1. CEK KEAMANAN
+// CEK KEAMANAN
 if (!isset($_SESSION['user_id'])) {
     header("Location: register.php");
     exit();
 }
 
-// 2. PROSES UPDATE DATA
+// PROSES UPDATE DATA
 if (isset($_POST['finish_setup'])) {
     $user_id = $_SESSION['user_id'];
     

@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HydraFit - From Fat To Fit</title>
     
-    <!-- 1. GOOGLE FONTS (POPPINS) -->
+    <!-- GOOGLE FONTS (POPPINS) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <!-- 2. CSS LOKAL -->
+    <!-- CSS LOKAL -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
-            <!-- Icon Jantung (SVG Manual - Tanpa CDN) -->
+            <!-- Icon Jantung-->
             <div class="logo-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20 12h-4l-3 9L9 3l-3 9H2"/>

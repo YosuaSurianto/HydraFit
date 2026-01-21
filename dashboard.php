@@ -3,7 +3,7 @@ session_start();
 include 'koneksi.php';
 
 // =========================================
-// 1. CEK LOGIN (SECURITY LAYER)
+// CEK LOGIN (SECURITY LAYER)
 // =========================================
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // =========================================
-// 2. AMBIL DATA USER DARI DATABASE
+// AMBIL DATA USER DARI DATABASE
 // =========================================
 $query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);
@@ -25,10 +25,10 @@ $weight = $user['current_weight'] ?? 0;
 $height = $user['height'] ?? 0;
 
 // =========================================
-// 3. HITUNG BMI AWAL (SERVER SIDE)
+// HITUNG BMI AWAL (SERVER SIDE)
 // =========================================
 // Ini untuk tampilan awal saat halaman diload.
-// Nanti kalau user update berat, JS yang akan update angka ini via AJAX.
+// Nanti kalau user update berat, JS yang akan update angka ini lewat AJAX.
 
 $bmi_score = 0;
 $bmi_status = "No Data";

@@ -2,13 +2,13 @@
 session_start();
 include 'koneksi.php';
 
-// 1. CEK SESSION: Wajib Login
+// CEK SESSION: Wajib Login
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// 2. AMBIL DATA USER DARI DATABASE
+// AMBIL DATA USER DARI DATABASE
 $user_id = $_SESSION['user_id'];
 $query = "SELECT username, first_name FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);
