@@ -42,8 +42,25 @@ if (isset($_POST['sign_up'])) {
             $_SESSION['user_id'] = $new_user_id;
             
             // SUKSES: Langsung Lempar ke Step 2 (Tanpa Alert, biar cepat)
-            header("Location: create-profile.php");
-            exit();
+            // header("Location: create-profile.php");
+            // exit();
+
+$swal_script = "
+    Swal.fire({
+        icon: 'success',
+        title: 'Account Created!',
+        text: 'Welcome to HydraFit! Let\'s complete your profile to personalize your experience.',
+        confirmButtonText: 'Setup Profile →',
+        confirmButtonColor: '#2563eb',
+        allowOutsideClick: false,  // User gak bisa tutup alert sembarangan
+        allowEscapeKey: false
+    }).then((result) => {
+        // 3. Logika Redirect pake JavaScript (Jalan setelah user klik tombol)
+        if (result.isConfirmed) {
+            window.location.href = 'create-profile.php';
+        }
+    });
+";
         } else {
             // Error System Database
             $sys_error = mysqli_error($conn);
@@ -130,7 +147,7 @@ if (isset($_POST['sign_up'])) {
     </div>
 
     <script>
-        // 1. Logic Toggle Password (Bawaan Lama)
+        // 1. Logic Toggle Password Visibility
         const togglePassword = document.getElementById('togglePassword');
         const passwordInput = document.getElementById('passwordInput');
 
@@ -153,3 +170,5 @@ if (isset($_POST['sign_up'])) {
     </script>
 </body>
 </html>
+
+
