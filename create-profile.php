@@ -2,6 +2,9 @@
 session_start();
 include 'koneksi.php';
 
+// Variabel untuk menampung script SweetAlert (Default kosong)
+$swal_script = "";
+
 // CEK KEAMANAN: Apakah user sudah login/register?
 if (!isset($_SESSION['user_id'])) {
     header("Location: register.php"); 
@@ -12,19 +15,27 @@ if (!isset($_SESSION['user_id'])) {
 if (isset($_POST['save_profile'])) {
     $user_id = $_SESSION['user_id'];
     
-    // Ambil data dari input (pakai atribut 'name', bukan 'id')
+    // Ambil data dari input
     $first_name = mysqli_real_escape_string($conn, $_POST['first_name']);
     $last_name  = mysqli_real_escape_string($conn, $_POST['last_name']);
 
-    // Update database: isi kolom first_name dan last_name
+    // Update database
     $query = "UPDATE users SET first_name = '$first_name', last_name = '$last_name' WHERE id = '$user_id'";
 
     if (mysqli_query($conn, $query)) {
-        // BERHASIL: Lempar ke Step 3 (Data Fisik)
+        // BERHASIL: Langsung Lempar ke Step 3 (Silent Success)
         header("Location: complete-profile.php");
         exit();
     } else {
-        $error_msg = "Gagal menyimpan data: " . mysqli_error($conn);
+        // GAGAL: Siapkan SweetAlert Error
+        $sys_error = mysqli_error($conn);
+        $swal_script = "
+            Swal.fire({
+                icon: 'error',
+                title: 'System Error',
+                text: 'Failed to save profile: $sys_error'
+            });
+        ";
     }
 }
 ?>
@@ -42,6 +53,8 @@ if (isset($_POST['save_profile'])) {
     
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/onboarding.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="auth-body">
 
@@ -63,10 +76,6 @@ if (isset($_POST['save_profile'])) {
                 <h2 class="auth-title">Create a New Profile</h2>
                 <p class="step-indicator">Step 2 of 3</p>
             </div>
-
-            <?php if(isset($error_msg)): ?>
-                <p style="color: red; text-align: center; margin-bottom: 10px;"><?php echo $error_msg; ?></p>
-            <?php endif; ?>
 
             <form class="auth-form" method="POST" action="">
                 
@@ -93,5 +102,9 @@ if (isset($_POST['save_profile'])) {
         </div>
     </div>
 
-    </body>
+    <script>
+        <?php echo $swal_script; ?>
+    </script>
+
+</body>
 </html>
