@@ -3,47 +3,51 @@ session_start();
 include 'koneksi.php';
 
 // --- FITUR AUTO-LOGOUT ---
-// Jika user iseng balik ke halaman login saat masih login,
-// kita ANGGAP dia mau logout. Kita hancurkan session lamanya.
 if (isset($_SESSION['user_id'])) {
     session_unset();
     session_destroy();
-    session_start(); // Mulai session baru yang bersih
+    session_start();
 }
 
 $error_msg = "";
 
 if (isset($_POST['login'])) {
-    // Ambil inputan user (bisa email, bisa username)
-    $login_input = mysqli_real_escape_string($conn, $_POST['login_input']);
+    // 1. AMBIL INPUT & BERSIHKAN (PENTING: Pakai trim, JANGAN pakai real_escape_string)
+    $login_input = trim($_POST['login_input']); 
     $password    = $_POST['password'];
 
-    // Query Cerdas: Cari di kolom email ATAU username
-    $query = "SELECT * FROM users WHERE email = '$login_input' OR username = '$login_input'";
-    $result = mysqli_query($conn, $query);
+    // 2. PREPARED STATEMENT (Security Level: Bank)
+    // Cek apakah email ATAU username cocok
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
+    
+    // Binding (s = string)
+    $stmt->bind_param("ss", $login_input, $login_input);
+    
+    // Eksekusi
+    $stmt->execute();
+    
+    // Ambil Hasil
+    $result = $stmt->get_result();
 
-    if (mysqli_num_rows($result) === 1) {
-        $row = mysqli_fetch_assoc($result);
+    if ($result->num_rows === 1) {
+        $row = $result->fetch_assoc();
 
-        // Cek Password (Hash)
+        // 3. VERIFIKASI PASSWORD
         if (password_verify($password, $row['password'])) {
-            // Login Sukses! 
-            
-            // TIPS TAMBAHAN: Kita perbarui ID session biar lebih aman (Security Best Practice)
+            // Login Sukses
             session_regenerate_id(true);
-
-            // Simpan ID user yang BARU LOGIN ke session
             $_SESSION['user_id'] = $row['id'];
             
-            // Lempar ke Welcome Page
             header("Location: welcome.php");
             exit();
         } else {
-            // Password Salah -> Muncul Error (Sesuai requestmu)
             $error_msg = "Wrong Password!";
         }
     } else {
-        // User Gak Ketemu -> Muncul Error
+        // User Gak Ketemu
+        // DEBUGGING (Hapus baris echo ini kalau sudah fix)
+        // echo "Input yang dicari: " . htmlspecialchars($login_input); 
+        
         $error_msg = "Username or Email not found!";
     }
 }
@@ -86,7 +90,7 @@ if (isset($_POST['login'])) {
 <body class="auth-body">
 
     <nav class="auth-navbar">
-        <a href="#" class="logo">
+        <a href="index.php" class="logo">
             <div class="logo-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
