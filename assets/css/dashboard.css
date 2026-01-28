@@ -1,5 +1,5 @@
 /* =========================================
-   DASHBOARD STYLES (STANDALONE)
+   DASHBOARD STYLES (UPDATED WITH FOOTER)
    ========================================= */
 
 /* Reset & Font Dasar */
@@ -19,17 +19,23 @@ body {
     border-right: 1px solid #e2e8f0;
     position: fixed;
     top: 0; left: 0;
-    display: flex; flex-direction: column;
+    
+    /* FLEXBOX UNTUK DORONG FOOTER KE BAWAH */
+    display: flex; 
+    flex-direction: column;
+    
     transition: width 0.3s ease;
     z-index: 100;
 }
 .sidebar.collapsed { width: 80px; }
 
+/* Header Sidebar */
 .sidebar-header {
     height: 70px;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 1.5rem;
     border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0; /* Header gak boleh gepeng */
 }
 .logo {
     display: flex; align-items: center; gap: 10px;
@@ -48,14 +54,16 @@ body {
 }
 .btn-toggle:hover { background-color: #f1f5f9; color: #2563eb; }
 
-/* Styles saat Collapsed */
-.sidebar.collapsed .logo-text, .sidebar.collapsed .link-text { display: none; }
-.sidebar.collapsed .sidebar-header { justify-content: center; padding: 1rem 0; height: auto; flex-direction: column; gap: 1rem; }
-.sidebar.collapsed .btn-toggle { transform: rotate(180deg); margin: 0 auto; }
-.sidebar.collapsed .menu-list a { justify-content: center; padding: 12px 0; }
-
-/* Menu List */
-.menu-list { list-style: none; padding: 1rem; flex-grow: 1; overflow-y: auto; }
+/* Menu List (Tengah) */
+.menu-list { 
+    list-style: none; 
+    padding: 1rem; 
+    
+    /* INI KUNCINYA: Mengisi semua ruang kosong di tengah */
+    flex-grow: 1; 
+    
+    overflow-y: auto; 
+}
 .menu-list li { margin-bottom: 0.5rem; }
 .menu-list a {
     display: flex; align-items: center; gap: 12px;
@@ -65,9 +73,61 @@ body {
 }
 .menu-list a:hover { background-color: #f1f5f9; color: #2563eb; }
 .menu-list li.active a { background-color: #eff6ff; color: #2563eb; }
-.menu-spacer { height: 1px; background-color: #e2e8f0; margin: 1rem 0; }
-.logout-link { color: #ef4444 !important; }
-.logout-link:hover { background-color: #fef2f2 !important; color: #ef4444 !important; }
+
+/* --- SIDEBAR FOOTER (LOGOUT AREA) - BARU --- */
+.sidebar-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #f1f5f9; /* Garis pemisah halus */
+    flex-shrink: 0; /* Footer gak boleh gepeng */
+}
+
+.sidebar-footer a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ef4444; /* Merah */
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+.sidebar-footer a:hover {
+    color: #dc2626;
+    transform: translateX(3px); /* Efek gerak dikit */
+}
+
+/* --- STYLES SAAT COLLAPSED --- */
+.sidebar.collapsed .logo-text, 
+.sidebar.collapsed .link-text { 
+    display: none; 
+}
+
+.sidebar.collapsed .sidebar-header { 
+    justify-content: center; 
+    padding: 1rem 0; 
+    height: auto; 
+    flex-direction: column; 
+    gap: 1rem; 
+}
+
+.sidebar.collapsed .btn-toggle { 
+    transform: rotate(180deg); 
+    margin: 0 auto; 
+}
+
+.sidebar.collapsed .menu-list a { 
+    justify-content: center; 
+    padding: 12px 0; 
+}
+
+/* Footer saat Collapsed */
+.sidebar.collapsed .sidebar-footer {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
 
 
 /* --- MAIN CONTENT --- */
@@ -104,7 +164,7 @@ body {
 }
 .card-header h3 { font-size: 1.1rem; color: #1e293b; }
 
-/* --- TIMEFRAME BUTTONS (NEW!) --- */
+/* Timeframe Buttons */
 .timeframe-buttons {
     display: flex;
     background: #f1f5f9;
@@ -172,4 +232,3 @@ body {
     .sidebar { width: 0; overflow: hidden; }
     .main-content { margin-left: 0; width: 100%; }
 }
-

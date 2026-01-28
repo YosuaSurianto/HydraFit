@@ -3,7 +3,7 @@ session_start();
 include 'koneksi.php';
 
 // =========================================
-// CEK LOGIN (SECURITY LAYER)
+// 1. CEK LOGIN (SECURITY LAYER)
 // =========================================
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -11,9 +11,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+$current_page = 'dashboard'; // Penanda halaman aktif untuk sidebar
 
 // =========================================
-// AMBIL DATA USER DARI DATABASE
+// 2. AMBIL DATA USER DARI DATABASE
 // =========================================
 $query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);
@@ -25,11 +26,8 @@ $weight = $user['current_weight'] ?? 0;
 $height = $user['height'] ?? 0;
 
 // =========================================
-// HITUNG BMI AWAL (SERVER SIDE)
+// 3. HITUNG BMI AWAL (SERVER SIDE)
 // =========================================
-// Ini untuk tampilan awal saat halaman diload.
-// Nanti kalau user update berat, JS yang akan update angka ini lewat AJAX.
-
 $bmi_score = 0;
 $bmi_status = "No Data";
 $bmi_color = "#64748b"; // Warna default (Abu-abu)
@@ -65,66 +63,69 @@ if ($weight > 0 && $height > 0) {
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link rel="stylesheet" href="assets/css/dashboard.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 <body>
 
-    <aside class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar">
+    
         <div class="sidebar-header">
-            <a href="#" class="logo">
+            <a href="dashboard.php" class="logo">
                 <div class="logo-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 </div>
                 <span class="logo-text">HydraFit</span>
             </a>
-            <button id="toggleSidebar" class="btn-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <button class="btn-toggle" id="sidebarToggle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
             </button>
         </div>
-
+    
         <ul class="menu-list">
-            <li class="active">
-                <a href="#">
+            <li class="<?php echo ($current_page == 'dashboard') ? 'active' : ''; ?>">
+                <a href="dashboard.php">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
-            
-            <li class="menu-spacer"></li>
-            
-            <li>
-                <a href="#" id="navLogoutBtn" class="logout-link">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    <span class="link-text">Logout</span>
+    
+            <li class="<?php echo ($current_page == 'course') ? 'active' : ''; ?>">
+                <a href="course.php">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span class="link-text">Course</span>
                 </a>
             </li>
         </ul>
-    </aside>
+    
+        <div class="sidebar-footer">
+            <a href="logout.php" class="logout-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span class="link-text">Logout</span>
+            </a>
+        </div>
+    
+    </div>
 
-    <main class="main-content" id="mainContent">
+    <div class="main-content">
         
         <header class="top-header">
             <div class="user-welcome">
                 <h1>Hello, <?php echo htmlspecialchars($first_name); ?>! 👋</h1>
                 <p>Track your progress and stay healthy.</p>
             </div>
-            <div class="user-profile">
-                <div class="avatar"><?php echo strtoupper(substr($first_name, 0, 1)); ?></div>
+            <div class="avatar">
+                <?php echo strtoupper(substr($first_name, 0, 1)); ?>
             </div>
         </header>
 
         <div class="dashboard-grid">
             
-            <div class="grid-left">
-                <div class="card chart-card">
+            <div class="main-column"> <div class="card chart-card">
                     <div class="card-header">
                         <h3>Weight Tracker</h3>
-                        
                         <div class="timeframe-buttons">
                             <button class="time-btn active" data-time="1W">1W</button>
                             <button class="time-btn" data-time="1M">1M</button>
@@ -143,9 +144,7 @@ if ($weight > 0 && $height > 0) {
                 </div>
             </div>
 
-            <div class="grid-right">
-                
-                <div class="card stat-card">
+            <div class="side-column"> <div class="card stat-card">
                     <div class="icon-box blue">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7"/><path d="M15 7h6v6"/></svg>
                     </div>
@@ -175,7 +174,7 @@ if ($weight > 0 && $height > 0) {
 
             </div>
         </div>
-    </main>
+    </div>
 
     <script src="assets/js/dashboard.js"></script>
 
