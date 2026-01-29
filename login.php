@@ -3,6 +3,7 @@ session_start();
 include 'koneksi.php';
 
 // --- FITUR AUTO-LOGOUT ---
+// Jika user kembali ke halaman login saat masih login, kita logout-kan dulu
 if (isset($_SESSION['user_id'])) {
     session_unset();
     session_destroy();
@@ -12,21 +13,14 @@ if (isset($_SESSION['user_id'])) {
 $error_msg = "";
 
 if (isset($_POST['login'])) {
-    // 1. AMBIL INPUT & BERSIHKAN (PENTING: Pakai trim, JANGAN pakai real_escape_string)
+    // 1. AMBIL INPUT & BERSIHKAN
     $login_input = trim($_POST['login_input']); 
     $password    = $_POST['password'];
 
-    // 2. PREPARED STATEMENT (Security Level: Bank)
-    // Cek apakah email ATAU username cocok
+    // 2. PREPARED STATEMENT (Cek Email atau Username)
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
-    
-    // Binding (s = string)
     $stmt->bind_param("ss", $login_input, $login_input);
-    
-    // Eksekusi
     $stmt->execute();
-    
-    // Ambil Hasil
     $result = $stmt->get_result();
 
     if ($result->num_rows === 1) {
@@ -34,20 +28,27 @@ if (isset($_POST['login'])) {
 
         // 3. VERIFIKASI PASSWORD
         if (password_verify($password, $row['password'])) {
-            // Login Sukses
+            // --- LOGIN SUKSES ---
             session_regenerate_id(true);
-            $_SESSION['user_id'] = $row['id'];
             
-            header("Location: welcome.php");
+            // Simpan ID dan Role ke Session
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['role'] = $row['role']; // <--- PENTING: Simpan Role!
+
+            // --- TRAFFIC CONTROLLER (PENGATUR LALU LINTAS) ---
+            if ($row['role'] === 'admin') {
+                // Jika Admin, kirim ke Dashboard Admin
+                header("Location: admin/dashboard.php");
+            } else {
+                // Jika User Biasa, kirim ke Dashboard User
+                header("Location: dashboard.php");
+            }
             exit();
+
         } else {
             $error_msg = "Wrong Password!";
         }
     } else {
-        // User Gak Ketemu
-        // DEBUGGING (Hapus baris echo ini kalau sudah fix)
-        // echo "Input yang dicari: " . htmlspecialchars($login_input); 
-        
         $error_msg = "Username or Email not found!";
     }
 }
@@ -61,9 +62,7 @@ if (isset($_POST['login'])) {
     <title>Login - HydraFit</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="assets/css/style.css">
-    
     <link rel="stylesheet" href="assets/css/onboarding.css?v=3">
 
     <style>
