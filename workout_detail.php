@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// 2. TANGKAP ID DARI URL (Contoh: workout_detail.php?id=5)
+// 2. TANGKAP ID DARI URL
 if (!isset($_GET['id'])) {
     header("Location: course.php");
     exit();
@@ -20,11 +20,15 @@ $query_course = "SELECT * FROM courses WHERE id = '$course_id'";
 $result_course = mysqli_query($conn, $query_course);
 $course = mysqli_fetch_assoc($result_course);
 
-// Kalau course tidak ditemukan (misal user iseng ganti ID jadi 999)
+// Kalau course tidak ditemukan
 if (!$course) {
     echo "<script>alert('Course not found!'); window.location='course.php';</script>";
     exit();
 }
+
+// --- LOGIC BANNER (BARU!) ---
+// Kalau kolom 'banner' ada isinya, pakai banner. Kalau kosong, pakai thumbnail.
+$bg_image = !empty($course['banner']) ? $course['banner'] : $course['thumbnail'];
 
 // 4. AMBIL DATA EXERCISES (ISI GERAKAN)
 $query_exercises = "SELECT * FROM exercises WHERE course_id = '$course_id' ORDER BY id ASC";
@@ -44,18 +48,24 @@ $result_exercises = mysqli_query($conn, $query_exercises);
         /* STYLE HALAMAN DETAIL */
         
         /* Header Banner Dynamic Background */
-        .workout-header {
-            /* Kita pasang background image dari database di sini lewat PHP inline style */
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('<?php echo htmlspecialchars($course['thumbnail']); ?>');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            position: relative;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
+.workout-header {
+    /* KEMBALIKAN KE TENGAH (CENTER) */
+    /* Biar fokus ke "Safe Area" di tengah gambar */
+    background-position: center center; 
+    
+    background-size: cover;
+    min-height: 300px; /* Settingan aman kamu tadi */
+    
+    /* Sisanya sama... */
+    color: white;
+    padding: 4rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    position: relative;
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+}
 
         .btn-back {
             position: absolute;
@@ -68,14 +78,35 @@ $result_exercises = mysqli_query($conn, $query_exercises);
             font-size: 0.85rem;
             backdrop-filter: blur(5px);
             transition: 0.3s;
+            z-index: 10;
         }
         .btn-back:hover { background: rgba(255,255,255,0.4); }
 
-        .header-content h1 { font-size: 2rem; margin-bottom: 5px; }
-        .header-content p { color: #cbd5e1; font-size: 1.1rem; }
+        .header-content {
+            position: relative;
+            z-index: 5;
+            max-width: 600px;
+        }
+
+        .header-content h1 { 
+            font-size: 2.5rem; /* Judul lebih besar */
+            margin-bottom: 10px; 
+            font-weight: 800;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .header-content p { 
+            color: #e2e8f0; 
+            font-size: 1.1rem; 
+            margin-bottom: 15px;
+        }
         
-        .badges { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .badge { background: #2563eb; padding: 5px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
+        .badges { display: flex; gap: 10px; flex-wrap: wrap; }
+        .badge { 
+            background: #2563eb; color: white;
+            padding: 6px 14px; border-radius: 50px; 
+            font-size: 0.85rem; font-weight: 600; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
         /* List Gerakan */
         .exercise-list { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -122,12 +153,13 @@ $result_exercises = mysqli_query($conn, $query_exercises);
             color: #475569; 
             line-height: 1.6; 
             font-size: 0.95rem; 
-            white-space: pre-line; /* Agar enter/baris baru di database terbaca */
+            white-space: pre-line;
         }
 
         @media (max-width: 768px) {
             .exercise-card { flex-direction: column; }
             .gif-container { width: 100%; height: 200px; }
+            .header-content h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -155,7 +187,7 @@ $result_exercises = mysqli_query($conn, $query_exercises);
         <div class="workout-header">
             <a href="course.php" class="btn-back">← Back to Library</a>
             
-            <div class="header-content" style="margin-top: 20px;">
+            <div class="header-content">
                 <h1><?php echo htmlspecialchars($course['title']); ?></h1>
                 <p>"<?php echo htmlspecialchars($course['tagline']); ?>"</p>
                 
@@ -168,7 +200,6 @@ $result_exercises = mysqli_query($conn, $query_exercises);
         <div class="exercise-list">
             
             <?php
-            // Cek apakah ada gerakan?
             if (mysqli_num_rows($result_exercises) > 0) {
                 $no = 1;
                 while ($ex = mysqli_fetch_assoc($result_exercises)) {
@@ -186,7 +217,6 @@ $result_exercises = mysqli_query($conn, $query_exercises);
             <?php 
                 } // End While
             } else {
-                // Kalau admin belum isi gerakan
                 echo "
                 <div style='text-align:center; padding: 40px; background: white; border-radius: 12px;'>
                     <h3>🚧 No Exercises Yet</h3>

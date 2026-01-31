@@ -12,21 +12,26 @@ $current_page = 'manage_course';
 $success_msg = "";
 $error_msg = "";
 
-// --- LOGIC TAMBAH COURSE (VERSI URL GAMBAR) ---
+// --- LOGIC TAMBAH COURSE (UPDATE: Tambah Banner) ---
 if (isset($_POST['add_course'])) {
     $title         = trim($_POST['title']);
     $tagline       = trim($_POST['tagline']);
     $target_muscle = trim($_POST['target_muscle']);
     $description   = trim($_POST['description']);
-    $thumbnail_url = trim($_POST['thumbnail']); // Ambil Link Gambar
+    $thumbnail_url = trim($_POST['thumbnail']); // Link Thumbnail (Kotak/16:9)
+    $banner_url    = trim($_POST['banner']);    // Link Banner (Lebar)
 
-    // Validasi sederhana: Pastikan semua terisi
+    // Validasi
     if (!empty($title) && !empty($thumbnail_url)) {
         
-        // Simpan ke Database (Langsung simpan URL-nya)
-        $stmt = $conn->prepare("INSERT INTO courses (title, tagline, thumbnail, description, target_muscle) VALUES (?, ?, ?, ?, ?)");
-        // Perhatikan tipe datanya semua string (sssss)
-        $stmt->bind_param("sssss", $title, $tagline, $thumbnail_url, $description, $target_muscle);
+        // Kalau Banner kosong, kita paksa pakai Thumbnail aja (biar gak error)
+        if(empty($banner_url)) {
+            $banner_url = $thumbnail_url;
+        }
+
+        // SIMPAN KE DB (Ada kolom banner sekarang)
+        $stmt = $conn->prepare("INSERT INTO courses (title, tagline, thumbnail, banner, description, target_muscle) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $title, $tagline, $thumbnail_url, $banner_url, $description, $target_muscle);
 
         if ($stmt->execute()) {
             $success_msg = "New Course created successfully!";
@@ -41,11 +46,7 @@ if (isset($_POST['add_course'])) {
 // --- LOGIC HAPUS COURSE ---
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
-    
-    // Karena sekarang cuma URL, kita tidak perlu unlink/hapus file fisik.
-    // Langsung hapus data di database saja.
     mysqli_query($conn, "DELETE FROM courses WHERE id='$id'");
-    
     header("Location: manage_course.php");
 }
 ?>
@@ -59,7 +60,6 @@ if (isset($_GET['delete'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -77,7 +77,7 @@ if (isset($_GET['delete'])) {
             <li><a href="manage_users.php"><span class="link-text">Manage Users</span></a></li>
         </ul>
         <div class="sidebar-footer">
-            <a href="logout.php" class="logout-link"><span class="link-text">Logout</span></a>
+            <a href="../logout.php" class="logout-link"><span class="link-text">Logout</span></a>
         </div>
     </div>
 
@@ -112,9 +112,13 @@ if (isset($_GET['delete'])) {
                 </div>
 
                 <div style="margin-top:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:500;">Cover Image URL</label>
-                    <input type="text" name="thumbnail" required placeholder="Paste image link here (e.g. https://image.com/foto.jpg)" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">
-                    <small style="color:#64748b;">Tips: Cari gambar di Google -> Klik Kanan -> Copy Image Address</small>
+                    <label style="display:block;margin-bottom:5px;font-weight:500;">Thumbnail Image URL (Card)</label>
+                    <input type="text" name="thumbnail" required placeholder="For card view (Ratio 16:9)" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">
+                </div>
+
+                <div style="margin-top:15px;">
+                    <label style="display:block;margin-bottom:5px;font-weight:500;">Banner Image URL (Header)</label>
+                    <input type="text" name="banner" placeholder="For detail page header (Wide Image). If empty, will use thumbnail." style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">
                 </div>
 
                 <div style="margin-top:15px;">
@@ -142,21 +146,16 @@ if (isset($_GET['delete'])) {
                     $result = mysqli_query($conn, "SELECT * FROM courses ORDER BY created_at DESC");
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
-                        
-                        // PERUBAHAN DI SINI: Langsung echo link URL, tidak pakai path assets/uploads/
                         echo "<td><img src='" . htmlspecialchars($row['thumbnail']) . "' width='60' height='60' style='border-radius:6px;object-fit:cover;aspect-ratio:1/1;background:#f1f5f9;' alt='Img'></td>";
-                        
                         echo "<td>
                                 <strong>" . htmlspecialchars($row['title']) . "</strong><br>
                                 <small style='color:#64748b;'>" . htmlspecialchars($row['tagline']) . "</small>
                               </td>";
-                        
                         echo "<td>
                                 <a href='manage_exercises.php?id=" . $row['id'] . "' style='background:#eff6ff; color:#2563eb; padding:6px 12px; border-radius:6px; text-decoration:none; font-weight:600; font-size:0.85rem;'>
                                     + Add Exercises
                                 </a>
                               </td>";
-                        
                         echo "<td>
                                 <a href='?delete=" . $row['id'] . "' onclick='return confirm(\"Hapus course ini?\")' style='color:#ef4444;font-weight:600;text-decoration:none;'>Delete</a>
                               </td>";
