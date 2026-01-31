@@ -59,27 +59,6 @@ if (isset($_POST['register'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/onboarding.css?v=3">
-
-    <style>
-        .auth-card {
-            max-width: 450px; 
-            margin: 40px auto;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-        .login-link a {
-            color: #06b6d4;
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body class="auth-body">
 
@@ -101,31 +80,31 @@ if (isset($_POST['register'])) {
             </div>
 
             <?php if($error_msg): ?>
-                <div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 10px; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">
+                <div class="alert-error">
                     <?php echo $error_msg; ?>
                 </div>
             <?php endif; ?>
 
             <form class="auth-form" method="POST" action="">
                 
-                <div class="input-group" style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: #334155; font-weight: 500;">Username</label>
+                <div class="input-group">
+                    <label>Username</label>
                     <input type="text" name="username" placeholder="Choose a username" required>
                 </div>
 
-                <div class="input-group" style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; color: #334155; font-weight: 500;">Email Address</label>
+                <div class="input-group">
+                    <label>Email Address</label>
                     <input type="email" name="email" placeholder="Enter your email" required>
                 </div>
 
-                <div class="input-group" style="margin-bottom: 10px;">
-                    <label style="display: block; margin-bottom: 8px; color: #334155; font-weight: 500;">Password</label>
+                <div class="input-group">
+                    <label>Password</label>
                     <div class="password-wrapper">
                         <input type="password" name="password" id="passwordInput" placeholder="Create a password" required>
-                        </div>
+                    </div>
                 </div>
 
-                <button type="submit" name="register" class="btn-next" style="margin-top: 25px;">Sign Up</button>
+                <button type="submit" name="register" class="btn-next">Sign Up</button>
 
                 <div class="login-link">
                     Already have an account? <a href="login.php">Log In</a>

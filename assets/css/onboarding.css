@@ -122,3 +122,78 @@
     justify-content: center;
     gap: 10px;
 }
+ /* Style halaman Register */
+        .auth-card {
+            max-width: 450px; 
+            margin: 40px auto;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .login-link a {
+            color: #06b6d4;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+/*  Style Halaman login */
+        .auth-card {
+            max-width: 450px; 
+            margin: 40px auto;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .register-link a {
+            color: #06b6d4;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Tambahan untuk Login Form --- */
+.alert-error {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 500;
+}
+
+.forgot-password-link {
+    text-align: right;
+    margin-bottom: 25px;
+}
+
+.forgot-password-link a {
+    font-size: 0.85rem;
+    color: #64748b;
+    text-decoration: none;
+}
+
+.input-group:last-of-type {
+    margin-bottom: 10px; /* Khusus input password jaraknya lebih dekat ke link forgot */
+}

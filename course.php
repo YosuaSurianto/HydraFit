@@ -21,108 +21,7 @@ $current_page = 'course';
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <style>
-        /* CSS Tambahan untuk Grid (Bisa dipindah ke dashboard.css) */
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
 
-        .course-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid #f1f5f9;
-            display: flex;
-            flex-direction: column;
-            height: 100%; /* Biar tinggi kartu sama rata */
-        }
-
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        .course-thumb {
-            width: 100%;
-            height: 180px;
-            background-color: #cbd5e1;
-            object-fit: cover;
-            position: relative;
-        }
-
-        .course-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .course-tag {
-            display: inline-block;
-            background-color: #dbeafe;
-            color: #2563eb;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            width: fit-content;
-        }
-
-        .course-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 5px;
-        }
-
-        .course-desc {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-bottom: 15px;
-            line-height: 1.5;
-            /* Batasi teks biar gak kepanjangann */
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .muscle-group {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding-top: 10px;
-            border-top: 1px dashed #e2e8f0;
-        }
-
-        .btn-start {
-            margin-top: 15px;
-            display: block;
-            width: 100%;
-            text-align: center;
-            background-color: #0f172a;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-start:hover {
-            background-color: #1e293b;
-        }
-    </style>
 </head>
 <body>
 
@@ -170,9 +69,9 @@ $current_page = 'course';
             </div>
         </div>
 
-        <div style="margin-bottom: 2rem;">
-            <input type="text" placeholder="Search workout..." style="width: 100%; max-width: 400px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; outline: none;">
-        </div>
+<div class="search-container">
+    <input type="text" placeholder="Search workout..." class="search-input">
+</div>
         
         <div class="course-grid">
             

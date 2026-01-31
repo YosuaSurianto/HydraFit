@@ -64,30 +64,8 @@ if (isset($_POST['login'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/onboarding.css?v=3">
-
-    <style>
-        .auth-card {
-            max-width: 450px; 
-            margin: 40px auto;
-        }
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #64748b;
-        }
-        .register-link a {
-            color: #06b6d4;
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body class="auth-body">
-
     <nav class="auth-navbar">
         <a href="index.php" class="logo">
             <div class="logo-icon">
