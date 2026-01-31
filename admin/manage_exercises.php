@@ -8,52 +8,105 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// 2. TANGKAP ID COURSE (Wajib ada, kalau gak ada tendang balik)
+// 2. TANGKAP ID COURSE (PARENT)
+// Halaman ini tidak boleh dibuka tanpa ID Course
 if (!isset($_GET['id'])) {
     header("Location: manage_course.php");
     exit();
 }
 $course_id = $_GET['id'];
 
-// 3. AMBIL DATA COURSE (Buat Judul Halaman)
-$q_course = mysqli_query($conn, "SELECT * FROM courses WHERE id='$course_id'");
-$course = mysqli_fetch_assoc($q_course);
+// Ambil data Course induknya (Buat Judul)
+$stmt_course = $conn->prepare("SELECT title FROM courses WHERE id = ?");
+$stmt_course->bind_param("i", $course_id);
+$stmt_course->execute();
+$result_course = $stmt_course->get_result();
+$course_data = $result_course->fetch_assoc();
 
-// Kalau ID ngawur (course gak ketemu)
-if (!$course) {
-    header("Location: manage_course.php");
+if (!$course_data) {
+    header("Location: manage_course.php"); // Kalau ID ngawur, tendang balik
     exit();
 }
 
-$success_msg = "";
-$error_msg = "";
+$current_page = 'manage_course'; // Biar menu sidebar aktif
 
-// --- LOGIC TAMBAH EXERCISE ---
-if (isset($_POST['add_exercise'])) {
-    $name        = trim($_POST['name']);
-    $duration    = trim($_POST['duration']);
-    $gif_url     = trim($_POST['gif_url']); // Kita pakai URL lagi biar gampang
-    $instruction = trim($_POST['instruction']);
+// Variabel SweetAlert
+$swal_type = ""; $swal_title = ""; $swal_text = ""; $redirect_url = "";
 
-    if (!empty($name) && !empty($gif_url)) {
-        $stmt = $conn->prepare("INSERT INTO exercises (course_id, name, duration, gif_image, instruction) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("issss", $course_id, $name, $duration, $gif_url, $instruction);
+// VARIABEL FORM EXERCISE
+$edit_mode = false;
+$edit_data = [
+    'id' => '', 'name' => '', 'duration' => '', 
+    'instruction' => '', 'gif_image' => ''
+];
 
-        if ($stmt->execute()) {
-            $success_msg = "Exercise added successfully!";
-        } else {
-            $error_msg = "Error: " . $conn->error;
-        }
-    } else {
-        $error_msg = "Name and GIF URL are required!";
+// --- 1. LOGIC EDIT: AMBIL DATA LAMA ---
+if (isset($_GET['edit_exercise'])) {
+    $ex_id = $_GET['edit_exercise'];
+    $stmt = $conn->prepare("SELECT * FROM exercises WHERE id = ?");
+    $stmt->bind_param("i", $ex_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $edit_mode = true;
+        $edit_data = $result->fetch_assoc();
     }
 }
 
-// --- LOGIC HAPUS EXERCISE ---
-if (isset($_GET['delete_ex'])) {
-    $ex_id = $_GET['delete_ex'];
-    mysqli_query($conn, "DELETE FROM exercises WHERE id='$ex_id'");
-    header("Location: manage_exercises.php?id=$course_id"); // Balik ke halaman course ini
+// --- 2. LOGIC SIMPAN / UPDATE ---
+if (isset($_POST['save_exercise'])) {
+    $name        = trim($_POST['name']);
+    $duration    = trim($_POST['duration']);
+    $instruction = trim($_POST['instruction']);
+    $gif_image   = trim($_POST['gif_image']);
+
+    if (!empty($name)) {
+        
+        if (!empty($_POST['exercise_id'])) {
+            // === UPDATE EXISTING EXERCISE ===
+            $ex_id = $_POST['exercise_id'];
+            $stmt = $conn->prepare("UPDATE exercises SET name=?, duration=?, instruction=?, gif_image=? WHERE id=?");
+            $stmt->bind_param("ssssi", $name, $duration, $instruction, $gif_image, $ex_id);
+            
+            if ($stmt->execute()) {
+                $swal_type = "success";
+                $swal_title = "Updated!";
+                $swal_text = "Exercise has been updated.";
+                // Redirect balik ke halaman list course ini
+                $redirect_url = "manage_exercises.php?id=" . $course_id;
+            } else {
+                $swal_type = "error"; $swal_title = "Failed"; $swal_text = $conn->error;
+            }
+
+        } else {
+            // === CREATE NEW EXERCISE ===
+            $stmt = $conn->prepare("INSERT INTO exercises (course_id, name, duration, instruction, gif_image) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("issss", $course_id, $name, $duration, $instruction, $gif_image);
+
+            if ($stmt->execute()) {
+                $swal_type = "success";
+                $swal_title = "Added!";
+                $swal_text = "New exercise added to the list.";
+                $redirect_url = "manage_exercises.php?id=" . $course_id;
+            } else {
+                $swal_type = "error"; $swal_title = "Failed"; $swal_text = $conn->error;
+            }
+        }
+    } else {
+        $swal_type = "warning"; $swal_title = "Empty Name"; $swal_text = "Please enter exercise name.";
+    }
+}
+
+// --- 3. LOGIC DELETE ---
+if (isset($_GET['delete_exercise'])) {
+    $ex_id = $_GET['delete_exercise'];
+    $stmt = $conn->prepare("DELETE FROM exercises WHERE id = ?");
+    $stmt->bind_param("i", $ex_id);
+    $stmt->execute();
+    
+    // Redirect PENTING: Harus bawa ID course lagi
+    header("Location: manage_exercises.php?id=" . $course_id);
     exit();
 }
 ?>
@@ -63,10 +116,11 @@ if (isset($_GET['delete_ex'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Exercises - HydraFit Admin</title>
+    <title>Manage Exercises - Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -91,42 +145,50 @@ if (isset($_GET['delete_ex'])) {
     <div class="main-content">
         <div class="top-header">
             <div>
-                <a href="manage_course.php" style="text-decoration: none; color: #64748b; font-size: 0.9rem;">← Back to Courses</a>
-                <h1 style="margin-top: 10px;">Exercises for: <?php echo htmlspecialchars($course['title']); ?></h1>
-                <p>Add the step-by-step workouts for this course.</p>
+                <h1>Manage: <?php echo htmlspecialchars($course_data['title']); ?></h1>
+                <p>Add or Edit exercises for this course.</p>
+            </div>
+            
+            <div>
+                <a href="manage_course.php" class="btn-cancel-edit" style="font-size: 1rem;">← Back to Courses</a>
             </div>
         </div>
 
-        <?php if($success_msg): ?><div style="background:#dcfce7;color:#166534;padding:15px;border-radius:8px;margin-bottom:20px;"><?php echo $success_msg; ?></div><?php endif; ?>
-        <?php if($error_msg): ?><div style="background:#fee2e2;color:#b91c1c;padding:15px;border-radius:8px;margin-bottom:20px;"><?php echo $error_msg; ?></div><?php endif; ?>
-
         <div class="card">
-            <h3>Add New Exercise</h3>
-            <form action="" method="POST" style="margin-top: 1.5rem;">
-                
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+            <div class="form-header">
+                <h3><?php echo $edit_mode ? '✏️ Edit Exercise' : '💪 Add New Exercise'; ?></h3>
+                <?php if($edit_mode): ?>
+                    <a href="manage_exercises.php?id=<?php echo $course_id; ?>" class="btn-cancel-edit">✕ Cancel Edit</a>
+                <?php endif; ?>
+            </div>
+
+            <form action="" method="POST" class="admin-form">
+                <input type="hidden" name="exercise_id" value="<?php echo $edit_data['id']; ?>">
+
+                <div class="form-grid">
                     <div>
-                        <label style="display:block;margin-bottom:5px;font-weight:500;">Exercise Name</label>
-                        <input type="text" name="name" required placeholder="e.g. Standard Push-Up" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;">
+                        <label class="form-label">Exercise Name</label>
+                        <input type="text" name="name" value="<?php echo htmlspecialchars($edit_data['name']); ?>" required placeholder="e.g. Push Up" class="form-input">
                     </div>
                     <div>
-                        <label style="display:block;margin-bottom:5px;font-weight:500;">Duration / Reps</label>
-                        <input type="text" name="duration" required placeholder="e.g. 12 Reps or 30 Sec" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;">
+                        <label class="form-label">Duration / Reps</label>
+                        <input type="text" name="duration" value="<?php echo htmlspecialchars($edit_data['duration']); ?>" required placeholder="e.g. 30 Seconds / 15 Reps" class="form-input">
                     </div>
                 </div>
 
-                <div style="margin-top:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:500;">GIF Image URL</label>
-                    <input type="text" name="gif_url" required placeholder="Paste GIF link here (e.g. https://site.com/pushup.gif)" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;">
-                    <small style="color:#64748b;">Tips: Cari di Google "Push up GIF" -> Klik Kanan -> Copy Image Address</small>
+                <div class="form-group">
+                    <label class="form-label">GIF / Image URL</label>
+                    <input type="text" name="gif_image" value="<?php echo htmlspecialchars($edit_data['gif_image']); ?>" placeholder="https://... (Animation)" class="form-input">
                 </div>
 
-                <div style="margin-top:15px;">
-                    <label style="display:block;margin-bottom:5px;font-weight:500;">Instructions</label>
-                    <textarea name="instruction" required rows="2" placeholder="Explain how to do it correctly..." style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;"></textarea>
+                <div class="form-group">
+                    <label class="form-label">Instructions</label>
+                    <textarea name="instruction" required rows="3" placeholder="How to do this exercise..." class="form-input"><?php echo htmlspecialchars($edit_data['instruction']); ?></textarea>
                 </div>
 
-                <button type="submit" name="add_exercise" style="margin-top:20px;background:#0f172a;color:white;padding:12px 24px;border:none;border-radius:8px;cursor:pointer;font-weight:600;">+ Add Exercise</button>
+                <button type="submit" name="save_exercise" class="btn-submit <?php echo $edit_mode ? 'btn-warning' : 'btn-primary'; ?>">
+                    <?php echo $edit_mode ? 'Update Exercise' : 'Add Exercise'; ?>
+                </button>
             </form>
         </div>
 
@@ -135,39 +197,82 @@ if (isset($_GET['delete_ex'])) {
             <table class="admin-table">
                 <thead>
                     <tr>
-                        <th width="80">GIF</th>
-                        <th>Name</th>
-                        <th>Duration</th>
-                        <th>Instruction</th>
-                        <th width="80">Action</th>
+                        <th width="80">Preview</th>
+                        <th>Exercise Info</th>
+                        <th width="150">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    // Ambil exercises CUMA untuk course ini
-                    $q_ex = mysqli_query($conn, "SELECT * FROM exercises WHERE course_id='$course_id' ORDER BY id ASC");
-                    
-                    if (mysqli_num_rows($q_ex) > 0) {
-                        while ($row = mysqli_fetch_assoc($q_ex)) {
+                    // Ambil exercise HANYA untuk course ini
+                    $stmt_list = $conn->prepare("SELECT * FROM exercises WHERE course_id = ? ORDER BY id ASC");
+                    $stmt_list->bind_param("i", $course_id);
+                    $stmt_list->execute();
+                    $result_list = $stmt_list->get_result();
+
+                    if ($result_list->num_rows > 0) {
+                        while ($row = $result_list->fetch_assoc()) {
                             echo "<tr>";
-                            echo "<td><img src='" . htmlspecialchars($row['gif_image']) . "' width='60' height='60' style='border-radius:6px;object-fit:cover;background:#f1f5f9;'></td>";
-                            echo "<td><strong>" . htmlspecialchars($row['name']) . "</strong></td>";
-                            echo "<td><span style='background:#f1f5f9;padding:4px 8px;border-radius:4px;font-size:0.85rem;font-weight:600;'>" . htmlspecialchars($row['duration']) . "</span></td>";
-                            echo "<td><small style='color:#64748b;'>" . substr(htmlspecialchars($row['instruction']), 0, 50) . "...</small></td>";
+                            // Tampilkan GIF
+                            echo "<td><img src='" . htmlspecialchars($row['gif_image']) . "' width='60' height='60' class='table-thumb' alt='Gif' onerror=\"this.src='../assets/image/placeholder.png'\"></td>";
+                            
                             echo "<td>
-                                    <a href='?id=$course_id&delete_ex=" . $row['id'] . "' onclick='return confirm(\"Delete this exercise?\")' style='color:#ef4444;font-weight:600;text-decoration:none;'>Del</a>
+                                    <strong>" . htmlspecialchars($row['name']) . "</strong><br>
+                                    <span style='background:#eff6ff; color:#2563eb; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:600;'>" . htmlspecialchars($row['duration']) . "</span>
+                                    <p style='color:#64748b; font-size:0.85rem; margin-top:5px; line-height:1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;'>" . htmlspecialchars($row['instruction']) . "</p>
+                                  </td>";
+                            
+                            // Tombol Action (Penting: Bawa ID Course & ID Exercise)
+                            echo "<td>
+                                    <a href='?id=" . $course_id . "&edit_exercise=" . $row['id'] . "' class='action-link text-edit'>Edit</a>
+                                    <a href='javascript:void(0);' onclick='confirmDelete(" . $row['id'] . ")' class='action-link text-delete'>Delete</a>
                                   </td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='5' style='text-align:center;padding:20px;color:#64748b;'>No exercises added yet.</td></tr>";
+                        echo "<tr><td colspan='3' style='text-align:center; padding:20px; color:#94a3b8;'>No exercises yet. Add one above! 👆</td></tr>";
                     }
                     ?>
                 </tbody>
             </table>
         </div>
-
     </div>
+    
     <script src="../assets/js/dashboard.js"></script>
+
+    <script>
+        // ALERT SUKSES / ERROR
+        <?php if (!empty($swal_type)): ?>
+            Swal.fire({
+                icon: '<?php echo $swal_type; ?>',
+                title: '<?php echo $swal_title; ?>',
+                text: '<?php echo $swal_text; ?>',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                <?php if (!empty($redirect_url)): ?>
+                    window.location = '<?php echo $redirect_url; ?>';
+                <?php endif; ?>
+            });
+        <?php endif; ?>
+
+        // KONFIRMASI DELETE
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Delete this exercise?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Yes, delete!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // PENTING: URL Delete juga harus bawa ID Course biar gak tersesat
+                    window.location = '?id=<?php echo $course_id; ?>&delete_exercise=' + id;
+                }
+            })
+        }
+    </script>
 </body>
 </html>
