@@ -1,0 +1,40 @@
+/* =========================================
+   ADMIN DASHBOARD STYLES
+   ========================================= */
+
+/* Override Sidebar Border */
+.sidebar { 
+    border-right: 1px solid #cbd5e1; 
+}
+
+/* Kartu Admin (Sedikit beda style dari user) */
+.stat-card.admin-card { 
+    background: #fff; 
+    border: 1px solid #e2e8f0; 
+}
+
+/* Warna Icon Khusus Admin */
+.icon-box.purple { 
+    background-color: #8b5cf6; /* Ungu */
+}
+
+.icon-box.green { 
+    background-color: #10b981; /* Hijau */
+}
+
+/* (Opsional) Styling Tabel untuk Manage Course nanti */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.admin-table th, .admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+.admin-table th {
+    background-color: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+}
