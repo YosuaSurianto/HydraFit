@@ -1,0 +1,146 @@
+/* --- MANAGE USERS STYLES --- */
+
+/* Header Area */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+/* Search Bar (Mirip Course tapi versi Admin) */
+.user-search-box {
+    width: 100%;
+    max-width: 350px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+.search-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Table Styles */
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.user-table th {
+    text-align: left;
+    padding: 15px;
+    background-color: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.user-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.user-table tr:hover {
+    background-color: #f8fafc;
+}
+
+/* User Info Profile */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #e2e8f0;
+    color: #64748b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.user-details h4 {
+    font-size: 0.95rem;
+    color: #0f172a;
+    margin-bottom: 2px;
+}
+
+.user-details span {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* Role Badges */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge-admin {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-user {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+/* Action Buttons */
+.btn-action {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-edit {
+    background-color: #fff7ed;
+    color: #c2410c;
+    margin-right: 5px;
+}
+.btn-edit:hover { background-color: #ffedd5; }
+
+.btn-delete {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+.btn-delete:hover { background-color: #fee2e2; }
+
+/* Modal Edit Role (Sederhana) */
+.role-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.role-select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #cbd5e1;
+}
