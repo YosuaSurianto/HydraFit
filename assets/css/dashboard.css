@@ -467,3 +467,13 @@ body {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
+
+/* --- Search Result Message (Course Page) --- */
+#noResultMsg {
+    display: none; /* Default sembunyi */
+    text-align: center;
+    color: #64748b;
+    margin-top: 20px;
+    font-weight: 500;
+    grid-column: 1 / -1; /* Biar posisinya di tengah grid */
+}

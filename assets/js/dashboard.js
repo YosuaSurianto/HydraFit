@@ -222,3 +222,45 @@ document.addEventListener('DOMContentLoaded', () => {
         loadChartData('1W'); 
     }
 });
+
+/* =========================================
+   COURSE SEARCH LOGIC (REAL-TIME)
+   ========================================= */
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const searchInput = document.getElementById('searchInput');
+    const noResultMsg = document.getElementById('noResultMsg');
+
+    // Cek apakah elemen ada? (Biar gak error di halaman selain Course)
+    if (searchInput && noResultMsg) {
+        
+        searchInput.addEventListener('keyup', function() {
+            const filter = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.course-card');
+            let hasResult = false;
+
+            cards.forEach(card => {
+                const titleElement = card.querySelector('.course-title');
+                
+                // Jaga-jaga kalau element title gak ketemu
+                if (titleElement) {
+                    const title = titleElement.textContent.toLowerCase();
+
+                    if (title.includes(filter)) {
+                        card.style.display = ""; // Tampilkan
+                        hasResult = true;
+                    } else {
+                        card.style.display = "none"; // Sembunyikan
+                    }
+                }
+            });
+
+            // Toggle pesan "Not Found"
+            if (!hasResult) {
+                noResultMsg.style.display = "block";
+            } else {
+                noResultMsg.style.display = "none";
+            }
+        });
+    }
+});

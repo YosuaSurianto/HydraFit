@@ -69,9 +69,9 @@ $current_page = 'course';
             </div>
         </div>
 
-<div class="search-container">
-    <input type="text" placeholder="Search workout..." class="search-input">
-</div>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search workout..." class="search-input">
+        </div>
         
         <div class="course-grid">
             
@@ -86,7 +86,7 @@ $current_page = 'course';
                     ?>
                     <div class="course-card">
                         <div class="course-thumb" style="background: url('<?php echo htmlspecialchars($row['thumbnail']); ?>') center/cover no-repeat;">
-                            </div>
+                        </div>
 
                         <div class="course-content">
                             <span class="course-tag"><?php echo htmlspecialchars($row['tagline']); ?></span>
@@ -108,11 +108,14 @@ $current_page = 'course';
                     <?php
                 }
             } else {
-                echo "<p style='color:#64748b;'>No courses available yet. Admin needs to add some!</p>";
+                echo "<p style='color:#64748b; grid-column: 1/-1; text-align:center;'>No courses available yet. Admin needs to add some!</p>";
             }
             ?>
 
         </div>
+        
+        <p id="noResultMsg">No course found with that name.</p>
+
     </div>
 
     <script src="assets/js/dashboard.js"></script>

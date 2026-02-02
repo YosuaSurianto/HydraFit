@@ -155,17 +155,17 @@ if (isset($_GET['delete'])) {
                 <div class="form-grid">
                     <div>
                         <label class="form-label">Course Title</label>
-                        <input type="text" name="title" value="<?php echo htmlspecialchars($edit_data['title']); ?>" required placeholder="e.g. Home Warrior" class="form-input">
+                        <input type="text" name="title" value="<?php echo htmlspecialchars($edit_data['title']); ?>" required placeholder="Name Course" class="form-input">
                     </div>
                     <div>
                         <label class="form-label">Tagline (Singkat)</label>
-                        <input type="text" name="tagline" value="<?php echo htmlspecialchars($edit_data['tagline']); ?>" required placeholder="e.g. Badan Bagus Tanpa Modal" class="form-input">
+                        <input type="text" name="tagline" value="<?php echo htmlspecialchars($edit_data['tagline']); ?>" required placeholder="Clickbait" class="form-input">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Target Muscle</label>
-                    <input type="text" name="target_muscle" value="<?php echo htmlspecialchars($edit_data['target_muscle']); ?>" required placeholder="e.g. Dada, Paha, Core" class="form-input">
+                    <input type="text" name="target_muscle" value="<?php echo htmlspecialchars($edit_data['target_muscle']); ?>" required placeholder="Target Muscle" class="form-input">
                 </div>
 
                 <div class="form-group">
