@@ -35,6 +35,10 @@ $user_count = mysqli_fetch_assoc($user_count_query)['total'];
 $course_count_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM courses");
 $course_count = mysqli_fetch_assoc($course_count_query)['total'];
 
+// Hutung Total Admin
+$admin_count_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM users WHERE role='admin'");
+$admin_count = mysqli_fetch_assoc($admin_count_query)['total']; 
+
 ?>
 
 <!DOCTYPE html>
@@ -115,6 +119,16 @@ $course_count = mysqli_fetch_assoc($course_count_query)['total'];
                     <h2 class="value"><?php echo $user_count; ?></h2>
                 </div>
             </div>
+
+            <div class="card stat-card admin-card">
+    <div class="icon-box" style="background-color: #f59e0b; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+    </div>
+    <div class="stat-info">
+        <span class="label">Total Admins</span>
+        <h2 class="value"><?php echo $admin_count; ?></h2>
+    </div>
+</div>
 
             <div class="card stat-card admin-card">
                 <div class="icon-box green">

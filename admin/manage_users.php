@@ -9,29 +9,47 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 }
 
 $current_page = 'manage_users';
-
-// Variabel SweetAlert
 $swal_type = ""; $swal_title = ""; $swal_text = "";
 
+// ============================================================
+// 🛡️ KONFIGURASI SUPER ADMIN
+// ============================================================
+$super_admins = [
+    'drcswpyt01@gmail.com', 
+];
+
+// --- FUNGSI BANTUAN: Cek apakah target adalah Super Admin? ---
+function isSuperAdmin($email, $list) {
+    return in_array($email, $list);
+}
+
+
 // --- LOGIC 1: UPDATE ROLE USER ---
-// (Logic ini sekarang akan jalan karena sudah ada input hidden 'update_role')
 if (isset($_POST['update_role'])) {
-    $user_id = $_POST['user_id'];
+    $user_id  = $_POST['user_id'];
     $new_role = $_POST['role'];
     
-    // Cegah admin mengubah role dirinya sendiri
+    // Ambil Email Target dulu dari Database untuk dicek
+    $stmt_cek = $conn->prepare("SELECT email FROM users WHERE id = ?");
+    $stmt_cek->bind_param("i", $user_id);
+    $stmt_cek->execute();
+    $res_cek = $stmt_cek->get_result();
+    $data_target = $res_cek->fetch_assoc();
+
+    // VALIDASI KEAMANAN BERLAPIS
     if ($user_id == $_SESSION['user_id']) {
-        $swal_type = "error"; 
-        $swal_title = "Action Denied"; 
-        $swal_text = "You cannot change your own role!";
+        // 1. Gak boleh ubah role diri sendiri
+        $swal_type = "error"; $swal_title = "Action Denied"; $swal_text = "You cannot change your own role!";
+    } elseif (isSuperAdmin($data_target['email'], $super_admins)) {
+        // 2. Gak boleh ubah role Super Admin
+        $swal_type = "error"; $swal_title = "Protected Account"; $swal_text = "This user is a Super Admin and cannot be modified!";
     } else {
+        // LOLOS VALIDASI -> JALANKAN UPDATE
         $stmt = $conn->prepare("UPDATE users SET role = ? WHERE id = ?");
         $stmt->bind_param("si", $new_role, $user_id);
         
         if ($stmt->execute()) {
-            $swal_type = "success"; 
-            $swal_title = "Role Updated"; 
-            $swal_text = "User role has been changed successfully.";
+            $swal_type = "success"; $swal_title = "Role Updated"; $swal_text = "User role has been changed.";
         } else {
             $swal_type = "error"; $swal_title = "Failed"; $swal_text = $conn->error;
         }
@@ -42,10 +60,17 @@ if (isset($_POST['update_role'])) {
 if (isset($_GET['delete'])) {
     $user_id = $_GET['delete'];
     
+    // Ambil Email Target dulu
+    $stmt_cek = $conn->prepare("SELECT email FROM users WHERE id = ?");
+    $stmt_cek->bind_param("i", $user_id);
+    $stmt_cek->execute();
+    $res_cek = $stmt_cek->get_result();
+    $data_target = $res_cek->fetch_assoc();
+
     if ($user_id == $_SESSION['user_id']) {
-        $swal_type = "error"; 
-        $swal_title = "Action Denied"; 
-        $swal_text = "You cannot delete your own account!";
+        $swal_type = "error"; $swal_title = "Action Denied"; $swal_text = "You cannot delete your own account!";
+    } elseif (isSuperAdmin($data_target['email'], $super_admins)) {
+        $swal_type = "error"; $swal_title = "Protected Account"; $swal_text = "You cannot delete a Super Admin!";
     } else {
         $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
         $stmt->bind_param("i", $user_id);
@@ -67,11 +92,9 @@ if(isset($_GET['deleted'])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users - Admin</title>
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
     <link rel="stylesheet" href="../assets/css/manage_users.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -95,13 +118,11 @@ if(isset($_GET['deleted'])){
     </div>
 
     <div class="main-content">
-        
         <div class="page-header">
             <div>
                 <h1>Manage Users</h1>
                 <p style="color:#64748b;">View, manage roles, or remove users.</p>
             </div>
-            
             <div class="user-search-box">
                 <input type="text" id="userSearch" class="search-input" placeholder="Search by name or email...">
             </div>
@@ -125,7 +146,10 @@ if(isset($_GET['deleted'])){
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             $initial = strtoupper(substr($row['username'], 0, 1));
+                            
+                            // Cek Status User
                             $is_me = ($row['id'] == $_SESSION['user_id']);
+                            $is_protected = isSuperAdmin($row['email'], $super_admins);
                             ?>
                             
                             <tr class="user-row">
@@ -135,7 +159,11 @@ if(isset($_GET['deleted'])){
                                         <div class="user-details">
                                             <h4 class="user-name">
                                                 <?php echo htmlspecialchars($row['username']); ?> 
-                                                <?php if($is_me) echo "<span style='color:#2563eb; font-size:0.7rem;'>(You)</span>"; ?>
+                                                <?php 
+                                                    if($is_me) echo "<span style='color:#2563eb; font-size:0.7rem;'>(You)</span>"; 
+                                                    // Tambah ikon mahkota/bintang kalo super admin
+                                                    if($is_protected) echo " <span title='Super Admin'>👑</span>";
+                                                ?>
                                             </h4>
                                             <span class="user-email"><?php echo htmlspecialchars($row['email']); ?></span>
                                         </div>
@@ -143,20 +171,23 @@ if(isset($_GET['deleted'])){
                                 </td>
                                 
                                 <td>
-                                    <form action="" method="POST" class="role-form">
-                                        <input type="hidden" name="update_role" value="1">
-                                        
-                                        <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
-                                        
-                                        <?php if(!$is_me): ?>
+                                    <?php if ($is_protected): ?>
+                                        <span class="badge" style="background-color: #fef3c7; color: #b45309; border: 1px solid #fcd34d;">
+                                            Super Admin
+                                        </span>
+                                    <?php elseif ($is_me): ?>
+                                        <span class="badge badge-admin">Admin</span>
+                                    <?php else: ?>
+                                        <form action="" method="POST" class="role-form">
+                                            <input type="hidden" name="update_role" value="1">
+                                            <input type="hidden" name="user_id" value="<?php echo $row['id']; ?>">
+                                            
                                             <select name="role" class="role-select" onchange="this.form.submit()">
                                                 <option value="user" <?php if($row['role']=='user') echo 'selected'; ?>>User</option>
                                                 <option value="admin" <?php if($row['role']=='admin') echo 'selected'; ?>>Admin</option>
                                             </select>
-                                        <?php else: ?>
-                                            <span class="badge badge-admin">Admin</span>
-                                        <?php endif; ?>
-                                    </form>
+                                        </form>
+                                    <?php endif; ?>
                                 </td>
                                 
                                 <td>
@@ -166,10 +197,10 @@ if(isset($_GET['deleted'])){
                                 </td>
                                 
                                 <td>
-                                    <?php if(!$is_me): ?>
-                                        <button onclick="confirmDeleteUser(<?php echo $row['id']; ?>)" class="btn-action btn-delete">Delete</button>
+                                    <?php if ($is_protected || $is_me): ?>
+                                        <span style="color:#cbd5e1; font-size:0.8rem; font-weight:500;">Protected</span>
                                     <?php else: ?>
-                                        <span style="color:#cbd5e1; font-size:0.8rem;">Protected</span>
+                                        <button onclick="confirmDeleteUser(<?php echo $row['id']; ?>)" class="btn-action btn-delete">Delete</button>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -196,7 +227,7 @@ if(isset($_GET['deleted'])){
                 title: '<?php echo $swal_title; ?>',
                 text: '<?php echo $swal_text; ?>',
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000
             });
         <?php endif; ?>
     </script>
