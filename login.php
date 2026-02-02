@@ -40,8 +40,8 @@ if (isset($_POST['login'])) {
                 // Jika Admin, kirim ke Dashboard Admin
                 header("Location: admin/dashboard.php");
             } else {
-                // Jika User Biasa, kirim ke Dashboard User
-                header("Location: dashboard.php");
+                // Jika User Biasa, kirim ke welcome page dulu baru ke user dashboard
+                header("Location: welcome.php");
             }
             exit();
 
