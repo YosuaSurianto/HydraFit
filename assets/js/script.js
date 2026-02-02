@@ -1,6 +1,4 @@
-/* =========================================
-   ANIMASI BACKGROUND (CANVAS)
-   ========================================= */
+/* ANIMASI BACKGROUND (CANVAS) */
 const canvas = document.getElementById('particles-canvas');
 
 if (canvas) {
@@ -85,10 +83,10 @@ if (canvas) {
     init();
     animate();
 }
+/* ANIMASI BACKGROUND (CANVAS) END */
 
-/* =========================================
-   GLOBAL MODAL SYSTEM (POP-UP)
-   ========================================= */
+
+/* GLOBAL MODAL SYSTEM (POP-UP) */
 
 // Fungsi global untuk menampilkan modal
 // Bisa dipanggil dari file JS manapun setelah script.js diload
@@ -167,9 +165,7 @@ function showModal(type, title, message, onConfirm = null) {
 }
 
 
-/* =========================================
-   LOGIKA NAVIGASI & AUTH
-   ========================================= */
+/* LOGIKA NAVIGASI & AUTH */
 
 const btnLogin = document.getElementById('btnLogin');
 const btnSignup = document.getElementById('btnSignup');

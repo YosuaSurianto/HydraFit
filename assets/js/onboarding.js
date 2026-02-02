@@ -1,6 +1,4 @@
-/* =========================================
-   LOGIKA ONBOARDING (CLIENT SIDE VALIDATION)
-   ========================================= */
+/* LOGIKA ONBOARDING (CLIENT SIDE VALIDATION) */
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -27,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const completeProfileForm = document.getElementById('completeProfileForm');
     if (completeProfileForm) {
         completeProfileForm.addEventListener('submit', (e) => {
-            // HAPUS e.preventDefault()
             
             const weight = document.getElementById('weight').value;
             const height = document.getElementById('height').value;

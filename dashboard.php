@@ -2,9 +2,9 @@
 session_start();
 include 'koneksi.php';
 
-// =========================================
+
 // 1. CEK LOGIN (SECURITY LAYER)
-// =========================================
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -13,9 +13,9 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $current_page = 'dashboard'; // Penanda halaman aktif untuk sidebar
 
-// =========================================
+
 // 2. AMBIL DATA USER DARI DATABASE
-// =========================================
+
 $query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
@@ -25,9 +25,8 @@ $first_name = $user['first_name'] ?? 'User';
 $weight = $user['current_weight'] ?? 0;
 $height = $user['height'] ?? 0;
 
-// =========================================
 // 3. HITUNG BMI AWAL (SERVER SIDE)
-// =========================================
+
 $bmi_score = 0;
 $bmi_status = "No Data";
 $bmi_color = "#64748b"; // Warna default (Abu-abu)

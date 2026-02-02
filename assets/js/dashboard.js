@@ -1,12 +1,9 @@
-/* =========================================
-   DASHBOARD LOGIC (COMPLETE)
-   ========================================= */
+/* DASHBOARD LOGIC (COMPLETE) */
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // =========================================
-    // 1. SIDEBAR TOGGLE LOGIC (FITUR BARU)
-    // =========================================
+    //  1. SIDEBAR TOGGLE LOGIC (FITUR BARU)
+
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('sidebarToggle');
     
@@ -29,9 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // =========================================
     // 2. SETUP ELEMEN DASHBOARD
-    // =========================================
+
     const ctx = document.getElementById('weightChart');
     const btnUpdate = document.getElementById('btnUpdateWeight');
     const inputWeight = document.getElementById('newWeight');
@@ -43,9 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let myChart; 
 
-    // =========================================
+
     // 3. LOGIKA LOGOUT (SWEETALERT2)
-    // =========================================
+
     if (navLogoutBtn) {
         navLogoutBtn.addEventListener('click', (e) => {
             e.preventDefault(); // Tahan link logout asli
@@ -66,9 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================
+
     // 4. RENDER CHART (CHART.JS)
-    // =========================================
+
     function renderChart(labels, dataPoints) {
         if (!ctx) return; // Cegah error jika chart tidak ada di halaman ini (misal di halaman Course)
 
@@ -102,9 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================
+
     // 5. FETCH DATA (GET)
-    // =========================================
+
     async function loadChartData(range = '1W') {
         if (!ctx) return; // Skip jika di halaman Course
 
@@ -122,9 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // =========================================
+
     // 6. TIMEFRAME BUTTONS
-    // =========================================
+
     if (timeBtns) {
         timeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -135,9 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // =========================================
+
     // 7. UPDATE BERAT (POST)
-    // =========================================
+
     if (btnUpdate) {
         btnUpdate.addEventListener('click', async () => {
             const weightVal = parseFloat(inputWeight.value);
@@ -223,9 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/* =========================================
-   COURSE SEARCH LOGIC (REAL-TIME)
-   ========================================= */
+/* COURSE SEARCH LOGIC (REAL-TIME) */
+
 document.addEventListener('DOMContentLoaded', function() {
     
     const searchInput = document.getElementById('searchInput');

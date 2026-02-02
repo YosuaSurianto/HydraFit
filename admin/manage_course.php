@@ -2,7 +2,7 @@
 session_start();
 include '../koneksi.php';
 
-// 1. CEK ADMIN
+// CEK ADMIN
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../login.php");
     exit();
@@ -24,7 +24,7 @@ $edit_data = [
     'banner' => '', 'description' => ''
 ];
 
-// --- 1. LOGIC EDIT (AMBIL DATA) ---
+// --- LOGIC EDIT (AMBIL DATA) ---
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $stmt = $conn->prepare("SELECT * FROM courses WHERE id = ?");
@@ -38,7 +38,7 @@ if (isset($_GET['edit'])) {
     }
 }
 
-// --- 2. LOGIC SIMPAN / UPDATE ---
+// ---LOGIC SIMPAN / UPDATE ---
 if (isset($_POST['save_course'])) {
     $title         = trim($_POST['title']);
     $tagline       = trim($_POST['tagline']);
@@ -91,7 +91,7 @@ if (isset($_POST['save_course'])) {
     }
 }
 
-// --- 3. LOGIC HAPUS DATA ---
+// --- LOGIC HAPUS DATA ---
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $stmt = $conn->prepare("DELETE FROM courses WHERE id = ?");

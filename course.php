@@ -76,11 +76,11 @@ $current_page = 'course';
         <div class="course-grid">
             
             <?php
-            // 1. QUERY KE DATABASE
+            // QUERY KE DATABASE
             $query = "SELECT * FROM courses ORDER BY created_at DESC";
             $result = mysqli_query($conn, $query);
 
-            // 2. LOOPING DATA
+            // LOOPING DATA
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     ?>

@@ -28,8 +28,8 @@ if ($method === 'GET') {
     }
 
     // Ambil history berat badan user ini
-    // Kita urutkan dari yang terlama ke terbaru (ASC) biar grafiknya nyambung
-    // Note: Kita gunakan subquery agar LIMIT bekerja pada data terbaru, lalu diurutkan ulang
+    // diurutkan dari yang terlama ke terbaru (ASC) biar grafiknya nyambung
+    // Note:gunakan subquery agar LIMIT bekerja pada data terbaru, lalu diurutkan ulang
     $query = "
         SELECT * FROM (
             SELECT weight, recorded_at 

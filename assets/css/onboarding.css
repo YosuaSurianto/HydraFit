@@ -12,13 +12,13 @@
     margin-top: -10px; 
 }
 
-/* 2. PENYERAGAMAN SEMUA INPUT (RAHASIA AGAR KEMBAR) */
+/* 2. PENYERAGAMAN SEMUA INPUT */
 .auth-form input[type="text"],
 .auth-form input[type="date"],
 .auth-form input[type="number"],
 .auth-form select {
     width: 100%;
-    padding: 14px 16px; /* Padding Gembul (Sama dengan Step 2) */
+    padding: 14px 16px; /* Padding  (Sama dengan Step 2) */
     
     border: 1px solid #cbd5e1;
     border-radius: 12px; /* Lengkungan sudut yang konsisten */

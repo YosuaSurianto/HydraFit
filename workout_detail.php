@@ -2,20 +2,20 @@
 session_start();
 include 'koneksi.php';
 
-// 1. CEK LOGIN
+// CEK LOGIN
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// 2. TANGKAP ID DARI URL
+// TANGKAP ID DARI URL
 if (!isset($_GET['id'])) {
     header("Location: course.php");
     exit();
 }
 $course_id = $_GET['id'];
 
-// 3. AMBIL DATA COURSE (HEADER)
+// AMBIL DATA COURSE (HEADER)
 $query_course = "SELECT * FROM courses WHERE id = '$course_id'";
 $result_course = mysqli_query($conn, $query_course);
 $course = mysqli_fetch_assoc($result_course);
@@ -26,7 +26,7 @@ if (!$course) {
     exit();
 }
 
-// --- LOGIC BANNER (BARU!) ---
+// --- LOGIC BANNER  ---
 // Kalau kolom 'banner' ada isinya, pakai banner. Kalau kosong, pakai thumbnail.
 $bg_image = !empty($course['banner']) ? $course['banner'] : $course['thumbnail'];
 

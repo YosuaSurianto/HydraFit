@@ -6,12 +6,12 @@ $error_msg = "";
 $success_msg = "";
 
 if (isset($_POST['register'])) {
-    // 1. AMBIL INPUT & BERSIHKAN
+    // AMBIL INPUT & BERSIHKAN
     $username = trim($_POST['username']);
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // 2. CEK APAKAH EMAIL SUDAH ADA? (Mencegah Duplikat)
+    // CEK APAKAH EMAIL SUDAH ADA? (Mencegah Duplikat)
     $check_stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
     $check_stmt->bind_param("s", $email);
     $check_stmt->execute();
@@ -20,19 +20,19 @@ if (isset($_POST['register'])) {
     if ($check_result->num_rows > 0) {
         $error_msg = "Email or Username already registered!";
     } else {
-        // 3. ENKRIPSI PASSWORD (WAJIB!)
-        // Jangan pernah simpan password polosan. Kita pakai algoritma BCRYPT bawaan PHP.
+        // ENKRIPSI PASSWORD (WAJIB!)
+        // memakai algoritma BCRYPT bawaan PHP.
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // 4. PREPARED STATEMENT INSERT (Brankas Aman)
-        // Kita siapkan template insert
+        // PREPARED STATEMENT INSERT (Brankas Aman)
+        // siapkan template insert
         $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
         
         // Binding: sss = string, string, string
         $stmt->bind_param("sss", $username, $email, $hashed_password);
 
         if ($stmt->execute()) {
-            // 5. SUKSES & AUTO-LOGIN (PENTING!)
+            // SUKSES & AUTO-LOGIN (PENTING!)
             // Ambil ID user yang barusan dibuat
             $new_user_id = $conn->insert_id;
 

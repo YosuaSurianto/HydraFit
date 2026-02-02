@@ -2,13 +2,13 @@
 session_start();
 include '../koneksi.php';
 
-// 1. CEK ADMIN
+// CEK ADMIN
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../login.php");
     exit();
 }
 
-// 2. TANGKAP ID COURSE (PARENT)
+// TANGKAP ID COURSE (PARENT)
 // Halaman ini tidak boleh dibuka tanpa ID Course
 if (!isset($_GET['id'])) {
     header("Location: manage_course.php");
@@ -24,7 +24,7 @@ $result_course = $stmt_course->get_result();
 $course_data = $result_course->fetch_assoc();
 
 if (!$course_data) {
-    header("Location: manage_course.php"); // Kalau ID ngawur, tendang balik
+    header("Location: manage_course.php"); // Kalau ID ngawur langsung tendang balik
     exit();
 }
 
@@ -40,7 +40,7 @@ $edit_data = [
     'instruction' => '', 'gif_image' => ''
 ];
 
-// --- 1. LOGIC EDIT: AMBIL DATA LAMA ---
+// ---LOGIC EDIT: AMBIL DATA LAMA ---
 if (isset($_GET['edit_exercise'])) {
     $ex_id = $_GET['edit_exercise'];
     $stmt = $conn->prepare("SELECT * FROM exercises WHERE id = ?");
@@ -54,7 +54,7 @@ if (isset($_GET['edit_exercise'])) {
     }
 }
 
-// --- 2. LOGIC SIMPAN / UPDATE ---
+// ---LOGIC SIMPAN / UPDATE ---
 if (isset($_POST['save_exercise'])) {
     $name        = trim($_POST['name']);
     $duration    = trim($_POST['duration']);
@@ -64,7 +64,7 @@ if (isset($_POST['save_exercise'])) {
     if (!empty($name)) {
         
         if (!empty($_POST['exercise_id'])) {
-            // === UPDATE EXISTING EXERCISE ===
+            // UPDATE EXISTING EXERCISE 
             $ex_id = $_POST['exercise_id'];
             $stmt = $conn->prepare("UPDATE exercises SET name=?, duration=?, instruction=?, gif_image=? WHERE id=?");
             $stmt->bind_param("ssssi", $name, $duration, $instruction, $gif_image, $ex_id);
@@ -80,7 +80,7 @@ if (isset($_POST['save_exercise'])) {
             }
 
         } else {
-            // === CREATE NEW EXERCISE ===
+            // CREATE NEW EXERCISE
             $stmt = $conn->prepare("INSERT INTO exercises (course_id, name, duration, instruction, gif_image) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param("issss", $course_id, $name, $duration, $instruction, $gif_image);
 
@@ -98,7 +98,7 @@ if (isset($_POST['save_exercise'])) {
     }
 }
 
-// --- 3. LOGIC DELETE ---
+// --- LOGIC DELETE ---
 if (isset($_GET['delete_exercise'])) {
     $ex_id = $_GET['delete_exercise'];
     $stmt = $conn->prepare("DELETE FROM exercises WHERE id = ?");

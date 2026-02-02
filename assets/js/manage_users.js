@@ -1,10 +1,8 @@
-/* =========================================
-   MANAGE USERS LOGIC
-   ========================================= */
+/* MANAGE USERS LOGIC */
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // 1. REAL-TIME SEARCH
+    // REAL-TIME SEARCH
     const searchInput = document.getElementById('userSearch');
     
     if (searchInput) {
@@ -28,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// 2. SWEETALERT DELETE CONFIRMATION
+// SWEETALERT DELETE CONFIRMATION
 function confirmDeleteUser(userId) {
     Swal.fire({
         title: 'Delete User?',

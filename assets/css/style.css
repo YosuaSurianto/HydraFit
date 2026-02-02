@@ -1,6 +1,5 @@
-/* =========================================
-   1. RESET & DASAR GLOBAL
-   ========================================= */
+/* 1. RESET & DASAR GLOBAL */
+
 * {
     margin: 0;
     padding: 0;
@@ -18,9 +17,7 @@ body {
     flex-direction: column;
 }
 
-/* =========================================
-   BACKGROUND CANVAS (ANIMASI)
-   ========================================= */
+/* BACKGROUND CANVAS (ANIMASI) */
 #particles-canvas {
     position: absolute;
     top: 0;
@@ -33,9 +30,7 @@ body {
     pointer-events: none; 
 }
 
-/* =========================================
-   NAVBAR UTAMA (LANDING PAGE)
-   ========================================= */
+/* NAVBAR UTAMA (LANDING PAGE) */
 .navbar {
     display: flex;
     justify-content: space-between; /* Logo di kiri, Tombol di kanan */
@@ -73,9 +68,7 @@ body {
     gap: 15px;
 }
 
-/* =========================================
-   COMPONENT TOMBOL (CUSTOM BUTTONS)
-   ========================================= */
+/* COMPONENT TOMBOL (CUSTOM BUTTONS) */
 
 /* Agar Button nya itu bawahannya gak ada garis */
 a { text-decoration: none; }
@@ -140,9 +133,7 @@ button {
     height: 24px;
 }
 
-/* =========================================
-   HERO SECTION (LAYOUT UTAMA)
-   ========================================= */
+/* HERO SECTION (LAYOUT UTAMA) */
 .hero-container {
     flex-grow: 1; /* Mengisi sisa ruang layar */
     display: flex;
@@ -267,9 +258,7 @@ h1 {
 .blue { width: 150px; height: 150px; background: #bfdbfe; top: -20px; right: -20px; }
 .purple { width: 200px; height: 200px; background: #e9d5ff; bottom: -20px; left: -20px; }
 
-/* =========================================
-   RESPONSIVE (LAYOUT HP/TABLET)
-   ========================================= */
+/* RESPONSIVE (LAYOUT HP/TABLET) */
 @media (max-width: 900px) {
     .navbar { 
         padding: 1.5rem; 
@@ -302,9 +291,7 @@ h1 {
     }
 }
 
-/* =========================================
-   ANIMASI MASUK (FADE IN)
-   ========================================= */
+/* ANIMASI MASUK (FADE IN)*/
 .fade-in {
     opacity: 0;
     animation: fadeInUp 1s ease forwards;
@@ -322,9 +309,7 @@ h1 {
     }
 }
 
-/* =========================================
-   HALAMAN AUTH (LOGIN & REGISTER & WELCOME)
-   ========================================= */
+/* HALAMAN AUTH (LOGIN & REGISTER & WELCOME) */
 
 /* Background Abu-abu (Sesuai desain Figma) */
 .auth-body {
@@ -345,7 +330,7 @@ h1 {
     padding: 1.5rem 3rem; /* Samakan padding dengan Landing Page biar konsisten */
     z-index: 10; /* Pastikan dia di atas background abu-abu */
     
-    /* --- PENTING: Layout Kiri-Kanan (Flexbox) --- */
+    /* --- Layout Kiri-Kanan (Flexbox) --- */
     display: flex !important; 
     justify-content: space-between; 
     align-items: center; 
@@ -662,7 +647,7 @@ h1 {
 @media (max-width: 900px) {
     .auth-navbar {
         padding: 1.5rem;
-        /* Di HP, kita biarkan logo di kiri dan user di kanan */
+        /* Di HP, biarkan logo di kiri dan user di kanan */
     }
     
     .auth-card {

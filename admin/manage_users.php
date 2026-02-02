@@ -11,9 +11,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 $current_page = 'manage_users';
 $swal_type = ""; $swal_title = ""; $swal_text = "";
 
-// ============================================================
-// 🛡️ KONFIGURASI SUPER ADMIN
-// ============================================================
+
+//  KONFIGURASI SUPER ADMIN
+
 $super_admins = [
     'drcswpyt01@gmail.com', 
 ];

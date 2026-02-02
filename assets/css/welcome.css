@@ -15,7 +15,7 @@
     margin: 20px auto; /* Auto biar tengah */
 }
 
-/* 2. STYLE ICON BACK (BARU DITAMBAHKAN) */
+/* STYLE ICON BACK (BARU DITAMBAHKAN) */
 .back-icon {
     position: absolute; /* Teknik memaku posisi */
     top: 25px;          
@@ -116,11 +116,8 @@
     width: 100%;
     padding: 15px;
     border: none;
-    
-    /* REVISI: Gradient & Radius Kapsul (Sama kek Step 2/3) */
     background: linear-gradient(to right, #06b6d4, #2dd4bf); 
     border-radius: 50px; 
-    
     color: white;
     font-weight: 600;
     font-size: 1rem;

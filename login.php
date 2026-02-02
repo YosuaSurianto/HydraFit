@@ -13,11 +13,11 @@ if (isset($_SESSION['user_id'])) {
 $error_msg = "";
 
 if (isset($_POST['login'])) {
-    // 1. AMBIL INPUT & BERSIHKAN
+    // AMBIL INPUT & BERSIHKAN
     $login_input = trim($_POST['login_input']); 
     $password    = $_POST['password'];
 
-    // 2. PREPARED STATEMENT (Cek Email atau Username)
+    // PREPARED STATEMENT (Cek Email atau Username)
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = ? OR username = ?");
     $stmt->bind_param("ss", $login_input, $login_input);
     $stmt->execute();
@@ -26,7 +26,7 @@ if (isset($_POST['login'])) {
     if ($result->num_rows === 1) {
         $row = $result->fetch_assoc();
 
-        // 3. VERIFIKASI PASSWORD
+        // VERIFIKASI PASSWORD
         if (password_verify($password, $row['password'])) {
             // --- LOGIN SUKSES ---
             session_regenerate_id(true);

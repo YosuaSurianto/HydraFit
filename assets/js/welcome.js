@@ -1,6 +1,4 @@
-/* =========================================
-   LOGIKA WELCOME PAGE
-   ========================================= */
+/* LOGIKA WELCOME PAGE */
 
 document.addEventListener('DOMContentLoaded', () => {
     // Tombol GET STARTED

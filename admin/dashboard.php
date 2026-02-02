@@ -2,9 +2,8 @@
 session_start();
 include '../koneksi.php'; // Mundur satu langkah untuk cari koneksi
 
-// =========================================
-// 1. SECURITY CHECK (WAJIB ADMIN)
-// =========================================
+// SECURITY CHECK (WAJIB ADMIN)
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit();
@@ -19,9 +18,9 @@ if ($_SESSION['role'] !== 'admin') {
 $current_page = 'dashboard';
 $user_id = $_SESSION['user_id'];
 
-// =========================================
+
 // 2. AMBIL DATA ADMIN & STATISTIK
-// =========================================
+
 $query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);
 $admin = mysqli_fetch_assoc($result);
