@@ -108,12 +108,34 @@ if(isset($_GET['deleted'])){
             <button class="btn-toggle" id="sidebarToggle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg></button>
         </div>
         <ul class="menu-list">
-            <li><a href="dashboard.php"><span class="link-text">Dashboard</span></a></li>
-            <li><a href="manage_course.php"><span class="link-text">Manage Courses</span></a></li>
-            <li class="active"><a href="manage_users.php"><span class="link-text">Manage Users</span></a></li>
+            <!-- Dashboard Button -->
+            <li>
+                <a href="dashboard.php">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span class="link-text">Dashboard</span>
+                </a>
+            </li>
+            <!-- Manage Course Button -->
+            <li>
+                <a href="manage_course.php">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    <span class="link-text">Manage Courses</span>
+                </a>
+            </li>
+            <!-- Manage User Button -->
+            <li class="active">
+                <a href="manage_users.php">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span class="link-text">Manage Users</span>
+                </a>
+            </li>
         </ul>
+            <!-- LogOut Button -->
         <div class="sidebar-footer">
-            <a href="../logout.php" class="logout-link"><span class="link-text">Logout</span></a>
+            <a href="../logout.php" class="logout-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span class="link-text">Logout</span>
+            </a>
         </div>
     </div>
 

@@ -108,7 +108,7 @@ $admin_count = mysqli_fetch_assoc($admin_count_query)['total'];
             </div>
         </div>
 
-        <div class="dashboard-grid">
+        <div class="dashboard-grid admin-mode">
             
             <div class="card stat-card admin-card">
                 <div class="icon-box purple">

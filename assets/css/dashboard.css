@@ -153,12 +153,20 @@ body {
 }
 
 /* --- GRID SYSTEM --- */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-    gap: 1.5rem;
+
+/* 1. DEFAULT: Untuk Dashboard USER (2 Kolom: Kiri Lebar, Kanan Kecil) */
+.dashboard-grid { 
+    display: grid; 
+    grid-template-columns: 2fr 1fr; /* INI KUNCI TAMPILAN USER */
+    gap: 1.5rem; 
     margin-bottom: 2rem;
 }
+
+/* 2. KHUSUS ADMIN: Untuk Dashboard ADMIN (3 Kolom Sejajar/Fleksibel) */
+.dashboard-grid.admin-mode {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
 .card {
     background-color: white; padding: 1.5rem; border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 1.5rem;
@@ -233,7 +241,8 @@ body {
 
 /* Responsive */
 @media (max-width: 900px) {
-    .dashboard-grid { grid-template-columns: 1fr; }
+    .dashboard-grid, 
+    .dashboard-grid.admin-mode { grid-template-columns: 1fr; }
     .sidebar { width: 0; overflow: hidden; }
     .main-content { margin-left: 0; width: 100%; }
 }
