@@ -1,13 +1,12 @@
-/* DASHBOARD LOGIC (COMPLETE) */
+/* DASHBOARD LOGIC */
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    //  1. SIDEBAR TOGGLE LOGIC (FITUR BARU)
-
+    //  1. SIDEBAR TOGGLE LOGIC 
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('sidebarToggle');
     
-    // Cek apakah elemen ada? (Biar aman)
+    // Cek apakah elemen ada? 
     if (toggleBtn && sidebar) {
         
         // Event Klik Tombol <<

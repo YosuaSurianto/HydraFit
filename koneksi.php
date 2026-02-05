@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = ""; 
-$db   = "db_hydrafit"; // Sesuai screenshot kamu
+$db   = "db_hydrafit"; 
 
 $conn = mysqli_connect($host, $user, $pass, $db);
 

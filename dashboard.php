@@ -4,7 +4,6 @@ include 'koneksi.php';
 
 
 // 1. CEK LOGIN (SECURITY LAYER)
-
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -14,11 +13,13 @@ $user_id = $_SESSION['user_id'];
 $current_page = 'dashboard'; // Penanda halaman aktif untuk sidebar
 
 
-// 2. AMBIL DATA USER DARI DATABASE
-
-$query = "SELECT * FROM users WHERE id = '$user_id'";
-$result = mysqli_query($conn, $query);
-$user = mysqli_fetch_assoc($result);
+// 2. AMBIL DATA USER DARI DATABASE (SECURE WAY: PREPARED STATEMENT) 🛡️
+// Kita pakai tanda tanya (?) sebagai placeholder
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id); // "i" artinya integer (ID user berupa angka)
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 
 // Set Default Values jika data kosong/error
 $first_name = $user['first_name'] ?? 'User';

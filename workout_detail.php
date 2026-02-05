@@ -110,13 +110,29 @@ $result_exercises = mysqli_query($conn, $query_exercises);
         
         <?php if (mysqli_num_rows($result_exercises) > 0): ?>
             <div style="margin-top: 30px; text-align: center;">
-                <a href="course.php" onclick="return alert('Good job! Workout Completed! 🔥')" style="background: #22c55e; color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);">
+                <a href="course.php" id="btnFinishWorkout">
                     🎉 I'm Finished!
                 </a>
             </div>
         <?php endif; ?>
 
     </div>
+    <script>
+    document.getElementById('btnFinishWorkout').addEventListener('click', function(e) {
+        e.preventDefault(); // Cegah pindah halaman dulu
+        Swal.fire({
+            title: 'Workout Completed! 🔥',
+            text: 'Great job! You are one step closer to your goal.',
+            icon: 'success',
+            confirmButtonText: 'Yeah!',
+            confirmButtonColor: '#22c55e'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'course.php'; // Baru pindah halaman
+            }
+        });
+    });
+</script>
 
     <script src="assets/js/dashboard.js"></script>
 </body>

@@ -180,7 +180,6 @@ body {
     padding: 1.5rem 0;
 }
 
-
 /* --- MAIN CONTENT --- */
 .main-content {
     margin-left: 250px;
@@ -226,7 +225,7 @@ body {
 
 /* --- GRID SYSTEM --- */
 
-/* DEFAULT: Untuk Dashboard USER (2 Kolom: Kiri Lebar, Kanan Kecil) */
+/* DEFAULT: Untuk Dashboard USER */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -235,7 +234,7 @@ body {
     margin-bottom: 2rem;
 }
 
-/* KHUSUS ADMIN: Untuk Dashboard ADMIN (3 Kolom Sejajar/Fleksibel) */
+/* KHUSUS ADMIN: Untuk Dashboard ADMIN  */
 .dashboard-grid.admin-mode {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
@@ -410,7 +409,6 @@ body {
     }
 }
 
-
 /* STYLE HALAMAN DETAIL di fitur course */
 
 .workout-header {
@@ -568,7 +566,6 @@ body {
         font-size: 1.8rem;
     }
 }
-
 
 /* CSS Tambahan untuk Grid Course */
 .course-grid {
