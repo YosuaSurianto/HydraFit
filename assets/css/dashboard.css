@@ -122,11 +122,36 @@ body {
     color: #2563eb;
 }
 
-/* --- SIDEBAR FOOTER (LOGOUT AREA) --- */
-.sidebar-footer {
-    padding: 1.5rem;
+/* --- SIDEBAR FOOTER (Settings) --- */
+.sidebar-footer-settings {
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
     border-top: 1px solid #f1f5f9;
     /* Garis pemisah halus */
+    flex-shrink: 0;
+}
+
+.sidebar-footer-settings a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #64748b;
+    /* Merah */
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+.sidebar-footer-settings a:hover {
+    color: #64748b;
+    transform: translateX(3px);
+    /* Efek gerak dikit */
+}
+
+/* --- SIDEBAR FOOTER (LOGOUT) --- */
+.sidebar-footer {
+    padding: 0rem 1.5rem 1.5rem 1.5rem;
     flex-shrink: 0;
 }
 
