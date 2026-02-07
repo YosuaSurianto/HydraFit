@@ -438,6 +438,7 @@ body {
 
 .workout-header {
     background-position: center center;
+    backgorund-repeat: no-repeat;
 
     background-size: cover;
     min-height: 300px;

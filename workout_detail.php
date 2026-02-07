@@ -30,7 +30,7 @@ if (!$course) {
 // Kalau kolom 'banner' ada isinya, pakai banner. Kalau kosong, pakai thumbnail.
 $bg_image = !empty($course['banner']) ? $course['banner'] : $course['thumbnail'];
 
-// 4. AMBIL DATA EXERCISES (ISI GERAKAN)
+// AMBIL DATA EXERCISES (ISI GERAKAN)
 $query_exercises = "SELECT * FROM exercises WHERE course_id = '$course_id' ORDER BY id ASC";
 $result_exercises = mysqli_query($conn, $query_exercises);
 ?>
@@ -102,7 +102,7 @@ $result_exercises = mysqli_query($conn, $query_exercises);
 
     <div class="main-content">
         
-        <div class="workout-header">
+        <div class="workout-header" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<?php echo $course['banner']; ?>');">
             <a href="course.php" class="btn-back">← Back to Library</a>
             
             <div class="header-content">

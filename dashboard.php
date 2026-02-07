@@ -3,7 +3,7 @@ session_start();
 include 'koneksi.php';
 
 
-// 1. CEK LOGIN (SECURITY LAYER)
+// CEK LOGIN (SECURITY LAYER)
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -13,7 +13,7 @@ $user_id = $_SESSION['user_id'];
 $current_page = 'dashboard'; // Penanda halaman aktif untuk sidebar
 
 
-// 2. AMBIL DATA USER DARI DATABASE (SECURE WAY: PREPARED STATEMENT) 🛡️
+// AMBIL DATA USER DARI DATABASE (SECURE WAY: PREPARED STATEMENT) 🛡️
 // Kita pakai tanda tanya (?) sebagai placeholder
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id); // "i" artinya integer (ID user berupa angka)
@@ -25,8 +25,9 @@ $user = $result->fetch_assoc();
 $first_name = $user['first_name'] ?? 'User';
 $weight = $user['current_weight'] ?? 0;
 $height = $user['height'] ?? 0;
+$avatar_url = $user['avatar'] ?? '';
 
-// 3. HITUNG BMI AWAL (SERVER SIDE)
+// HITUNG BMI AWAL (SERVER SIDE)
 
 $bmi_score = 0;
 $bmi_status = "No Data";
@@ -56,48 +57,54 @@ if ($weight > 0 && $height > 0) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - HydraFit</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="assets/css/dashboard.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
 
+    <!-- Side Bar -->
     <div class="sidebar" id="sidebar">
-    
+
         <div class="sidebar-header">
             <a href="dashboard.php" class="logo">
                 <div class="logo-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                    </svg>
                 </div>
                 <span class="logo-text">HydraFit</span>
             </a>
             <button class="btn-toggle" id="sidebarToggle">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/>
+                    <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" />
                 </svg>
             </button>
         </div>
-    
+
         <ul class="menu-list">
             <li class="<?php echo ($current_page == 'dashboard') ? 'active' : ''; ?>">
                 <a href="dashboard.php">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect></svg>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
                     <span class="link-text">Dashboard</span>
                 </a>
             </li>
-    
+
             <li class="<?php echo ($current_page == 'course') ? 'active' : ''; ?>">
                 <a href="course.php">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -109,44 +116,50 @@ if ($weight > 0 && $height > 0) {
             </li>
         </ul>
 
-    <!-- SIDE BAR FOOTER -->
-       <div class="sidebar-footer-settings">
+        <!-- SIDE BAR FOOTER -->
+        <div class="sidebar-footer-settings">
             <a href="settings.php" style="<?php echo ($current_page == 'settings') ? 'color: #2563eb;' : ''; ?>">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-            <span class="link-text">Settings</span>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span class="link-text">Settings</span>
             </a>
         </div>
-    <div class="sidebar-footer">
+        <div class="sidebar-footer">
             <a href="logout.php" class="logout-link">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline>
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
                     <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
                 <span class="link-text">Logout</span>
             </a>
 
         </div>
-    
+
     </div>
 
     <div class="main-content">
-        
+        <!-- Top header -->
         <header class="top-header">
             <div class="user-welcome">
                 <h1>Hello, <?php echo htmlspecialchars($first_name); ?>! 👋</h1>
                 <p>Track your progress and stay healthy.</p>
             </div>
             <div class="avatar">
-                <?php echo strtoupper(substr($first_name, 0, 1)); ?>
+                <?php if (!empty($avatar_url)): ?>
+                    <img src="<?php echo htmlspecialchars($avatar_url); ?>" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <?php else: ?>
+                    <?php echo strtoupper(substr($first_name, 0, 1)); ?>
+                <?php endif; ?>
             </div>
         </header>
 
         <div class="dashboard-grid">
-            
-            <div class="main-column"> <div class="card chart-card">
+
+            <div class="main-column">
+                <div class="card chart-card">
                     <div class="card-header">
                         <h3>Weight Tracker</h3>
                         <div class="timeframe-buttons">
@@ -155,7 +168,7 @@ if ($weight > 0 && $height > 0) {
                             <button class="time-btn" data-time="ALL">ALL</button>
                         </div>
                     </div>
-                    
+
                     <div class="chart-container">
                         <canvas id="weightChart"></canvas>
                     </div>
@@ -167,9 +180,13 @@ if ($weight > 0 && $height > 0) {
                 </div>
             </div>
 
-            <div class="side-column"> <div class="card stat-card">
+            <div class="side-column">
+                <div class="card stat-card">
                     <div class="icon-box blue">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7"/><path d="M15 7h6v6"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.2 7.8l-7.7 7.7-4-4-5.7 5.7" />
+                            <path d="M15 7h6v6" />
+                        </svg>
                     </div>
                     <div class="stat-info">
                         <span class="label">Current Weight</span>
@@ -179,7 +196,9 @@ if ($weight > 0 && $height > 0) {
 
                 <div class="card stat-card">
                     <div class="icon-box orange">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>
                     </div>
                     <div class="stat-info">
                         <span class="label">BMI Score</span>
@@ -202,4 +221,5 @@ if ($weight > 0 && $height > 0) {
     <script src="assets/js/dashboard.js"></script>
 
 </body>
+
 </html>
