@@ -102,7 +102,7 @@ if (isset($_POST['login'])) {
                 </div>
 
                 <div style="text-align: right; margin-bottom: 25px;">
-                    <a href="#" style="font-size: 0.85rem; color: #64748b; text-decoration: none;">Forgot Password?</a>
+                    <a href="forgot_password.php" style="font-size: 0.85rem; color: #64748b; text-decoration: none;">Forgot Password?</a>
                 </div>
 
                 <button type="submit" name="login" class="btn-next">Log In</button>

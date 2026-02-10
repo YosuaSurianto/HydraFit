@@ -1,0 +1,89 @@
+/* Styling khusus halaman Auth (Login/Forgot Pass) */
+body { 
+    background-color: #f8f9fa; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+.auth-card { 
+    background: white; 
+    padding: 40px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+    width: 100%; 
+    max-width: 400px; 
+    text-align: center; 
+}
+
+.auth-card h2 { 
+    color: #333; 
+    margin-bottom: 10px; 
+    font-size: 24px;
+}
+
+.auth-card p { 
+    color: #666; 
+    font-size: 14px; 
+    margin-bottom: 25px; 
+    line-height: 1.5;
+}
+
+.form-control { 
+    width: 100%; 
+    padding: 12px; 
+    margin-bottom: 15px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    box-sizing: border-box; 
+    font-size: 14px;
+}
+
+.form-control:focus {
+    border-color: #00ADB5;
+    outline: none;
+}
+
+.btn-primary { 
+    width: 100%; 
+    padding: 12px; 
+    background-color: #00ADB5; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: 0.3s;
+}
+
+.btn-primary:hover { 
+    background-color: #008c93; 
+}
+
+.back-link { 
+    display: block; 
+    margin-top: 20px; 
+    color: #555; 
+    text-decoration: none; 
+    font-size: 14px; 
+}
+
+.back-link:hover { 
+    text-decoration: underline; 
+    color: #00ADB5;
+}
+
+.alert-error { 
+    color: #721c24; 
+    background-color: #f8d7da; 
+    border-color: #f5c6cb; 
+    padding: 10px; 
+    border-radius: 5px; 
+    margin-bottom: 15px; 
+    font-size: 14px; 
+    border: 1px solid transparent; 
+}
