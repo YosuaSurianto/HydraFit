@@ -234,7 +234,7 @@ if (isset($_GET['delete'])) {
                               </td>";
                         echo "<td>
                                 <a href='manage_exercises.php?id=" . $row['id'] . "' class='btn-sm-add'>
-                                    + Exercises
+                                    Exercises
                                 </a>
                               </td>";
                         echo "<td>
