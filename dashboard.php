@@ -13,7 +13,7 @@ $user_id = $_SESSION['user_id'];
 $current_page = 'dashboard'; // Penanda halaman aktif untuk sidebar
 
 
-// AMBIL DATA USER DARI DATABASE (SECURE WAY: PREPARED STATEMENT) 🛡️
+// AMBIL DATA USER DARI DATABASE (SECURE WAY: PREPARED STATEMENT) 
 // Kita pakai tanda tanya (?) sebagai placeholder
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id); // "i" artinya integer (ID user berupa angka)

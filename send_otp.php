@@ -9,7 +9,8 @@ require 'PHPMailer-master/src/Exception.php';
 require 'PHPMailer-master/src/PHPMailer.php';
 require 'PHPMailer-master/src/SMTP.php';
 
-function sendOtpEmail($userEmail, $otpCode) {
+function sendOtpEmail($userEmail, $otpCode)
+{
     $mail = new PHPMailer(true);
 
     try {
@@ -20,11 +21,11 @@ function sendOtpEmail($userEmail, $otpCode) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        
+
         // --- EMAIL & PASSWORD ---
-        $mail->Username   = 'dracooproject@gmail.com'; 
-        $mail->Password   = 'usdm mxdh xscz odtj'; 
-        
+        $mail->Username   = 'dracooproject@gmail.com';
+        $mail->Password   = 'usdm mxdh xscz odtj';
+
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
@@ -36,20 +37,29 @@ function sendOtpEmail($userEmail, $otpCode) {
         $mail->isHTML(true);
         $mail->Subject = 'Reset Your Password - HydraFit';
         $mail->Body    = "
-            <div style='font-family: Arial, sans-serif; color: #333;'>
-                <h2 style='color: #00ADB5;'>Password Reset</h2>
-                <p>Here is your OTP code:</p>
-                <h1 style='letter-spacing: 5px; background: #f4f4f4; padding: 10px; display: inline-block;'>{$otpCode}</h1>
-                <p>Valid for 5 minutes.</p>
-            </div>
-        ";
+<div style='font-family: Arial, sans-serif; color: #333;'>
+        <h3>Hi User,</h3>
+        <p>
+            Your One-Time Password (OTP) for reset password is:
+            <br><br> </p>
+        <h1 style='letter-spacing: 5px; color: #00ADB5; margin: 0;'>{$otpCode}</h1>
+        <p>
+            <br> This OTP is valid for 5 minutes. Please do not share it with anyone.
+            <br><br>
+            If you did not request this code, please ignore this email.
+            <br><br>
+            Thanks,<br>
+            Hydra Team
+        </p>
+
+    </div>
+";
+
         $mail->AltBody = "Your OTP Code is: {$otpCode}";
 
         $mail->send();
         return true;
     } catch (Exception $e) {
-        // Kita return false aja biar SweetAlert yang handle error-nya
         return false;
     }
 }
-?>

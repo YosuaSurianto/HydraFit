@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    //  1. SIDEBAR TOGGLE LOGIC 
+    //  SIDEBAR TOGGLE LOGIC 
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('sidebarToggle');
     
@@ -25,21 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 2. SETUP ELEMEN DASHBOARD
+    // SETUP ELEMEN DASHBOARD
 
     const ctx = document.getElementById('weightChart');
     const btnUpdate = document.getElementById('btnUpdateWeight');
     const inputWeight = document.getElementById('newWeight');
     const displayWeight = document.getElementById('displayWeight');
     const timeBtns = document.querySelectorAll('.time-btn');
-    
-    // FIX: Menggunakan querySelector untuk class karena di PHP tidak ada ID navLogoutBtn
     const navLogoutBtn = document.querySelector('.logout-link'); 
 
     let myChart; 
 
 
-    // 3. LOGIKA LOGOUT (SWEETALERT2)
+    // LOGIKA LOGOUT (SWEETALERT2)
 
     if (navLogoutBtn) {
         navLogoutBtn.addEventListener('click', (e) => {
@@ -62,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // 4. RENDER CHART (CHART.JS)
+    // RENDER CHART (CHART.JS)
 
     function renderChart(labels, dataPoints) {
         if (!ctx) return; // Cegah error jika chart tidak ada di halaman ini (misal di halaman Course)
@@ -98,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // 5. FETCH DATA (GET)
+    // 5FETCH DATA (GET)
 
     async function loadChartData(range = '1W') {
         if (!ctx) return; // Skip jika di halaman Course
@@ -118,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // 6. TIMEFRAME BUTTONS
+    // TIMEFRAME BUTTONS
 
     if (timeBtns) {
         timeBtns.forEach(btn => {
@@ -131,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // 7. UPDATE BERAT (POST)
+    // UPDATE BERAT (POST)
 
     if (btnUpdate) {
         btnUpdate.addEventListener('click', async () => {

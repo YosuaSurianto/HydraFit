@@ -20,12 +20,10 @@ if (isset($_POST['register'])) {
     if ($check_result->num_rows > 0) {
         $error_msg = "Email or Username already registered!";
     } else {
-        // ENKRIPSI PASSWORD (WAJIB!)
-        // memakai algoritma BCRYPT bawaan PHP.
+        // ENKRIPSI PASSWORD memakai algoritma BCRYPT bawaan PHP.
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // PREPARED STATEMENT INSERT (Brankas Aman)
-        // siapkan template insert
+        // PREPARED STATEMENT INSERT (Brankas Aman) 
         $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
         
         // Binding: sss = string, string, string

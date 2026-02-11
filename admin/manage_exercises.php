@@ -40,7 +40,7 @@ $edit_data = [
     'instruction' => '', 'gif_image' => ''
 ];
 
-// ---LOGIC EDIT: AMBIL DATA LAMA ---
+// LOGIC EDIT: AMBIL DATA LAMA 
 if (isset($_GET['edit_exercise'])) {
     $ex_id = $_GET['edit_exercise'];
     $stmt = $conn->prepare("SELECT * FROM exercises WHERE id = ?");
@@ -54,7 +54,7 @@ if (isset($_GET['edit_exercise'])) {
     }
 }
 
-// ---LOGIC SIMPAN / UPDATE ---
+// LOGIC SIMPAN / UPDATE
 if (isset($_POST['save_exercise'])) {
     $name        = trim($_POST['name']);
     $duration    = trim($_POST['duration']);
@@ -98,7 +98,7 @@ if (isset($_POST['save_exercise'])) {
     }
 }
 
-// --- LOGIC DELETE ---
+// LOGIC DELETE 
 if (isset($_GET['delete_exercise'])) {
     $ex_id = $_GET['delete_exercise'];
     $stmt = $conn->prepare("DELETE FROM exercises WHERE id = ?");

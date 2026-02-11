@@ -20,7 +20,7 @@
     background-color: #10b981; /* Hijau */
 }
 
-/* (Opsional) Styling Tabel untuk Manage Course nanti */
+/* Styling Tabel untuk Manage Course  */
 .admin-table {
     width: 100%;
     border-collapse: collapse;
@@ -115,7 +115,7 @@
     background-color: #d97706;
 }
 
-/* --- TABLE STYLES EXTRA --- */
+/* TABLE STYLES EXTRA  */
 .table-thumb {
     border-radius: 6px; 
     object-fit: cover; 

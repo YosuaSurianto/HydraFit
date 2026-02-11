@@ -754,7 +754,7 @@ body {
     /* Biar posisinya di tengah grid */
 }
 
-/* --- FITUR TAMBAHAN MOBILE (TOMBOL MENU) --- */
+/* --- FITUR  MOBILE (TOMBOL MENU) --- */
 /* Default: Sembunyi di Laptop/PC */
 .mobile-menu-btn {
     display: none; /* Default sembunyi */
@@ -771,18 +771,18 @@ body {
 /* --- RESPONSIVE MEDIA QUERY (KHUSUS HP) --- */
 @media (max-width: 900px) {
 
-    /* 1. Munculkan Tombol Menu di HP */
+    /* Munculkan Tombol Menu di HP */
     .mobile-menu-btn {
         display: inline-block; /* Paksa muncul di HP */
     }
 
-    /* 2. Grid jadi 1 kolom */
+    /* Grid jadi 1 kolom */
     .dashboard-grid,
     .dashboard-grid.admin-mode {
         grid-template-columns: 1fr;
     }
 
-    /* 3. Sidebar Sembunyi ke Kiri */
+    /* Sidebar Sembunyi ke Kiri */
     .sidebar {
         width: 250px;
         height: 100vh;
@@ -799,24 +799,24 @@ body {
         left: 0;
     }
 
-    /* 4. Main Content Full Width */
+    /* Main Content Full Width */
     .main-content {
         margin-left: 0;
         width: 100%;
         padding: 1.5rem;
     }
 
-    /* 5. Sembunyikan tombol toggle desktop */
+    /* Sembunyikan tombol toggle desktop */
     .btn-toggle {
         display: none;
     }
     
-    /* 6. Fix Chart biar gak gepeng di HP */
+    /* Fix Chart biar gak gepeng di HP */
     .chart-container {
         height: 250px; /* Sedikit lebih kecil biar pas di HP */
     }
     
-    /* 7. Fix Exercise Card di Course biar tumpuk ke bawah */
+    /* Fix Exercise Card di Course biar tumpuk ke bawah */
     .exercise-card {
         flex-direction: column;
     }

@@ -2,7 +2,7 @@
 session_start();
 include '../koneksi.php';
 
-// 1. CEK ADMIN
+// CEK ADMIN
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../login.php");
     exit();
@@ -18,13 +18,13 @@ $super_admins = [
     'drcswpyt01@gmail.com', 
 ];
 
-// --- FUNGSI BANTUAN: Cek apakah target adalah Super Admin? ---
+// FUNGSI BANTUAN: Cek apakah target adalah Super Admin? 
 function isSuperAdmin($email, $list) {
     return in_array($email, $list);
 }
 
 
-// --- LOGIC 1: UPDATE ROLE USER ---
+// LOGIC UPDATE ROLE USER 
 if (isset($_POST['update_role'])) {
     $user_id  = $_POST['user_id'];
     $new_role = $_POST['role'];
@@ -56,7 +56,7 @@ if (isset($_POST['update_role'])) {
     }
 }
 
-// --- LOGIC 2: DELETE USER ---
+// LOGIC DELETE USER 
 if (isset($_GET['delete'])) {
     $user_id = $_GET['delete'];
     

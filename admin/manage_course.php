@@ -24,7 +24,7 @@ $edit_data = [
     'banner' => '', 'description' => ''
 ];
 
-// --- LOGIC EDIT (AMBIL DATA) ---
+// LOGIC EDIT (AMBIL DATA)
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $stmt = $conn->prepare("SELECT * FROM courses WHERE id = ?");
@@ -38,7 +38,7 @@ if (isset($_GET['edit'])) {
     }
 }
 
-// ---LOGIC SIMPAN / UPDATE ---
+// LOGIC SIMPAN / UPDATE
 if (isset($_POST['save_course'])) {
     $title         = trim($_POST['title']);
     $tagline       = trim($_POST['tagline']);
@@ -69,7 +69,7 @@ if (isset($_POST['save_course'])) {
             }
 
         } else {
-            // === CREATE ===
+            // CREATE 
             $stmt = $conn->prepare("INSERT INTO courses (title, tagline, thumbnail, banner, description, target_muscle) VALUES (?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("ssssss", $title, $tagline, $thumbnail_url, $banner_url, $description, $target_muscle);
 
@@ -91,7 +91,7 @@ if (isset($_POST['save_course'])) {
     }
 }
 
-// --- LOGIC HAPUS DATA ---
+// LOGIC HAPUS DATA 
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $stmt = $conn->prepare("DELETE FROM courses WHERE id = ?");

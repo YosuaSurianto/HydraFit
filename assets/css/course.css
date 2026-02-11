@@ -14,7 +14,7 @@ body {
     overflow-x: hidden;
 }
 
-/* --- SIDEBAR STYLE (Wajib ada biar menu gak hancur) --- */
+/* --- SIDEBAR STYLE --- */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -343,7 +343,7 @@ body {
     align-items: center;
 }
 
-/* Fix Warna Teks Banner (Wajib Putih) */
+/* Warna Teks Banner (Wajib Putih) */
 .workout-header h1, 
 .workout-header h2, 
 .workout-header h3 {

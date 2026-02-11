@@ -1,6 +1,6 @@
 /* --- STYLE GLOBAL ONBOARDING (STEP 2 & 3) --- */
 
-/* 1. Header Indikator Step */
+/* Header Indikator Step */
 .onboarding-header {
     margin-bottom: 2rem;
 }
@@ -86,7 +86,7 @@
     color: #0f172a;            
 }
 
-/* 4. TOMBOL */
+/* TOMBOL */
 .btn-finish-full, 
 .btn-next { 
     width: 100%;

@@ -26,7 +26,7 @@ if ($method === 'GET') {
         $limit_sql = "LIMIT 500";
     }
 
-    // QUERY AMAN DENGAN PREPARED STATEMENT 🛡️
+    // QUERY AMAN DENGAN PREPARED STATEMENT 
     // Kita bind $user_id agar aman dari injeksi
     $query = "
         SELECT * FROM (
@@ -67,12 +67,12 @@ if ($method === 'POST') {
 
         if ($new_weight > 0) {
             
-            // 1. INSERT HISTORY (SECURE) 🛡️
+            // INSERT HISTORY (SECURE) 
             $stmt_hist = $conn->prepare("INSERT INTO weight_tracking (user_id, weight) VALUES (?, ?)");
             $stmt_hist->bind_param("id", $user_id, $new_weight); // "id" = Integer, Double
             $stmt_hist->execute();
 
-            // 2. UPDATE USER CURRENT WEIGHT (SECURE) 
+            // UPDATE USER CURRENT WEIGHT (SECURE) 
             $stmt_upd = $conn->prepare("UPDATE users SET current_weight = ? WHERE id = ?");
             $stmt_upd->bind_param("di", $new_weight, $user_id); // "di" = Double, Integer
             $stmt_upd->execute();

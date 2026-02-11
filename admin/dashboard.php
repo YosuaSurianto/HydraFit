@@ -19,7 +19,7 @@ $current_page = 'dashboard';
 $user_id = $_SESSION['user_id'];
 
 
-// 2. AMBIL DATA ADMIN & STATISTIK
+// AMBIL DATA ADMIN & STATISTIK
 
 $query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = mysqli_query($conn, $query);

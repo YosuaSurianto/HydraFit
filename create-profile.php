@@ -90,13 +90,6 @@ if (isset($_POST['save_profile'])) {
                 </div>
 
                 <button type="submit" name="save_profile" class="btn-next">Next</button>
-
-                <div class="onboarding-footer">
-                    <a href="terms.php" target="_blank">Terms & Conditions</a>
-                    <span>•</span>
-                    <a href="privacy.php" target="_blank">Privacy Policy</a>
-                </div>
-
             </form>
             
         </div>
