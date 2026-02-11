@@ -12,8 +12,9 @@
     margin-top: -10px; 
 }
 
-/* 2. PENYERAGAMAN SEMUA INPUT */
+/*  PENYERAGAMAN SEMUA INPUT */
 .auth-form input[type="text"],
+.auth-form input[type="password"],
 .auth-form input[type="date"],
 .auth-form input[type="number"],
 .auth-form select {

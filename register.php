@@ -25,7 +25,7 @@ if (isset($_POST['register'])) {
 
         // PREPARED STATEMENT INSERT (Brankas Aman) 
         $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-        
+
         // Binding: sss = string, string, string
         $stmt->bind_param("sss", $username, $email, $hashed_password);
 
@@ -49,21 +49,25 @@ if (isset($_POST['register'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - HydraFit</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/onboarding.css?v=3">
 </head>
+
 <body class="auth-body">
 
     <nav class="auth-navbar">
         <a href="index.php" class="logo">
             <div class="logo-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
             </div>
             <span>HydraFit</span>
         </a>
@@ -71,20 +75,20 @@ if (isset($_POST['register'])) {
 
     <div class="auth-container">
         <div class="auth-card fade-in">
-            
+
             <div class="onboarding-header">
                 <h2 class="auth-title">Create Account 🚀</h2>
                 <p class="step-indicator">Join us and start your journey</p>
             </div>
 
-            <?php if($error_msg): ?>
+            <?php if ($error_msg): ?>
                 <div class="alert-error">
                     <?php echo $error_msg; ?>
                 </div>
             <?php endif; ?>
 
             <form class="auth-form" method="POST" action="">
-                
+
                 <div class="input-group">
                     <label>Username</label>
                     <input type="text" name="username" placeholder="Choose a username" required>
@@ -99,6 +103,17 @@ if (isset($_POST['register'])) {
                     <label>Password</label>
                     <div class="password-wrapper">
                         <input type="password" name="password" id="passwordInput" placeholder="Create a password" required>
+
+                        <button type="button" id="togglePasswordBtn" class="toggle-eye">
+                            <svg id="eyeOpen" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <svg id="eyeClosed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
@@ -112,5 +127,8 @@ if (isset($_POST['register'])) {
         </div>
     </div>
 
+    <script src="assets/js/toggle_password.js"></script>
+
 </body>
+
 </html>

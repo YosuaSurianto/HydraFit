@@ -14,7 +14,7 @@ $error_msg = "";
 
 if (isset($_POST['login'])) {
     // AMBIL INPUT & BERSIHKAN
-    $login_input = trim($_POST['login_input']); 
+    $login_input = trim($_POST['login_input']);
     $password    = $_POST['password'];
 
     // PREPARED STATEMENT (Cek Email atau Username)
@@ -30,7 +30,7 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $row['password'])) {
             // --- LOGIN SUKSES ---
             session_regenerate_id(true);
-            
+
             // Simpan ID dan Role ke Session
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['role'] = $row['role']; // <--- PENTING: Simpan Role!
@@ -44,7 +44,6 @@ if (isset($_POST['login'])) {
                 header("Location: welcome.php");
             }
             exit();
-
         } else {
             $error_msg = "Wrong Password!";
         }
@@ -56,20 +55,24 @@ if (isset($_POST['login'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - HydraFit</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/onboarding.css?v=3">
 </head>
+
 <body class="auth-body">
     <nav class="auth-navbar">
         <a href="index.php" class="logo">
             <div class="logo-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                </svg>
             </div>
             <span>HydraFit</span>
         </a>
@@ -77,20 +80,20 @@ if (isset($_POST['login'])) {
 
     <div class="auth-container">
         <div class="auth-card fade-in">
-            
+
             <div class="onboarding-header">
                 <h2 class="auth-title">Welcome Back! 👋</h2>
                 <p class="step-indicator">Please login to continue</p>
             </div>
 
-            <?php if($error_msg): ?>
+            <?php if ($error_msg): ?>
                 <div style="background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 10px; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">
                     <?php echo $error_msg; ?>
                 </div>
             <?php endif; ?>
 
             <form class="auth-form" method="POST" action="">
-                
+
                 <div class="input-group" style="margin-bottom: 20px;">
                     <label style="display: block; margin-bottom: 8px; color: #334155; font-weight: 500;">Email or Username</label>
                     <input type="text" name="login_input" placeholder="Enter email or username" required>
@@ -98,7 +101,22 @@ if (isset($_POST['login'])) {
 
                 <div class="input-group" style="margin-bottom: 10px;">
                     <label style="display: block; margin-bottom: 8px; color: #334155; font-weight: 500;">Password</label>
-                    <input type="password" name="password" placeholder="Enter password" required>
+
+                    <div class="password-wrapper">
+                        <input type="password" name="password" id="passwordInput" placeholder="Enter password" required>
+
+                        <button type="button" id="togglePasswordBtn" class="toggle-eye">
+                            <svg id="eyeOpen" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+
+                            <svg id="eyeClosed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 <div style="text-align: right; margin-bottom: 25px;">
@@ -114,6 +132,7 @@ if (isset($_POST['login'])) {
             </form>
         </div>
     </div>
-
+    <script src="assets/js/toggle_password.js"></script>
 </body>
+
 </html>
