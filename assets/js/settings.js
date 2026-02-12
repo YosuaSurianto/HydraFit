@@ -1,12 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', function () {
+
     // --- PREVIEW FOTO  ---
     const avatarInput = document.getElementById('avatarInput');
     const imagePreview = document.getElementById('imagePreview');
     const initialAvatar = document.getElementById('initialAvatar');
 
     if (avatarInput) {
-        avatarInput.addEventListener('change', function() {
+        avatarInput.addEventListener('change', function () {
             const file = this.files[0];
             if (file) {
                 if (file.size > 2 * 1024 * 1024) {
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.value = ''; return;
                 }
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     imagePreview.src = e.target.result;
                     imagePreview.style.display = 'block';
                     if (initialAvatar) initialAvatar.style.display = 'none';
@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- LOGIC SAVE PROFILE (AJAX) ---
     const profileForm = document.getElementById('profileForm');
-    if(profileForm){
-        profileForm.addEventListener('submit', async function(e){
+    if (profileForm) {
+        profileForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             // Ambil Tombol buat efek loading
@@ -46,15 +46,15 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('target_weight', document.getElementById('targetWeight').value);
 
             // Cek apakah user upload foto
-            if(avatarInput.files.length > 0){
+            if (avatarInput.files.length > 0) {
                 formData.append('avatar', avatarInput.files[0]);
             }
 
             try {
                 const req = await fetch('api_settings.php', { method: 'POST', body: formData });
                 const res = await req.json();
-
-                if(res.status === 'success'){
+                // SweetAlert success or error based on response
+                if (res.status === 'success') {
                     Swal.fire('Saved!', res.message, 'success').then(() => {
                         location.reload(); // Refresh biar foto profil di pojok kanan update
                     });
@@ -73,15 +73,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- LOGIC GANTI PASSWORD ---
     const securityForm = document.getElementById('securityForm');
-    if(securityForm){
-        securityForm.addEventListener('submit', async function(e){
+    if (securityForm) {
+        securityForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const current = document.getElementById('currentPass').value;
             const newP = document.getElementById('newPass').value;
             const confirmP = document.getElementById('confirmPass').value;
 
-            if(newP !== confirmP){
+            if (newP !== confirmP) {
                 Swal.fire('Error', 'New passwords do not match!', 'warning');
                 return;
             }
@@ -94,8 +94,8 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const req = await fetch('api_settings.php', { method: 'POST', body: formData });
                 const res = await req.json();
-                
-                if(res.status === 'success'){
+
+                if (res.status === 'success') {
                     Swal.fire('Success', res.message, 'success');
                     securityForm.reset();
                 } else {
@@ -109,8 +109,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- LOGIC DELETE ACCOUNT ---
     const btnDelete = document.getElementById('btnDeleteAccount');
-    if(btnDelete){
-        btnDelete.addEventListener('click', function(){
+    if (btnDelete) {
+        btnDelete.addEventListener('click', function () {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -123,16 +123,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Kirim request delete
                     const formData = new FormData();
                     formData.append('action', 'delete_account');
-                    
+
                     fetch('api_settings.php', { method: 'POST', body: formData })
-                    .then(response => response.json())
-                    .then(data => {
-                        if(data.status === 'success'){
-                            window.location.href = 'login.php'; // Tendang ke login
-                        } else {
-                            Swal.fire('Error', data.message, 'error');
-                        }
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                window.location.href = 'login.php'; // Tendang ke login
+                            } else {
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        });
                 }
             });
         });

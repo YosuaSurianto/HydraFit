@@ -250,7 +250,7 @@ if (isset($_GET['delete'])) {
     </div>
     
     <script src="../assets/js/dashboard.js"></script>
-
+<!-- Sweet Alert -->
     <script>
         <?php if (!empty($swal_type)): ?>
             Swal.fire({

@@ -213,11 +213,6 @@ if ($weight > 0 && $height > 0) {
                     </div>
                 </div>
 
-                <div class="card tip-card">
-                    <h4>💡 Daily Tip</h4>
-                    <p>Drinking 500ml of water before meals can help with weight loss.</p>
-                </div>
-
             </div>
         </div>
     </div>

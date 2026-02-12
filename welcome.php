@@ -113,11 +113,6 @@ $display_name = !empty($user_data['first_name']) ? $user_data['first_name'] : $u
                 Get Started 🚀
             </a>
 
-            <div class="welcome-footer">
-                <a href="#">Need Help?</a>
-                <a href="#">Support</a>
-            </div>
-
         </div>
     </div>
 
